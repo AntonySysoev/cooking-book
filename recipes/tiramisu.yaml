@@ -12,8 +12,8 @@ tags:
   - десерт без выпечки
   - тирамису
 yield:
-  quantity_min: 6
-  quantity_max: 8
+  quantity_min: 5
+  quantity_max: 7
   unit: порций
 time:
   active_minutes_min: 30
@@ -21,7 +21,7 @@ time:
   total_minutes_min: 750
   total_minutes_max: 1480
 equipment:
-  - Форма примерно 20 × 20 см или небольшая форма около 20 × 25 см
+  - Форма примерно 18 × 18 см или небольшая форма около 20 × 20 см
   - Миксер
   - Две чистые миски
   - Лопатка
@@ -37,15 +37,15 @@ ingredient_groups:
 ingredients:
   - id: mascarpone
     name: Маскарпоне
-    quantity: 600
+    quantity: 500
     unit: г
     group: cream
   - id: eggs
     name: Яйца категории M–L
-    quantity: 3
+    quantity: 2
     unit: шт.
     parts_mode: components
-    note: Используются сырыми: отдели желтки от белков. Для снижения риска выбирай пастеризованные яйца.
+    note: Используй 2 целых яйца и 1 дополнительный желток. Яйца используются сырыми; для снижения риска выбирай пастеризованные.
     parts:
       - id: yolks
         name: Желтки
@@ -53,56 +53,61 @@ ingredients:
         group: cream
       - id: whites
         name: Белки
-        quantity: 3
+        quantity: 2
         group: cream
+  - id: extra_yolk
+    name: Дополнительный желток
+    quantity: 1
+    unit: шт.
+    group: cream
   - id: sugar
     name: Белый сахар
-    quantity: 75
+    quantity: 50
     unit: г
     parts:
       - id: yolks
         name: Для желтков
-        quantity: 50
+        quantity: 33
         group: cream
       - id: whites
         name: Для белков
-        quantity: 25
+        quantity: 17
         group: cream
   - id: salt
     name: Мелкая соль
-    quantity: 0.5
+    quantity: 0.4
     unit: г
     group: cream
   - id: coffee
     name: Крепкий эспрессо или концентрированный кофе
-    quantity: 250
+    quantity: 210
     unit: г
     group: coffee
     note: Полностью остудить.
   - id: whiskey
     name: Jack Daniel’s, 45%
-    quantity: 10
+    quantity: 8
     unit: г
     group: coffee
     optional: true
     note: Можно не добавлять или заменить пряным ромом.
   - id: muscovado
     name: Мусковадо
-    quantity_min: 3
-    quantity_max: 5
+    quantity_min: 2.5
+    quantity_max: 4
     unit: г
     group: coffee
     optional: true
     note: По желанию, для мягкой карамельной ноты в кофе.
   - id: savoiardi
     name: Печенье савоярди
-    quantity_min: 200
-    quantity_max: 250
+    quantity_min: 170
+    quantity_max: 210
     unit: г
     group: assembly
   - id: cocoa
     name: Какао-порошок без сахара
-    quantity: 10
+    quantity: 8
     unit: г
     group: assembly
 steps:
@@ -120,10 +125,11 @@ steps:
     ingredients:
       - ingredient: eggs
         part: yolks
+      - ingredient: extra_yolk
       - ingredient: sugar
         part: yolks
     instructions: >-
-      Взбей желтки с 50 г сахара миксером до светлой, густой и пышной массы,
+      Взбей 3 желтка с 33 г сахара миксером до светлой, густой и пышной массы,
       примерно 3–5 минут.
   - id: mascarpone
     title: Соединить с маскарпоне
@@ -141,8 +147,8 @@ steps:
       - ingredient: sugar
         part: whites
     instructions: >-
-      В отдельной чистой обезжиренной миске взбей белки до пены. Постепенно
-      всыпь 25 г сахара и продолжай взбивать до устойчивых, блестящих пиков.
+      В отдельной чистой обезжиренной миске взбей 2 белка до пены. Постепенно
+      всыпь 17 г сахара и продолжай взбивать до устойчивых, блестящих пиков.
   - id: combine
     title: Завершить крем
     instructions: >-
