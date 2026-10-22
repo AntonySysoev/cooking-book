@@ -66,10 +66,18 @@
     }
     return Object.values(item).filter(value => typeof value === "string" || typeof value === "number").join(" — ");
   }
-  function yieldHint(recipe) {
-    const label = yieldLabel(recipe);
+  function yieldHint(recipe, factor = 1) {
+    const y = recipe.yield || {};
+    const amount = y.quantity != null ? numberText(y.quantity * factor)
+      : y.quantity_min != null && y.quantity_max != null
+        ? `${numberText(y.quantity_min * factor)}–${numberText(y.quantity_max * factor)}`
+        : "";
+    const label = [amount, y.unit].filter(Boolean).join(" ");
     return label ? `Примерно ${label}` : "";
   }
+  const multiplierText = value => Number(value).toFixed(2);
+  const MIN_MULTIPLIER = 0.1;
+  const MAX_MULTIPLIER = 5;
   function categoryName(id) {
     const c = state.categories.find(item => item.id === id);
     return c ? c.title : id || "Без категории";
@@ -199,7 +207,7 @@
         <div>
           <section class="panel">
             <h2 class="panel-title">Ингредиенты</h2>
-            <div class="scale-box"><label for="multiplier-input">Множитель</label><div class="multiplier-control"><input id="multiplier-input" class="scale-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="1" aria-label="Множитель количества ингредиентов"><div class="multiplier-arrows"><button class="multiplier-arrow" id="multiplier-up" type="button" aria-label="Увеличить множитель">▲</button><button class="multiplier-arrow" id="multiplier-down" type="button" aria-label="Уменьшить множитель">▼</button></div></div><small class="scale-hint">${escapeHtml(yieldHint(recipe))}</small></div>
+            <div class="scale-box"><label for="multiplier-input">Множитель</label><div class="multiplier-control"><input id="multiplier-input" class="scale-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="1.00" aria-label="Множитель количества ингредиентов от 0.10 до 5.00" title="От 0.10 до 5.00"><div class="multiplier-arrows"><button class="multiplier-arrow" id="multiplier-up" type="button" aria-label="Увеличить множитель на четверть">▲</button><button class="multiplier-arrow" id="multiplier-down" type="button" aria-label="Уменьшить множитель на четверть">▼</button></div></div><small class="scale-hint" id="multiplier-yield-hint">${escapeHtml(yieldHint(recipe))}</small></div>
             <div id="ingredient-groups">${ingredientRows(recipe, 1)}</div>
             <div style="margin-top:14px"><button id="reset-checks" class="reset-button" type="button">Сбросить отметки</button></div>
           </section>
@@ -257,10 +265,11 @@
       const normalized = String(value).trim().replace(",", ".");
       if (!normalized || /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(normalized) === false) return null;
       const amount = Number(normalized);
-      return Number.isFinite(amount) && amount > 0 ? amount : null;
+      return Number.isFinite(amount) ? amount : null;
     };
     const updateMultiplier = () => {
       const factor = state.multiplier;
+      $("#multiplier-yield-hint").textContent = yieldHint(recipe, factor);
       $("#ingredient-groups").innerHTML = ingredientRows(recipe, factor);
       bindIngredientRows();
       $(".step-list").innerHTML = renderSteps(recipe, factor);
@@ -268,25 +277,26 @@
     };
     multiplierInput.addEventListener("input", e => {
       const amount = parseMultiplier(e.target.value);
-      if (amount == null) return;
-      state.multiplier = amount;
+      if (amount == null || amount < MIN_MULTIPLIER || amount > MAX_MULTIPLIER) return;
+      state.multiplier = Math.round(amount * 100) / 100;
       updateMultiplier();
     });
     multiplierInput.addEventListener("change", e => {
       const amount = parseMultiplier(e.target.value);
-      state.multiplier = amount == null ? 1 : Math.max(0.01, Math.round(amount * 100) / 100);
-      e.target.value = numberText(state.multiplier);
+      state.multiplier = amount == null ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(amount * 100) / 100));
+      e.target.value = multiplierText(state.multiplier);
       updateMultiplier();
     });
     const stepMultiplier = direction => {
-      const current = parseMultiplier(multiplierInput.value) ?? state.multiplier ?? 1;
-      const doubled = current * 2;
-      const exactHalf = Math.abs(doubled - Math.round(doubled)) < 1e-8;
-      let next = exactHalf ? current + direction * 0.5
-        : (direction > 0 ? Math.ceil(doubled - 1e-8) : Math.floor(doubled + 1e-8)) / 2;
-      next = Math.max(0.01, Math.round(next * 100) / 100);
-      state.multiplier = next;
-      multiplierInput.value = numberText(next);
+      const parsed = parseMultiplier(multiplierInput.value);
+      const current = parsed == null ? state.multiplier : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, parsed));
+      const quarterPosition = current * 4;
+      const onQuarter = Math.abs(quarterPosition - Math.round(quarterPosition)) < 1e-8;
+      const next = onQuarter
+        ? current + direction * 0.25
+        : (direction > 0 ? Math.ceil(quarterPosition - 1e-8) : Math.floor(quarterPosition + 1e-8)) / 4;
+      state.multiplier = Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(next * 100) / 100));
+      multiplierInput.value = multiplierText(state.multiplier);
       updateMultiplier();
     };
     $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
