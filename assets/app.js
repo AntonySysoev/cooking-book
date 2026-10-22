@@ -2,6 +2,7 @@
   "use strict";
   const app = document.getElementById("app");
   const printButton = document.getElementById("print-button");
+  const topButton = document.getElementById("top-button");
   const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1 };
   const $ = (selector, root = document) => root.querySelector(selector);
   const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
@@ -352,6 +353,15 @@
     }
   }
   printButton.addEventListener("click", () => window.print());
+  const updateTopButton = () => {
+    const shouldShow = window.scrollY > window.innerHeight;
+    topButton.hidden = !shouldShow;
+    topButton.classList.toggle("is-visible", shouldShow);
+  };
+  window.addEventListener("scroll", updateTopButton, { passive: true });
+  window.addEventListener("resize", updateTopButton);
+  topButton.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  updateTopButton();
   document.addEventListener("visibilitychange", async () => {
     if (document.visibilityState === "visible" && state.wakeEnabled && !state.wakeLock && "wakeLock" in navigator) {
       try {
