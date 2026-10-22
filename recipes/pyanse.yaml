@@ -1,0 +1,144 @@
+id: pyanse
+title: Пянсе
+description: Паровые дрожжевые булочки с сочной мясной начинкой, капустой и луком.
+category: main-dishes
+subcategory: dumplings
+tags: [пянсе, паровые булочки, мясной фарш, капуста]
+yield:
+  quantity: 10
+  unit: булочек
+time:
+  active_minutes: 60
+  total_minutes_min: 150
+  total_minutes_max: 210
+equipment:
+  - Ankarsrum
+  - Мясорубка с решёткой 6 мм
+  - Пароварка-мантоварка на 4 уровня
+ingredient_groups:
+  - id: dough
+    title: Тесто
+  - id: filling
+    title: Начинка
+ingredients:
+  - id: flour
+    name: Пшеничная мука
+    quantity: 600
+    unit: г
+    group: dough
+  - id: water
+    name: Тёплая вода
+    quantity: 330
+    unit: г
+    group: dough
+  - id: yeast
+    name: Сухие быстродействующие дрожжи
+    quantity: 7
+    unit: г
+    group: dough
+  - id: sugar
+    name: Сахар
+    quantity: 15
+    unit: г
+    group: dough
+  - id: salt
+    name: Соль
+    quantity: 10
+    unit: г
+    group: dough
+  - id: oil-dough
+    name: Растительное масло
+    quantity: 20
+    unit: г
+    group: dough
+  - id: pork
+    name: Свинина
+    quantity: 350
+    unit: г
+    group: filling
+  - id: beef
+    name: Говядина
+    quantity: 250
+    unit: г
+    group: filling
+  - id: cabbage
+    name: Белокочанная капуста
+    quantity: 350
+    unit: г
+    group: filling
+  - id: onion
+    name: Репчатый лук
+    quantity: 180
+    unit: г
+    group: filling
+  - id: garlic
+    name: Чеснок
+    quantity: 12
+    unit: г
+    group: filling
+  - id: soy
+    name: Соевый соус
+    quantity: 25
+    unit: г
+    group: filling
+  - id: sesame-oil
+    name: Кунжутное масло
+    quantity: 10
+    unit: г
+    group: filling
+    optional: true
+  - id: black-pepper
+    name: Чёрный перец
+    quantity: 2
+    unit: г
+    group: filling
+  - id: salt-filling
+    name: Соль для начинки
+    quantity: 5
+    unit: г
+    group: filling
+steps:
+  - id: dough
+    title: Замесить тесто
+    ingredients:
+      - ingredient: flour
+      - ingredient: water
+      - ingredient: yeast
+      - ingredient: sugar
+      - ingredient: salt
+      - ingredient: oil-dough
+    instructions: Смешай воду, дрожжи и сахар. Добавь муку и соль, замеси в Ankarsrum до гладкого теста, затем введи масло. Накрой и оставь до увеличения примерно вдвое.
+  - id: meat
+    title: Подготовить мясо
+    ingredients:
+      - ingredient: pork
+      - ingredient: beef
+    instructions: Пропусти охлаждённое мясо через мясорубку с решёткой 6 мм. Если мясо уже фарш, просто охлади его перед смешиванием.
+  - id: vegetables
+    title: Подготовить овощи и начинку
+    ingredients:
+      - ingredient: cabbage
+      - ingredient: onion
+      - ingredient: garlic
+      - ingredient: soy
+      - ingredient: sesame-oil
+      - ingredient: black-pepper
+      - ingredient: salt-filling
+    instructions: Мелко нашинкуй капусту и лук, чеснок измельчи. Смешай овощи с мясом, соевым соусом, кунжутным маслом, перцем и солью. Не отжимай капусту насухо: сок поможет сохранить начинку сочной.
+  - id: divide
+    title: Разделить тесто
+    instructions: Раздели поднявшееся тесто на 10 частей. Каждую округли, накрой и дай отдохнуть 10 минут.
+  - id: fill
+    title: Сформовать пянсе
+    instructions: Раскатай каждую часть в круг с более тонкими краями и более толстой серединой. Положи начинку в центр, собери края сверху и тщательно защипни шов. Оставь немного места для расширения.
+  - id: proof
+    title: Расстоять
+    instructions: Положи булочки швом вверх на квадраты пергамента и оставь на 20–30 минут. Между ними должно быть пространство.
+  - id: steam
+    title: Приготовить на пару
+    instructions: Доведи воду в мантоварке до устойчивого кипения. Разложи булочки на смазанные или выстеленные пергаментом уровни, не перегружая их. Готовь на сильном пару 20–25 минут после восстановления активного парообразования. После выключения оставь под крышкой 5 минут, затем открывай осторожно.
+tips:
+  - Не открывай крышку в первые 20 минут приготовления: резкий перепад температуры может осадить тесто.
+  - Начинка должна быть холодной при формовании; готовность мяса проверь в самой крупной булочке.
+storage:
+  - Готовые пянсе храни в холодильнике до 2 дней. Разогревай на пару 5–8 минут.
