@@ -15,6 +15,7 @@ time:
   prep_minutes: 30
   proof_minutes: 90
   cook_minutes: 25
+  total_minutes: 145
 equipment:
   - Ankarsrum
   - Духовка с верхним и нижним нагревом
