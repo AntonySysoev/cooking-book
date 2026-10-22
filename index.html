@@ -6,7 +6,8 @@
   <meta name="theme-color" content="#f7f1e7">
   <meta name="description" content="Личная кулинарная книга с рецептами, масштабированием ингредиентов и удобным режимом готовки.">
   <title>Cooking Book — кулинарная книга</title>
-  <link rel="manifest" href="./manifest.webmanifest">\n  <link rel="stylesheet" href="./assets/styles.css">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./assets/styles.css">
 </head>
 <body>
   <header class="site-header">
@@ -14,7 +15,13 @@
       <span class="brand-mark" aria-hidden="true">cb</span>
       <span><strong>Cooking Book</strong><small>моя кулинарная книга</small></span>
     </a>
-    <button class="icon-button print-button" id="print-button" type="button" hidden aria-label="Печать рецепта" title="Печать">⎙</button>
+    <div class="header-actions">
+      <div class="wake-card header-wake-card" id="wake-card" hidden>
+        <div><strong>Не выключать экран</strong><p id="wake-status">Экран может выключаться автоматически.</p></div>
+        <label class="switch" aria-label="Не выключать экран во время готовки"><input id="wake-toggle" type="checkbox"><span class="switch-track"></span></label>
+      </div>
+      <button class="icon-button print-button" id="print-button" type="button" hidden aria-label="Печать рецепта" title="Печать">⎙</button>
+    </div>
   </header>
   <main id="app" class="page-shell">
     <div class="loading-state">Загружаю рецепты…</div>
