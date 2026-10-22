@@ -1,0 +1,94 @@
+id: mint-gelato
+title: Мятное мороженое
+description: Молочное мятное джелато с настоем свежей мяты, умеренной сладостью и мягкой текстурой.
+category: desserts
+subcategory: ice-cream
+tags: [мороженое, мята, джелато, Ankarsrum]
+yield:
+  quantity: 1100
+  unit: г
+time:
+  active_minutes: 35
+  total_minutes_min: 420
+  total_minutes_max: 900
+equipment:
+  - Ankarsrum с мороженицей
+  - Кастрюля
+  - Сито
+  - Весы с точностью 0,1 г
+ingredient_groups:
+  - id: base
+    title: Молочная основа
+ingredients:
+  - id: milk
+    name: Молоко 3–3,5%
+    quantity: 670
+    unit: г
+    group: base
+  - id: cream
+    name: Сливки 30%
+    quantity: 200
+    unit: г
+    group: base
+  - id: sugar
+    name: Сахар
+    quantity: 140
+    unit: г
+    group: base
+  - id: skim-milk-powder
+    name: Сухое обезжиренное молоко
+    quantity: 47
+    unit: г
+    group: base
+  - id: yolks
+    name: Яичные желтки
+    quantity: 73
+    unit: г
+    group: base
+  - id: mint
+    name: Свежая мята
+    quantity: 47
+    unit: г
+    group: base
+  - id: locust-bean-gum
+    name: Камедь рожкового дерева E410
+    quantity: 1
+    unit: г
+    group: base
+  - id: salt
+    name: Соль
+    quantity: 0.7
+    unit: г
+    group: base
+steps:
+  - id: infuse
+    title: Настоять мяту
+    ingredients:
+      - ingredient: milk
+      - ingredient: cream
+      - ingredient: mint
+    instructions: Нагрей молоко со сливками примерно до 60–70 °C, сними с огня, добавь промытую мяту и накрой. Оставь в холодильнике на 8–12 часов для холодного настоя; затем тщательно отожми и процеди листья.
+  - id: dry-mix
+    title: Смешать сухие ингредиенты
+    ingredients:
+      - ingredient: sugar
+      - ingredient: skim-milk-powder
+      - ingredient: locust-bean-gum
+      - ingredient: salt
+    instructions: Тщательно смешай сахар, сухое молоко, камедь и соль, чтобы камедь равномерно распределилась.
+  - id: cook
+    title: Заварить основу
+    ingredients:
+      - ingredient: yolks
+    instructions: Подогрей процеженную молочную смесь. Дождём дождём всыпь сухую смесь, постоянно перемешивая. Отдельно размешай желтки с небольшим количеством тёплой основы, верни в кастрюлю и нагревай, постоянно мешая, до 82–84 °C. Не кипяти.
+  - id: chill
+    title: Быстро охладить и выдержать
+    instructions: Процеди основу, быстро охлади и убери в холодильник на 6–12 часов, лучше на ночь.
+  - id: churn
+    title: Заморозить в мороженице
+    instructions: Перемешай охлаждённую основу и замораживай в предварительно подготовленной чаше мороженицы Ankarsrum до плотной мягкой консистенции. Переложи в контейнер и дозаморозь 2–4 часа.
+tips:
+  - В этой версии мята используется только для настоя, без измельчённых листьев: вкус чище, а текстура однороднее.
+  - Если после хранения появляются мелкие кристаллы, максимально быстро охлаждай основу и плотно закрывай контейнер.
+storage:
+  - Храни в морозильнике в герметичном контейнере; перед подачей дай постоять несколько минут при комнатной температуре.
