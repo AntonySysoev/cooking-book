@@ -35,15 +35,28 @@ h1 { font-family:Georgia, "Times New Roman", serif; font-weight:600; letter-spac
 h2 { font-family:Georgia,serif; font-size:26px; line-height:1.2; letter-spacing:-.4px; margin:0 0 14px; }
 h3 { font-size:16px; margin:0 0 8px; }
 .lead { color:var(--muted); max-width:610px; font-size:16px; margin-bottom:0; }
-.toolbar { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:10px; margin:20px 0 22px; }
+.toolbar { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px, 280px); gap:10px; margin:20px 0 22px; }
 .search-wrap { position:relative; }
 .search-wrap span { position:absolute; left:15px; top:11px; color:var(--muted); font-size:18px; }
 .search-input,.category-select,.scale-input { border:1px solid var(--line); background:var(--card); border-radius:13px; padding:12px 14px; color:var(--ink); width:100%; outline:none; }
 .search-input { padding-left:42px; }
 .search-input:focus,.category-select:focus,.scale-input:focus { border-color:#bd8b70; box-shadow:0 0 0 3px #8b4b3114; }
 .category-pills { display:flex; gap:8px; flex-wrap:wrap; margin:0 0 28px; }
-.pill { border:1px solid var(--line); background:transparent; color:var(--muted); padding:7px 12px; border-radius:999px; font-size:13px; }
+.pill { border:1px solid var(--line); background:#fffaf3; color:var(--muted); padding:7px 12px; border-radius:999px; font-size:13px; transition:background .15s,border-color .15s,color .15s; }
 .pill.active { color:var(--accent-dark); border-color:#d4b6a3; background:var(--accent-soft); }
+/* Спокойные природные оттенки для категорий: цвет помогает ориентироваться, не перегружая интерфейс. */
+.category-desserts { --category-ink:#925461; --category-soft:#f5e7e9; --category-line:#e7cbd0; }
+.category-baking-and-dough { --category-ink:#9a5e3d; --category-soft:#f5e9df; --category-line:#e7d0bd; }
+.category-main-dishes { --category-ink:#52745d; --category-soft:#e7efe7; --category-line:#cbdccb; }
+.category-snacks-and-light-meals { --category-ink:#3f7773; --category-soft:#e4f0ee; --category-line:#c7e0dc; }
+.category-drinks { --category-ink:#52779a; --category-soft:#e7eef6; --category-line:#ccdbea; }
+.category-soups { --category-ink:#8b7139; --category-soft:#f4efdf; --category-line:#e5dbb8; }
+.category-salads-and-sides { --category-ink:#6e7c48; --category-soft:#edf0e2; --category-line:#d8dfbf; }
+.category-sauces-and-preserves { --category-ink:#79638c; --category-soft:#eee8f3; --category-line:#d9cce5; }
+.pill[class*="category-"] { color:var(--category-ink); background:var(--category-soft); border-color:var(--category-line); }
+.pill[class*="category-"].active { color:var(--category-ink); background:var(--category-soft); border-color:var(--category-ink); box-shadow:inset 0 0 0 1px var(--category-ink); }
+.recipe-card[class*="category-"] { border-top:3px solid var(--category-line); }
+.card-category { display:inline-flex; align-self:flex-start; width:fit-content; color:var(--category-ink, var(--accent)); background:var(--category-soft, transparent); border:1px solid var(--category-line, transparent); border-radius:999px; padding:4px 9px; font-size:11px; font-weight:750; }
 .section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin: 26px 0 14px; }
 .section-heading h2 { margin:0; }
 .result-count { color:var(--muted); font-size:13px; }
