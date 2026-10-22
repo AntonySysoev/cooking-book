@@ -1,0 +1,97 @@
+id: salted-caramel
+title: Густая солёная карамель
+description: Густой соус с белым сахаром, мусковадо, сливками и ванилью — для тортов, булочек и мороженого.
+category: sauces-and-preserves
+subcategory: caramel-and-syrups
+tags: [карамель, солёная карамель, соус, мороженое]
+yield:
+  quantity: 400
+  unit: г
+time:
+  active_minutes: 25
+  total_minutes: 40
+ingredient_groups:
+  - id: caramel
+    title: Карамель
+ingredients:
+  - id: white-sugar
+    name: Белый сахар
+    quantity: 150
+    unit: г
+    group: caramel
+  - id: muscovado
+    name: Мусковадо
+    quantity: 30
+    unit: г
+    group: caramel
+  - id: brown-sugar
+    name: Сухой коричневый сахар
+    quantity: 20
+    unit: г
+    group: caramel
+  - id: water
+    name: Вода
+    quantity: 50
+    unit: г
+    group: caramel
+  - id: cream
+    name: Сливки 30%
+    quantity: 150
+    unit: г
+    group: caramel
+  - id: butter
+    name: Сливочное масло
+    quantity: 70
+    unit: г
+    group: caramel
+  - id: salt
+    name: Соль
+    quantity: 1.5
+    unit: г
+    group: caramel
+  - id: vanilla
+    name: Ванильный экстракт
+    quantity: 3
+    unit: г
+    group: caramel
+  - id: rum
+    name: Пряный ром
+    quantity: 5
+    unit: г
+    group: caramel
+    optional: true
+steps:
+  - id: prepare
+    title: Подготовить сливки
+    ingredients:
+      - ingredient: muscovado
+      - ingredient: brown-sugar
+      - ingredient: cream
+    instructions: Заранее смешай мусковадо и коричневый сахар со сливками и осторожно подогрей до горячего состояния, чтобы сахар начал растворяться. Не кипяти бурно.
+  - id: caramelize
+    title: Карамелизовать белый сахар
+    ingredients:
+      - ingredient: white-sugar
+      - ingredient: water
+    instructions: В сотейнике с толстым дном соедини белый сахар с водой. Нагревай, не перемешивая ложкой после начала кипения, до насыщенного янтарного цвета. Сними с огня, когда карамель станет медно-янтарной; не доводи до запаха гари.
+  - id: add-cream
+    title: Ввести сливки
+    ingredients:
+      - ingredient: cream
+    instructions: Осторожно, небольшими порциями, влей горячие сливки в карамель, постоянно перемешивая длинной лопаткой. Смесь будет сильно пузыриться и подниматься. Если сахар схватился, прогрей на слабом огне до растворения.
+  - id: cook
+    title: Уварить до густоты
+    instructions: Верни сотейник на умеренный огонь и увари до 105–107 °C, периодически перемешивая. Для более текучего соуса остановись раньше; при охлаждении карамель заметно загустеет.
+  - id: finish
+    title: Эмульгировать
+    ingredients:
+      - ingredient: butter
+      - ingredient: salt
+      - ingredient: vanilla
+      - ingredient: rum
+    instructions: Сними с огня, добавь масло и соль, размешай до гладкой эмульсии. Когда карамель немного остынет, вмешай ваниль и по желанию ром. Перелей в чистую банку.
+tips:
+  - Карамель очень горячая: не пробуй её до охлаждения и избегай попадания на кожу.
+  - Для прослоек мороженого полностью охлади карамель и чередуй её с мороженым тонкими слоями.
+storage:
+  - После остывания храни в холодильнике в закрытой банке до 2 недель. Перед использованием слегка согрей, если стала слишком густой.
