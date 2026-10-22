@@ -88,6 +88,7 @@ steps:
       - ingredient: sugar
       - ingredient: salt
       - ingredient: yeast
+      - ingredient: butter
     instructions: >-
       Соедини ингредиенты и замеси в Ankarsrum до гладкого эластичного теста. В конце введи мягкое масло и продолжай замес до развития клейковины. Тесто должно быть мягким, но пригодным для формования.
   - id: first-proof
