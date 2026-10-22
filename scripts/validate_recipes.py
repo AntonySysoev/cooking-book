@@ -207,7 +207,13 @@ def validate_recipe(path: Path) -> list[str]:
             error("'yield' must include quantity_max when quantity_min is set")
         if "quantity_max" in yield_data and "quantity_min" not in yield_data:
             error("'yield' must include quantity_min when quantity_max is set")
-        if "unit" not in yield_data:
+        for key in ("quantity", "quantity_min", "quantity_max"):
+            if key in yield_data and (not is_number(yield_data[key]) or yield_data[key] < 0):
+                error(f"'yield.{key}' must be a non-negative number")
+        if "quantity_min" in yield_data and "quantity_max" in yield_data:
+            if is_number(yield_data["quantity_min"]) and is_number(yield_data["quantity_max"]) and yield_data["quantity_min"] > yield_data["quantity_max"]:
+                error("'yield.quantity_min' cannot exceed 'yield.quantity_max'")
+        if not isinstance(yield_data.get("unit"), str) or not yield_data.get("unit", "").strip():
             error("'yield' must specify a unit")
 
     time_data = data.get("time", {})
@@ -243,8 +249,21 @@ def main() -> int:
         return 1
 
     all_errors: list[str] = []
+    recipe_ids: dict[str, Path] = {}
     for path in paths:
         all_errors.extend(validate_recipe(path))
+        try:
+            parsed = yaml.safe_load(path.read_text(encoding="utf-8"))
+            if isinstance(parsed, dict) and isinstance(parsed.get("id"), str) and parsed["id"].strip():
+                recipe_id = parsed["id"]
+                if recipe_id in recipe_ids:
+                    all_errors.append(
+                        f"{path}: duplicate recipe ID '{recipe_id}' also used in {recipe_ids[recipe_id]}"
+                    )
+                else:
+                    recipe_ids[recipe_id] = path
+        except (OSError, yaml.YAMLError):
+            pass
 
     if all_errors:
         print("Recipe validation failed:")
