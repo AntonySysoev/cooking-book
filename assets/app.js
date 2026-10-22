@@ -24,13 +24,21 @@
     }
     return null;
   }
+  function pluralRu(n, one, few, many) {
+    const lastTwo = n % 100;
+    if (lastTwo >= 11 && lastTwo <= 14) return many;
+    const last = n % 10;
+    if (last === 1) return one;
+    if (last >= 2 && last <= 4) return few;
+    return many;
+  }
   function formatMinutes(minutes) {
     if (!Number.isFinite(minutes)) return "";
     const n = Math.round(minutes);
-    if (n < 60) return `${n} мин`;
+    if (n < 60) return `${n} ${pluralRu(n, "минута", "минуты", "минут")}`;
     const hours = Math.floor(n / 60), mins = n % 60;
-    const hWord = hours % 10 === 1 && hours % 100 !== 11 ? "ч" : "ч";
-    return mins ? `${hours} ${hWord} ${mins} мин` : `${hours} ${hWord}`;
+    const hourText = `${hours} ${pluralRu(hours, "час", "часа", "часов")}`;
+    return mins ? `${hourText} ${mins} ${pluralRu(mins, "минута", "минуты", "минут")}` : hourText;
   }
   function timeLabel(recipe) {
     const t = recipe.time || {};
