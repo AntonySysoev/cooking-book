@@ -1,0 +1,86 @@
+id: basque-cheesecake
+title: Баскский чизкейк
+description: Классический баскский чизкейк на сливочном сыре с тёмной карамелизированной корочкой и нежной серединой.
+category: desserts
+subcategory: cakes-and-pastries
+tags: [чизкейк, сливочный сыр, баскский, десерт]
+yield:
+  quantity: 8
+  unit: порций
+time:
+  active_minutes: 20
+  total_minutes_min: 300
+  total_minutes_max: 600
+equipment:
+  - Разъёмная форма диаметром 20 см
+  - Пергамент
+  - Ankarsrum с лопаткой
+ingredient_groups:
+  - id: batter
+    title: Основа
+ingredients:
+  - id: cream-cheese
+    name: Сливочный сыр
+    quantity: 750
+    unit: г
+    group: batter
+    note: Полностью жирный, комнатной температуры.
+  - id: sugar
+    name: Белый сахар
+    quantity: 180
+    unit: г
+    group: batter
+  - id: eggs
+    name: Яйца без скорлупы
+    quantity: 200
+    unit: г
+    group: batter
+    note: Примерно 4 крупных яйца; взвешивай без скорлупы.
+  - id: cream
+    name: Сливки 30%
+    quantity: 250
+    unit: г
+    group: batter
+  - id: flour
+    name: Пшеничная мука
+    quantity: 15
+    unit: г
+    group: batter
+  - id: salt
+    name: Соль
+    quantity: 1
+    unit: г
+    group: batter
+steps:
+  - id: prepare
+    title: Подготовить форму
+    instructions: Разогрей духовку до фактических 230 °C, верхний и нижний нагрев без конвекции. Выстели форму двумя перекрёстными листами пергамента, оставляя края выше борта.
+  - id: mix-cheese
+    title: Размешать сыр с сахаром
+    ingredients:
+      - ingredient: cream-cheese
+      - ingredient: sugar
+      - ingredient: salt
+    instructions: На низкой скорости размешай сливочный сыр с сахаром и солью до гладкости, не насыщая массу воздухом. Периодически очищай стенки чаши.
+  - id: eggs
+    title: Ввести яйца
+    ingredients:
+      - ingredient: eggs
+    instructions: Вводи яйца порциями, каждый раз дожидаясь однородности. Не взбивай массу до пышности.
+  - id: cream
+    title: Добавить сливки и муку
+    ingredients:
+      - ingredient: cream
+      - ingredient: flour
+    instructions: Влей сливки. Просей муку и вмешай до исчезновения комочков. При необходимости пропусти массу через сито.
+  - id: bake
+    title: Выпечь
+    instructions: Перелей массу в форму и выпекай при фактических 230 °C примерно 35–45 минут, до очень тёмно-коричневой поверхности и заметного дрожания центра. Если верх темнеет недостаточно, в конце кратко включи верхний гриль, внимательно наблюдая.
+  - id: cool
+    title: Охладить и стабилизировать
+    instructions: Оставь чизкейк остывать в форме. После остывания убери в холодильник минимум на 6 часов, лучше на ночь. Для более кремовой середины подавай охлаждённым, но не ледяным.
+tips:
+  - Для гладкой текстуры ингредиенты должны быть комнатной температуры, а смешивание — минимальным.
+  - Не пытайся довести центр до полностью сухой готовности: характерная середина остаётся нежной.
+storage:
+  - Храни в холодильнике при температуре не выше 4 °C до 4 дней.
