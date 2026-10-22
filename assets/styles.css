@@ -20,6 +20,7 @@ a { color: inherit; }
 .site-header { max-width: 1040px; padding: 22px 22px 14px; margin: 0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; }
 .header-actions { display:flex; align-items:center; justify-content:flex-end; gap:10px; min-width:0; }
 .wake-toggle-button { font-size:19px; }
+.wake-toggle-button svg { display:block; width:20px; height:20px; }
 .wake-toggle-button.is-active { color:var(--accent-dark); background:var(--accent-soft); border-color:#d4b6a3; box-shadow:inset 0 0 0 1px #d4b6a3; }
 .scale-box { display:grid; grid-template-columns:minmax(0,1fr) minmax(110px, 132px); align-items:center; gap:4px 12px; margin:0 0 18px; }
 .scale-hint { grid-column:1 / -1; color:var(--muted); font-size:12px; }
