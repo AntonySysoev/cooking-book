@@ -240,19 +240,22 @@
         updateWakeButton();
         state.wakeLock.addEventListener("release", () => {
           state.wakeLock = null;
-          if (state.wakeEnabled) { state.wakeEnabled = false; updateWakeButton(); }
+          if (state.wakeEnabled && document.visibilityState === "visible") {
+            state.wakeEnabled = false;
+            updateWakeButton();
+          }
         });
       } catch (_) {
         state.wakeEnabled = false;
+        updateWakeButton();
         wakeToggle.title = "Не удалось удержать экран — проверь разрешения браузера";
         wakeToggle.setAttribute("aria-label", wakeToggle.title);
-        updateWakeButton();
       }
     });
     const multiplierInput = $("#multiplier-input");
     const parseMultiplier = value => {
       const normalized = String(value).trim().replace(",", ".");
-      if (!normalized || !/^(?:\\d+(?:\\.\\d*)?|\\.\\d+)$/.test(normalized)) return null;
+      if (!normalized || /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(normalized) === false) return null;
       const amount = Number(normalized);
       return Number.isFinite(amount) && amount > 0 ? amount : null;
     };
