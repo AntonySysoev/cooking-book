@@ -1,0 +1,156 @@
+id: black-sea-mussels-wine-basil
+title: Черноморские мидии с чесноком, вином и базиликом
+description: Мидии в лёгком винно-чесночном соусе со сливочным маслом, лимонной цедрой и свежим базиликом. Без сливок.
+category: main-dishes
+subcategory: seafood
+tags:
+  - мидии
+  - морепродукты
+  - белое вино
+  - базилик
+yield:
+  quantity: 2
+  unit: порции
+time:
+  prep_minutes: 10
+  cook_minutes: 10
+equipment:
+  - Широкая кастрюля с крышкой
+  - Щётка для очистки раковин
+ingredient_groups:
+  - id: main
+    title: Ингредиенты
+ingredients:
+  - id: mussels
+    name: Мидии в раковинах
+    quantity: 1000
+    unit: г
+    group: main
+  - id: white-wine
+    name: Сухое белое вино
+    quantity: 100
+    unit: мл
+    group: main
+  - id: butter
+    name: Сливочное масло
+    quantity: 25
+    unit: г
+    group: main
+  - id: garlic
+    name: Чеснок
+    quantity: 3
+    unit: зубчика
+    group: main
+  - id: shallot
+    name: Лук-шалот
+    quantity: 1
+    unit: небольшой
+    group: main
+    note: Или 1/2 обычной луковицы
+  - id: basil
+    name: Свежий базилик
+    quantity: 6
+    unit: крупных листьев
+    group: main
+    note: Примерно 5–8 листьев
+  - id: black-pepper
+    name: Чёрный перец, свежемолотый
+    quantity: 0.25
+    unit: ч. л.
+    group: main
+  - id: pink-pepper
+    name: Розовый перец
+    quantity: 4
+    unit: горошины
+    group: main
+    optional: true
+    note: Слегка раздавить
+  - id: lemon-juice
+    name: Лимонный сок
+    quantity: 1
+    unit: ч. л.
+    group: main
+    note: 1–2 ч. л., по вкусу
+  - id: lemon-zest
+    name: Лимонная цедра
+    quantity: 0.25
+    unit: ч. л.
+    group: main
+  - id: salt
+    name: Соль
+    quantity: 0
+    unit: по вкусу
+    group: main
+    note: Добавлять только после пробы соуса
+steps:
+  - id: clean
+    title: Подготовить мидии
+    instructions: >-
+      Очисти раковины щёткой под холодной проточной водой и удали «бороду».
+      Выбрось экземпляры с разбитыми раковинами или неприятным запахом.
+      Живые мидии с открытыми раковинами, которые не закрываются после лёгкого
+      постукивания, тоже выбрось.
+  - id: shallot
+    title: Обжарить лук
+    ingredients:
+      - ingredient: butter
+        quantity: 15
+        unit: г
+    instructions: >-
+      В широкой кастрюле с крышкой растопи 15 г сливочного масла на среднем огне.
+      Добавь мелко нарезанный шалот и готовь 2–3 минуты, не подрумянивая.
+  - id: garlic
+    title: Добавить чеснок
+    ingredients:
+      - ingredient: garlic
+    instructions: >-
+      Измельчи чеснок, добавь к луку и прогрей около 30 секунд, чтобы он раскрыл
+      аромат, но не начал подгорать.
+  - id: wine
+    title: Влить вино и приготовить мидии
+    ingredients:
+      - ingredient: white-wine
+      - ingredient: mussels
+    instructions: >-
+      Влей вино и доведи до кипения. Добавь мидии и сразу накрой крышкой.
+      Готовь на сильном огне, периодически встряхивая кастрюлю, чтобы мидии
+      готовились равномерно.
+  - id: cook-through
+    title: Довести до готовности
+    instructions: >-
+      Когда раковины раскроются, продолжай кипячение ещё 3–5 минут. Выбрось
+      мидии, которые не раскрылись после приготовления. Не пробуй сырые или
+      недоготовленные мидии.
+  - id: sauce
+    title: Собрать соус
+    ingredients:
+      - ingredient: butter
+        quantity: 10
+        unit: г
+    instructions: >-
+      Если жидкости слишком много, немного выпари её без крышки. Добавь
+      оставшиеся 10 г сливочного масла и перемешай, чтобы соус стал более
+      шелковистым.
+  - id: aromatics
+    title: Добавить ароматы
+    ingredients:
+      - ingredient: black-pepper
+      - ingredient: pink-pepper
+      - ingredient: lemon-zest
+      - ingredient: basil
+    instructions: >-
+      Выключи огонь. Добавь чёрный перец, по желанию слегка раздавленные горошины
+      розового перца, немного лимонной цедры и порванный руками базилик.
+  - id: season
+    title: Отрегулировать вкус
+    ingredients:
+      - ingredient: lemon-juice
+      - ingredient: salt
+    instructions: >-
+      Добавляй лимонный сок понемногу, пробуя соус. Соль добавляй только после
+      пробы: мидии уже могут быть достаточно солоноватыми. Подавай сразу с хлебом,
+      чтобы собирать им соус.
+tips:
+  - Лучшее сочетание перцев — чёрный и немного розового.
+  - Базилик добавляй в самом конце, уже после выключения огня.
+  - Подавай мидии сразу после приготовления.
