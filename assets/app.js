@@ -2,7 +2,7 @@
   "use strict";
   const app = document.getElementById("app");
   const printButton = document.getElementById("print-button");
-  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, servings: 1 };
+  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1 };
   const $ = (selector, root = document) => root.querySelector(selector);
   const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
   const numberText = value => {
@@ -47,16 +47,24 @@
     if (min == null) return "";
     return max != null && max !== min ? `${formatMinutes(min)} – ${formatMinutes(max)}` : formatMinutes(min);
   }
-  function yieldBase(recipe) {
-    const y = recipe.yield || {};
-    return Number(y.quantity ?? y.quantity_min ?? 1) || 1;
-  }
   function yieldLabel(recipe) {
     const y = recipe.yield || {};
     const amount = y.quantity != null ? numberText(y.quantity)
       : y.quantity_min != null && y.quantity_max != null ? `${numberText(y.quantity_min)}–${numberText(y.quantity_max)}`
       : "";
     return [amount, y.unit].filter(Boolean).join(" ");
+  }
+  function contentText(item) {
+    if (typeof item === "string" || typeof item === "number") return String(item);
+    if (!item || typeof item !== "object") return "";
+    for (const key of ["text", "description", "content", "title", "tip", "instruction"]) {
+      if (typeof item[key] === "string" && item[key].trim()) return item[key];
+    }
+    return Object.values(item).filter(value => typeof value === "string" || typeof value === "number").join(" — ");
+  }
+  function yieldHint(recipe) {
+    const label = yieldLabel(recipe);
+    return label ? `Примерно ${label}` : "";
   }
   function categoryName(id) {
     const c = state.categories.find(item => item.id === id);
@@ -67,16 +75,12 @@
       ...(recipe.ingredients || []).map(i => i.name)].join(" ").toLocaleLowerCase("ru");
   }
   function renderHome() {
+    document.title = "Cooking Book — кулинарная книга";
     printButton.hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button">${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || r.category === state.activeCategory) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")));
     app.innerHTML = `
-      <section class="hero">
-        <div class="eyebrow">Собрано и проверено на собственной кухне</div>
-        <h1>Что приготовим<br>сегодня?</h1>
-        <p class="lead">Любимые рецепты в одном месте — с понятными шагами, точными количествами и удобным режимом готовки.</p>
-      </section>
       <div class="toolbar">
         <label class="search-wrap"><span aria-hidden="true">⌕</span><input id="search" class="search-input" type="search" placeholder="Найти рецепт или ингредиент…" value="${escapeHtml(state.query)}" autocomplete="off" aria-label="Поиск рецептов"></label>
         <select id="category-select" class="category-select" aria-label="Фильтр по категории">
@@ -171,8 +175,9 @@
   }
   function renderRecipe(recipe) {
     printButton.hidden = false;
+    document.title = `${recipe.title} — Cooking Book`;
     state.currentRecipe = recipe;
-    state.servings = yieldBase(recipe);
+    state.multiplier = 1;
     state.checkedIngredients.clear();
     state.doneSteps.clear();
     const subcategory = (state.categories.find(c => c.id === recipe.category)?.subcategories || []).find(s => s.id === recipe.subcategory)?.title;
@@ -182,23 +187,19 @@
         <div class="eyebrow">${escapeHtml(categoryName(recipe.category))}${subcategory ? " / " + escapeHtml(subcategory) : ""}</div>
         <h1>${escapeHtml(recipe.title)}</h1>
         ${recipe.description ? `<p class="recipe-description">${escapeHtml(recipe.description)}</p>` : ""}
-        <div class="recipe-meta">${timeLabel(recipe) ? `<span class="meta-chip">◷ ${escapeHtml(timeLabel(recipe))}</span>` : ""}${yieldLabel(recipe) ? `<span class="meta-chip">♧ ${escapeHtml(yieldLabel(recipe))}</span>` : ""}${(recipe.tags || []).slice(0,4).map(t => `<span class="meta-chip">${escapeHtml(t)}</span>`).join("")}</div>
+        <div class="recipe-meta">${timeLabel(recipe) ? `<span class="meta-chip">◷ ${escapeHtml(timeLabel(recipe))}</span>` : ""}${yieldHint(recipe) ? `<span class="meta-chip">♧ ${escapeHtml(yieldHint(recipe))}</span>` : ""}${(recipe.tags || []).slice(0,4).map(t => `<span class="meta-chip">${escapeHtml(t)}</span>`).join("")}</div>
       </section>
       <div class="recipe-layout">
         <div>
           <section class="panel">
             <h2 class="panel-title">Ингредиенты</h2>
-            <div class="wake-card">
-              <div><strong>Не выключать экран</strong><p id="wake-status">Экран может выключаться автоматически.</p></div>
-              <label class="switch" aria-label="Не выключать экран во время готовки"><input id="wake-toggle" type="checkbox"><span class="switch-track"></span></label>
-            </div>
-            <div class="scale-box"><label for="servings-input">Выход рецепта</label><input id="servings-input" class="scale-input" type="number" min="0.1" step="any" value="${numberText(state.servings)}" aria-label="Количество порций или изделий"></div>
+            <div class="scale-box"><label for="multiplier-input">Множитель</label><input id="multiplier-input" class="scale-input" type="number" min="0.01" step="0.01" value="1" aria-label="Множитель количества ингредиентов"><small class="scale-hint">${escapeHtml(yieldHint(recipe))}</small></div>
             <div id="ingredient-groups">${ingredientRows(recipe, 1)}</div>
             <div style="margin-top:14px"><button id="reset-checks" class="reset-button" type="button">Сбросить отметки</button></div>
           </section>
-          ${recipe.equipment?.length ? `<section class="panel"><h2 class="panel-title">Оборудование</h2><ul class="tips-list">${recipe.equipment.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></section>` : ""}
-          ${recipe.tips?.length ? `<section class="panel"><h2 class="panel-title">Советы</h2><ul class="tips-list">${recipe.tips.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></section>` : ""}
-          ${recipe.storage?.length ? `<section class="panel"><h2 class="panel-title">Хранение</h2><ul class="storage-list">${recipe.storage.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></section>` : ""}
+          ${recipe.equipment?.length ? `<section class="panel"><h2 class="panel-title">Оборудование</h2><ul class="tips-list">${recipe.equipment.map(item => `<li>${escapeHtml(contentText(item))}</li>`).join("")}</ul></section>` : ""}
+          ${recipe.tips?.length ? `<section class="panel"><h2 class="panel-title">Советы</h2><ul class="tips-list">${recipe.tips.map(item => `<li>${escapeHtml(contentText(item))}</li>`).join("")}</ul></section>` : ""}
+          ${recipe.storage?.length ? `<section class="panel"><h2 class="panel-title">Хранение</h2><ul class="storage-list">${recipe.storage.map(item => `<li>${escapeHtml(contentText(item))}</li>`).join("")}</ul></section>` : ""}
         </div>
         <section class="panel">
           <div class="panel-head-row"><h2 class="panel-title" style="margin:0">Приготовление</h2><button id="reset-steps" class="reset-button" type="button">Сбросить шаги</button></div>
@@ -236,20 +237,33 @@
         state.wakeEnabled = false;
       }
     });
-    $("#servings-input").addEventListener("input", e => {
-      const amount = Number(e.target.value);
-      if (!Number.isFinite(amount) || amount <= 0) return;
-      state.servings = amount;
-      const factor = amount / yieldBase(recipe);
+    const multiplierInput = $("#multiplier-input");
+    const updateMultiplier = () => {
+      const factor = state.multiplier;
       $("#ingredient-groups").innerHTML = ingredientRows(recipe, factor);
       bindIngredientRows();
-      const active = document.activeElement;
-      if (active && active.id === "servings-input") active.focus();
       $(".step-list").innerHTML = renderSteps(recipe, factor);
       bindSteps();
+    };
+    multiplierInput.addEventListener("input", e => {
+      const amount = Number(e.target.value);
+      if (!Number.isFinite(amount) || amount <= 0) return;
+      state.multiplier = amount;
+      updateMultiplier();
     });
-    $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.servings / yieldBase(recipe)); bindIngredientRows(); });
-    $("#reset-steps").addEventListener("click", () => { state.doneSteps.clear(); $(".step-list").innerHTML = renderSteps(recipe, state.servings / yieldBase(recipe)); bindSteps(); });
+    multiplierInput.addEventListener("change", e => {
+      const amount = Number(e.target.value);
+      if (!Number.isFinite(amount) || amount <= 0) {
+        state.multiplier = 1;
+        e.target.value = "1";
+      } else {
+        state.multiplier = Math.max(0.01, Math.round(amount * 100) / 100);
+        e.target.value = numberText(state.multiplier);
+      }
+      updateMultiplier();
+    });
+    $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); });
+    $("#reset-steps").addEventListener("click", () => { state.doneSteps.clear(); $(".step-list").innerHTML = renderSteps(recipe, state.multiplier); bindSteps(); });
     bindIngredientRows();
     bindSteps();
   }
@@ -272,7 +286,7 @@
         const id = row.dataset.stepId;
         state.doneSteps.has(id) ? state.doneSteps.delete(id) : state.doneSteps.add(id);
         const recipe = state.currentRecipe;
-        const factor = state.servings / yieldBase(recipe);
+        const factor = state.multiplier;
         $(".step-list").innerHTML = renderSteps(recipe, factor);
         bindSteps();
       };
