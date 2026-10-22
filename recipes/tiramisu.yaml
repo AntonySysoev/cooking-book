@@ -49,7 +49,7 @@ ingredients:
     parts:
       - id: yolks
         name: Желтки
-        quantity: 3
+        quantity: 2
         group: cream
       - id: whites
         name: Белки
