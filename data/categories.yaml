@@ -1,0 +1,92 @@
+# Stable category IDs used by recipe files.
+categories:
+  - id: desserts
+    title: Десерты
+    subcategories:
+      - id: cakes-and-pastries
+        title: Торты и пирожные
+      - id: ice-cream
+        title: Мороженое
+      - id: creams-and-fillings
+        title: Кремы и начинки
+      - id: cookies-and-candies
+        title: Печенье и конфеты
+      - id: puddings
+        title: Пудинги
+  - id: baking-and-dough
+    title: Выпечка и тесто
+    subcategories:
+      - id: bread
+        title: Хлеб
+      - id: buns-and-pastries
+        title: Булочки и сдоба
+      - id: laminated-dough
+        title: Слоёное тесто
+      - id: pies-and-tarts
+        title: Пироги и тарты
+      - id: pizza-and-flatbreads
+        title: Пицца и лепёшки
+      - id: cookies
+        title: Печенье
+  - id: main-dishes
+    title: Основные блюда
+    subcategories:
+      - id: meat
+        title: Мясо
+      - id: fish-and-seafood
+        title: Рыба и морепродукты
+      - id: pasta-and-noodles
+        title: Паста и лапша
+      - id: dumplings
+        title: Пельмени и манты
+      - id: casseroles
+        title: Запеканки
+  - id: snacks-and-light-meals
+    title: Закуски и лёгкие блюда
+    subcategories:
+      - id: dips-and-spreads
+        title: Дипы и намазки
+      - id: finger-food
+        title: Закуски на один укус
+      - id: sandwiches
+        title: Бутерброды
+  - id: drinks
+    title: Напитки
+    subcategories:
+      - id: coffee-and-tea
+        title: Кофе и чай
+      - id: cold-drinks
+        title: Холодные напитки
+      - id: cocktails
+        title: Коктейли
+      - id: hot-drinks
+        title: Горячие напитки
+  - id: soups
+    title: Супы
+    subcategories:
+      - id: clear-soups
+        title: Прозрачные супы
+      - id: creamy-soups
+        title: Крем-супы
+      - id: hearty-soups
+        title: Сытные супы
+  - id: salads-and-sides
+    title: Салаты и гарниры
+    subcategories:
+      - id: salads
+        title: Салаты
+      - id: vegetable-sides
+        title: Овощные гарниры
+      - id: grains-and-potatoes
+        title: Крупы и картофель
+  - id: sauces-and-preserves
+    title: Соусы и заготовки
+    subcategories:
+      - id: sauces
+        title: Соусы
+      - id: caramel-and-syrups
+        title: Карамель и сиропы
+      - id: jams-and-preserves
+        title: Варенье и заготовки
+      - id: spice-and-nut-pastes
+        title: Пряные и ореховые пасты
