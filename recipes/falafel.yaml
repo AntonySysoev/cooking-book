@@ -1,0 +1,126 @@
+id: falafel
+title: Фалафель
+description: Хрустящий снаружи и сочный внутри фалафель из сухого нута, замоченного без варки.
+category: snacks-and-light-meals
+subcategory: finger-food
+tags: [нут, ближневосточная кухня, вегетарианское]
+yield:
+  quantity: 24
+  unit: шарика
+time:
+  active_minutes: 35
+  total_minutes_min: 780
+  total_minutes_max: 900
+equipment:
+  - Мясорубка с решёткой 6 мм
+  - Кастрюля или фритюрная посуда
+  - Термометр для масла, если есть
+ingredient_groups:
+  - id: falafel
+    title: Фалафель
+ingredients:
+  - id: chickpeas
+    name: Сухой нут
+    quantity: 250
+    unit: г
+    group: falafel
+    note: Не варить; замочить на 12–18 часов.
+  - id: onion
+    name: Репчатый лук
+    quantity: 100
+    unit: г
+    group: falafel
+  - id: garlic
+    name: Чеснок
+    quantity: 12
+    unit: г
+    group: falafel
+  - id: parsley
+    name: Петрушка
+    quantity: 25
+    unit: г
+    group: falafel
+  - id: cilantro
+    name: Кинза
+    quantity: 20
+    unit: г
+    group: falafel
+    note: Можно заменить петрушкой.
+  - id: cumin
+    name: Молотый кумин
+    quantity: 4
+    unit: г
+    group: falafel
+  - id: coriander
+    name: Молотый кориандр
+    quantity: 3
+    unit: г
+    group: falafel
+  - id: salt
+    name: Соль
+    quantity: 6
+    unit: г
+    group: falafel
+  - id: pepper
+    name: Чёрный перец
+    quantity: 1
+    unit: г
+    group: falafel
+  - id: baking-powder
+    name: Разрыхлитель
+    quantity: 4
+    unit: г
+    group: falafel
+  - id: flour
+    name: Нутовая мука
+    quantity: 15
+    unit: г
+    group: falafel
+    note: Добавлять только если масса слишком влажная.
+    optional: true
+  - id: oil
+    name: Растительное масло для жарки
+    quantity: 1000
+    unit: г
+    group: falafel
+    note: Фактический расход меньше; нужно достаточно для глубокого слоя.
+steps:
+  - id: soak
+    title: Замочить нут
+    ingredients:
+      - ingredient: chickpeas
+    instructions: Промой нут и залей большим количеством холодной воды на 12–18 часов. Он должен заметно увеличиться. Слей воду и очень тщательно обсуши.
+  - id: grind
+    title: Подготовить массу
+    ingredients:
+      - ingredient: onion
+      - ingredient: garlic
+      - ingredient: parsley
+      - ingredient: cilantro
+      - ingredient: cumin
+      - ingredient: coriander
+      - ingredient: salt
+      - ingredient: pepper
+    instructions: Нарежь лук и зелень на куски, затем пропусти нут, лук, чеснок и зелень через мясорубку с решёткой 6 мм. Перемешай со специями. Масса должна быть зернистой, влажной, но не пастообразной.
+  - id: rest
+    title: Охладить массу
+    ingredients:
+      - ingredient: baking-powder
+      - ingredient: flour
+    instructions: Накрой и охлади массу 30–60 минут. Перед формованием вмешай разрыхлитель. Если масса не держит форму, добавь немного нутовой муки.
+  - id: shape
+    title: Сформовать
+    instructions: Сформуй небольшие шарики или приплюснутые шайбы одинакового размера, плотно сжимая массу, но не утрамбовывая её чрезмерно.
+  - id: fry
+    title: Обжарить
+    ingredients:
+      - ingredient: oil
+    instructions: Разогрей масло до 170–175 °C. Жарь небольшими партиями примерно 3–5 минут до глубокого золотисто-коричневого цвета, поддерживая температуру масла. Не перегружай посуду.
+  - id: drain
+    title: Дать стечь маслу
+    instructions: Переложи фалафель на решётку или бумагу и подавай горячим с тахинным или йогуртовым соусом.
+tips:
+  - Нут для фалафеля не варят: приготовление из варёного нута даёт более рыхлую массу, которая может разваливаться в масле.
+  - Если внутри фалафель сыроват, делай шарики меньше или немного снизь температуру масла.
+storage:
+  - Лучше всего есть сразу. Остывший фалафель можно разогреть в духовке при 190 °C до восстановления корочки.
