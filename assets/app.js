@@ -84,12 +84,13 @@
     return c ? c.title : id || "Без категории";
   }
   function categoryClass(id) {
-    const allowed = ["desserts", "baking-and-dough", "main-dishes", "snacks-and-light-meals", "drinks", "soups", "salads-and-sides", "sauces-and-preserves"];
+    const allowed = ["desserts", "ice-cream", "baking-and-dough", "main-dishes", "snacks-and-light-meals", "drinks", "soups", "salads-and-sides", "sauces-and-preserves"];
     return allowed.includes(id) ? `category-${id}` : "category-neutral";
   }
   function categoryIcon(id) {
     return ({
       desserts: "🍰",
+      "ice-cream": "🍨",
       "baking-and-dough": "🥐",
       "main-dishes": "🍽️",
       "snacks-and-light-meals": "🥑",
