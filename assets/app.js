@@ -83,6 +83,10 @@
     const c = state.categories.find(item => item.id === id);
     return c ? c.title : id || "Без категории";
   }
+  function categoryClass(id) {
+    const allowed = ["desserts", "baking-and-dough", "main-dishes", "snacks-and-light-meals", "drinks", "soups", "salads-and-sides", "sauces-and-preserves"];
+    return allowed.includes(id) ? `category-${id}` : "category-neutral";
+  }
   function allSearchText(recipe) {
     return [recipe.title, recipe.description, ...(recipe.tags || []), categoryName(recipe.category), recipe.subcategory,
       ...(recipe.ingredients || []).map(i => i.name)].join(" ").toLocaleLowerCase("ru");
@@ -91,7 +95,7 @@
     document.title = "Cooking Book — кулинарная книга";
     printButton.hidden = true;
     $("#wake-toggle").hidden = true;
-    const categories = state.categories.map(c => `<button class="pill ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button">${escapeHtml(c.title)}</button>`).join("");
+    const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button">${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || r.category === state.activeCategory) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")));
     app.innerHTML = `
@@ -105,7 +109,7 @@
       <div class="category-pills"><button class="pill ${state.activeCategory === "all" ? "active" : ""}" data-category="all" type="button">Все</button>${categories}</div>
       <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${filtered.length === 1 ? "рецепт" : filtered.length > 1 && filtered.length < 5 ? "рецепта" : "рецептов"}</span></div>
       ${filtered.length ? `<div class="recipe-grid">${filtered.map(r => `
-        <a class="recipe-card" href="?recipe=${encodeURIComponent(r.id)}">
+        <a class="recipe-card ${categoryClass(r.category)}" href="?recipe=${encodeURIComponent(r.id)}">
           <span class="card-category">${escapeHtml(categoryName(r.category))}${r.subcategory ? " · " + escapeHtml((state.categories.find(c => c.id === r.category)?.subcategories || []).find(s => s.id === r.subcategory)?.title || "") : ""}</span>
           <h3>${escapeHtml(r.title)}</h3>
           <p class="card-description">${escapeHtml(r.description || "")}</p>
