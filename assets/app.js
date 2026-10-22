@@ -107,7 +107,8 @@
       const rows = [];
       for (const item of recipe.ingredients || []) {
         if (item.parts_mode === "components") {
-          if (item.group === group.id && !rendered.has(item.id)) {
+          const componentGroups = (item.parts || []).map(part => part.group).filter(Boolean);
+          if ((item.group === group.id || componentGroups.includes(group.id)) && !rendered.has(item.id)) {
             rows.push(renderIngredientRow(item, null, factor, item.id));
             rendered.add(item.id);
           }
