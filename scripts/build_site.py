@@ -57,7 +57,7 @@ def main() -> int:
         encoding="utf-8",
     )
     (DIST / "sw.js").write_text(
-        """const CACHE_NAME = "cooking-book-v1";
+        """const CACHE_NAME = "cooking-book-v2";
 const FILES = ["./", "./index.html", "./assets/styles.css", "./assets/app.js",
   "./data/categories.json", "./data/recipes.json", "./manifest.webmanifest"];
 self.addEventListener("install", event => {
