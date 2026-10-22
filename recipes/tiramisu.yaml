@@ -1,0 +1,184 @@
+id: tiramisu
+title: Тирамису ресторанного уровня
+description: >-
+  Тирамису с выразительным кофе, шелковистым кремом из маскарпоне,
+  тонкой алкогольной нотой и несладким какао.
+category: desserts
+subcategory: cakes-and-pastries
+tags:
+  - итальянская кухня
+  - маскарпоне
+  - кофе
+  - десерт без выпечки
+  - тирамису
+yield:
+  quantity_min: 8
+  quantity_max: 10
+  unit: порций
+time:
+  active_minutes_min: 40
+  active_minutes_max: 50
+  total_minutes_min: 760
+  total_minutes_max: 1490
+equipment:
+  - Форма примерно 20 × 25 см
+  - Кастрюля для водяной бани
+  - Металлическая миска
+  - Кулинарный термометр
+  - Венчик
+  - Лопатка
+  - Мелкое сито
+ingredient_groups:
+  - id: cream
+    title: Крем
+  - id: coffee
+    title: Кофейная пропитка
+  - id: assembly
+    title: Сборка и подача
+ingredients:
+  - id: mascarpone
+    name: Маскарпоне
+    quantity: 750
+    unit: г
+    group: cream
+  - id: eggs
+    name: Яйца категории M–L
+    quantity: 4
+    unit: шт.
+    parts_mode: components
+    note: Яйца разделить на желтки и белки.
+    parts:
+      - id: yolks
+        name: Желтки
+        quantity: 4
+        group: cream
+      - id: whites
+        name: Белки
+        quantity: 4
+        group: cream
+  - id: sugar
+    name: Белый сахар
+    quantity: 100
+    unit: г
+    parts:
+      - id: yolks
+        name: Для желтков
+        quantity: 65
+        group: cream
+      - id: whites
+        name: Для белков
+        quantity: 35
+        group: cream
+  - id: salt
+    name: Мелкая соль
+    quantity: 0.5
+    unit: г
+    group: cream
+  - id: coffee
+    name: Крепкий эспрессо или концентрированный кофе
+    quantity: 300
+    unit: г
+    group: coffee
+    note: Полностью остудить.
+  - id: whiskey
+    name: Jack Daniel’s, 45%
+    quantity: 15
+    unit: г
+    group: coffee
+    optional: true
+    note: Можно не добавлять или заменить пряным ромом.
+  - id: muscovado
+    name: Мусковадо
+    quantity_min: 3
+    quantity_max: 5
+    unit: г
+    group: coffee
+    optional: true
+    note: По желанию, для мягкой карамельной ноты в кофе.
+  - id: savoiardi
+    name: Печенье савоярди
+    quantity_min: 250
+    quantity_max: 300
+    unit: г
+    group: assembly
+  - id: cocoa
+    name: Какао-порошок без сахара
+    quantity_min: 10
+    quantity_max: 15
+    unit: г
+    group: assembly
+steps:
+  - id: coffee
+    title: Приготовить кофейную пропитку
+    ingredients:
+      - ingredient: coffee
+      - ingredient: whiskey
+      - ingredient: muscovado
+    instructions: >-
+      Приготовь крепкий кофе и полностью остуди. При желании размешай в нём
+      мусковадо и виски. Перелей в широкую неглубокую ёмкость.
+  - id: yolks
+    title: Заварить желтки
+    ingredients:
+      - ingredient: eggs
+        part: yolks
+      - ingredient: sugar
+        part: yolks
+    instructions: >-
+      Смешай желтки с 65 г сахара в жаропрочной миске. Поставь над слабо
+      кипящей водой так, чтобы дно миски не касалось воды, и постоянно
+      взбивай до густой светлой массы. Температура около 71 °C сама по себе
+      не гарантирует пастеризацию: для безопасности используй пастеризованные
+      яйца либо проверенный режим термообработки.
+  - id: mascarpone
+    title: Соединить с маскарпоне
+    ingredients:
+      - ingredient: mascarpone
+      - ingredient: salt
+    instructions: >-
+      Остуди желтковую смесь до тёплого состояния. Размягчи маскарпоне лопаткой
+      до однородности и вмешай желтки в несколько приёмов. Не перемешивай
+      интенсивно и долго, чтобы крем не стал жидким.
+  - id: whites
+    title: Приготовить белковую пену
+    ingredients:
+      - ingredient: eggs
+        part: whites
+      - ingredient: sugar
+        part: whites
+    instructions: >-
+      В чистой обезжиренной миске соедини белки с 35 г сахара. Нагревай на
+      водяной бане, постоянно перемешивая, до растворения сахара и примерно
+      71 °C, затем взбей до плотной блестящей пены и охлаждения. Обычная
+      швейцарская меренга не гарантирует пастеризацию; для максимальной
+      безопасности используй пастеризованные белки.
+  - id: combine
+    title: Завершить крем
+    instructions: >-
+      Вмешай белковую пену в маскарпоне в 2–3 приёма лопаткой, движениями
+      снизу вверх, стараясь сохранить объём.
+  - id: assemble
+    title: Собрать тирамису
+    ingredients:
+      - ingredient: savoiardi
+    instructions: >-
+      Быстро окунай каждую савоярди в кофе — буквально на мгновение с каждой
+      стороны, чтобы печенье не размокло насквозь. Выложи слой печенья,
+      распределяй половину крема, затем повтори слои. Разровняй поверхность.
+  - id: chill
+    title: Охладить
+    instructions: >-
+      Накрой форму и убери в холодильник при температуре не выше 4 °C минимум
+      на 12 часов, лучше на 18–24 часа, чтобы вкус и структура стабилизировались.
+  - id: serve
+    title: Подать
+    ingredients:
+      - ingredient: cocoa
+    instructions: >-
+      Непосредственно перед подачей просей сверху какао. Нарезай чистым ножом,
+      протирая его между порциями.
+tips:
+  - Не передерживай савоярди в кофе: они должны впитать аромат, но сохранять форму.
+  - Если кофе уже сладкий, не добавляй мусковадо.
+storage:
+  - Храни накрытым в холодильнике при температуре не выше 4 °C и съешь в течение 1–2 дней.
