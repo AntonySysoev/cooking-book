@@ -344,7 +344,12 @@
   printButton.addEventListener("click", () => window.print());
   document.addEventListener("visibilitychange", async () => {
     if (document.visibilityState === "visible" && state.wakeEnabled && !state.wakeLock && "wakeLock" in navigator) {
-      try { state.wakeLock = await navigator.wakeLock.request("screen"); } catch (_) {}
+      try {
+        state.wakeLock = await navigator.wakeLock.request("screen");
+      } catch (_) {
+        state.wakeEnabled = false;
+        updateWakeButton();
+      }
     }
   });
   if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
