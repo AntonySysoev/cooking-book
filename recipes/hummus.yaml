@@ -1,0 +1,104 @@
+id: hummus
+title: Хумус
+description: Гладкий, кремовый хумус из очень мягкого нута с тахини, лимоном и чесноком.
+category: snacks-and-light-meals
+subcategory: dips-and-spreads
+tags: [нут, тахини, ближневосточная кухня, намазка]
+yield:
+  quantity: 900
+  unit: г
+time:
+  active_minutes: 25
+  total_minutes_min: 600
+  total_minutes_max: 900
+equipment:
+  - Кастрюля
+  - Блендер Ninja с чашей и тройным ножом
+ingredient_groups:
+  - id: hummus
+    title: Хумус
+ingredients:
+  - id: chickpeas
+    name: Сухой нут
+    quantity: 300
+    unit: г
+    group: hummus
+  - id: tahini
+    name: Тахини
+    quantity: 120
+    unit: г
+    group: hummus
+  - id: lemon
+    name: Лимонный сок
+    quantity: 65
+    unit: г
+    group: hummus
+  - id: garlic
+    name: Чеснок
+    quantity: 8
+    unit: г
+    group: hummus
+  - id: salt
+    name: Соль
+    quantity: 7
+    unit: г
+    group: hummus
+  - id: cumin
+    name: Молотый кумин
+    quantity: 1
+    unit: г
+    group: hummus
+    optional: true
+  - id: ice-water
+    name: Ледяная вода
+    quantity: 120
+    unit: г
+    group: hummus
+    note: Добавляй постепенно, может понадобиться меньше или больше.
+  - id: soda
+    name: Пищевая сода для варки
+    quantity: 2
+    unit: г
+    group: hummus
+  - id: olive-oil
+    name: Оливковое масло для подачи
+    quantity: 15
+    unit: г
+    group: hummus
+    optional: true
+steps:
+  - id: soak
+    title: Замочить нут
+    ingredients:
+      - ingredient: chickpeas
+    instructions: Промой нут и замочи в большом количестве воды на 8–12 часов. Слей воду и промой.
+  - id: cook
+    title: Разварить нут
+    ingredients:
+      - ingredient: soda
+    instructions: Залей нут свежей водой с содой, доведи до кипения и вари до очень мягкого состояния: нут должен легко разминаться между пальцами. При необходимости снимай пену и доливай воду. Обычно требуется 45–90 минут в зависимости от нута.
+  - id: blend-base
+    title: Смешать тахини и приправы
+    ingredients:
+      - ingredient: tahini
+      - ingredient: lemon
+      - ingredient: garlic
+      - ingredient: salt
+      - ingredient: cumin
+    instructions: В чаше Ninja смешай тахини, лимонный сок, чеснок, соль и кумин до густой однородной массы. Если смесь сильно загустела, добавь немного ледяной воды.
+  - id: blend-chickpeas
+    title: Добиться кремовой текстуры
+    ingredients:
+      - ingredient: chickpeas
+      - ingredient: ice-water
+    instructions: Дай нуту постоять 10–15 минут после варки, но не остужай полностью. Добавляй горячий нут в чашу порциями и измельчай короткими циклами, делая паузы и соскребая массу со стенок. Постепенно добавляй ледяную воду до гладкой, воздушной консистенции. Не переполняй чашу.
+  - id: finish
+    title: Отрегулировать и подать
+    ingredients:
+      - ingredient: olive-oil
+    instructions: Попробуй и при необходимости отрегулируй соль и лимон. Переложи в неглубокую тарелку, сделай ложкой бороздки и при желании добавь оливковое масло.
+tips:
+  - Самая важная деталь — разварить нут очень мягко; недоваренный нут не даст шелковистой текстуры.
+  - Если используешь Ninja, работай короткими циклами и не запускай мотор надолго подряд.
+storage:
+  - Храни в закрытой ёмкости в холодильнике при температуре не выше 4 °C до 4 дней.
