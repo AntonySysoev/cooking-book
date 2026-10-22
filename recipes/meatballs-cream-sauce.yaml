@@ -1,0 +1,165 @@
+id: meatballs-cream-sauce
+title: Мясные тефтели в сливочном соусе
+description: Сочные мясные тефтели из говядины и свинины, обжаренные до румяной корочки и запечённые в нежном сливочном соусе.
+category: main-dishes
+subcategory: meat
+tags:
+  - тефтели
+  - мясной фарш
+  - сливочный соус
+  - говядина
+  - свинина
+yield:
+  quantity_min: 4
+  quantity_max: 5
+  unit: порций
+time:
+  active_minutes_min: 35
+  active_minutes_max: 45
+  total_minutes_min: 80
+  total_minutes_max: 100
+equipment:
+  - Большая миска
+  - Сковорода
+  - Форма для запекания
+  - Духовка
+ingredient_groups:
+  - id: meatballs
+    title: Мясные тефтели
+  - id: sauce
+    title: Сливочный соус
+ingredients:
+  - id: mince
+    name: Фарш из говядины и свинины
+    quantity: 750
+    unit: г
+    group: meatballs
+    note: Лучше смесь примерно из равных частей говядины и свинины.
+  - id: bread
+    name: Черствый белый хлеб без корочек
+    quantity: 80
+    unit: г
+    group: meatballs
+  - id: milk
+    name: Молоко для хлеба
+    quantity: 75
+    unit: г
+    group: meatballs
+    note: Это примерно 5 столовых ложек.
+  - id: onion
+    name: Репчатый лук
+    quantity: 1
+    unit: шт.
+    group: meatballs
+    note: Мелко нарезать.
+  - id: garlic
+    name: Чеснок
+    quantity: 1
+    unit: зубчик
+    group: meatballs
+  - id: egg
+    name: Куриное яйцо
+    quantity: 1
+    unit: шт.
+    group: meatballs
+  - id: salt
+    name: Соль
+    quantity: 9
+    unit: г
+    group: meatballs
+    note: Ориентир; скорректируй по солёности бульона и соевого соуса.
+  - id: pepper
+    name: Чёрный перец
+    quantity: 1
+    unit: г
+    group: meatballs
+  - id: butter
+    name: Сливочное масло
+    quantity: 40
+    unit: г
+    group: sauce
+  - id: flour
+    name: Пшеничная мука
+    quantity: 25
+    unit: г
+    group: sauce
+    note: Около 2 столовых ложек без большой горки; исходные 40 г могут сделать соус слишком густым.
+  - id: beef-stock
+    name: Говяжий бульон
+    quantity: 150
+    unit: мл
+    group: sauce
+  - id: vegetable-stock
+    name: Овощной бульон
+    quantity: 150
+    unit: мл
+    group: sauce
+  - id: cream
+    name: Сливки 30%
+    quantity: 150
+    unit: мл
+    group: sauce
+  - id: soy
+    name: Соевый соус
+    quantity: 10
+    unit: мл
+    group: sauce
+  - id: mustard
+    name: Дижонская горчица
+    quantity: 5
+    unit: г
+    group: sauce
+steps:
+  - id: soak-bread
+    title: Подготовить хлеб
+    ingredients:
+      - ingredient: bread
+      - ingredient: milk
+    instructions: >-
+      Нарежь хлеб небольшими кусочками, залей молоком и оставь на 10 минут. Разомни в мягкую кашицу; если остались крупные кусочки, измельчи их вилкой.
+  - id: mix-meat
+    title: Смешать фарш
+    ingredients:
+      - ingredient: mince
+      - ingredient: onion
+      - ingredient: garlic
+      - ingredient: egg
+      - ingredient: salt
+      - ingredient: pepper
+    instructions: >-
+      Очень мелко нарежь лук, чеснок измельчи. Соедини с фаршем, размоченным хлебом, яйцом, солью и перцем. Вымеси до однородности, но не переусердствуй, чтобы тефтели не стали плотными.
+  - id: shape
+    title: Сформовать тефтели
+    instructions: >-
+      Смочи руки холодной водой и скатай шарики примерно с грецкий орех. Убери в холодильник на 30 минут, чтобы они лучше держали форму.
+  - id: brown
+    title: Обжарить тефтели
+    instructions: >-
+      Разогрей сковороду с небольшим количеством растительного масла. Обжарь тефтели партиями со всех сторон до румяной корочки, примерно 5–7 минут суммарно. Полностью готовить их на этом этапе не нужно. Переложи в форму для запекания.
+  - id: roux
+    title: Приготовить основу соуса
+    ingredients:
+      - ingredient: butter
+      - ingredient: flour
+    instructions: >-
+      Убавь нагрев. В той же сковороде растопи сливочное масло, вмешай муку и готовь около 2 минут, постоянно помешивая, не допуская потемнения.
+  - id: sauce
+    title: Завершить соус
+    ingredients:
+      - ingredient: beef-stock
+      - ingredient: vegetable-stock
+      - ingredient: cream
+      - ingredient: soy
+      - ingredient: mustard
+    instructions: >-
+      Постепенно, тонкой струйкой влей горячие бульоны, энергично размешивая венчиком, чтобы не было комков. Добавь сливки, соевый соус и горчицу. Прогрей 3–4 минуты до лёгкого загустения. Попробуй соус и только после этого при необходимости добавь соль.
+  - id: bake
+    title: Запечь в соусе
+    instructions: >-
+      Залей тефтели соусом и запекай в духовке при фактической температуре 180 °C, режим верх-низ, без конвекции, примерно 15–20 минут — до полной готовности в центре. Для безопасности температура внутри самой крупной тефтели должна достичь 71 °C.
+tips:
+  - Если нет двух видов бульона, используй 300 мл одного бульона или сочетание бульона и воды.
+  - Для фарша из очень постного мяса можно добавить 1–2 столовые ложки молока; не добавляй лишнюю жидкость, если фарш уже мягкий.
+  - Соус продолжит густеть в духовке. Если он кажется слишком густым ещё на сковороде, добавь немного бульона или воды.
+storage:
+  - Охлади в течение 2 часов и храни в закрытой ёмкости в холодильнике до 3 дней. Разогревай до полного прогрева в центре.
