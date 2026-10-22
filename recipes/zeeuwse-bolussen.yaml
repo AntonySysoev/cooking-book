@@ -1,0 +1,121 @@
+id: zeeuwse-bolussen
+title: Зеландские болюсы
+description: Голландские дрожжевые булочки-спирали, щедро покрытые корично-сахарной оболочкой. Без слоения.
+category: baking-and-dough
+subcategory: buns-and-pastries
+tags: [Нидерланды, булочки, корица, дрожжевое тесто]
+yield:
+  quantity: 10
+  unit: булочек
+time:
+  active_minutes: 45
+  total_minutes_min: 150
+  total_minutes_max: 210
+equipment:
+  - Ankarsrum
+  - Противень
+  - Пергамент
+ingredient_groups:
+  - id: dough
+    title: Тесто
+  - id: coating
+    title: Сахарно-коричная оболочка
+ingredients:
+  - id: flour
+    name: Пшеничная мука
+    quantity: 500
+    unit: г
+    group: dough
+    note: Хороший вариант — 350 г сильной хлебной муки и 150 г муки типа 500.
+  - id: milk
+    name: Молоко
+    quantity: 100
+    unit: г
+    group: dough
+  - id: water
+    name: Вода
+    quantity: 165
+    unit: г
+    group: dough
+  - id: egg
+    name: Яйцо без скорлупы
+    quantity: 25
+    unit: г
+    group: dough
+  - id: sugar
+    name: Сахар
+    quantity: 30
+    unit: г
+    group: dough
+  - id: salt
+    name: Соль
+    quantity: 9
+    unit: г
+    group: dough
+  - id: yeast
+    name: Сухие быстродействующие дрожжи
+    quantity: 5
+    unit: г
+    group: dough
+  - id: butter
+    name: Сливочное масло
+    quantity: 35
+    unit: г
+    group: dough
+  - id: brown-sugar
+    name: Коричневый тростниковый сахар
+    quantity: 200
+    unit: г
+    group: coating
+  - id: white-sugar
+    name: Белый сахар
+    quantity: 50
+    unit: г
+    group: coating
+  - id: cinnamon
+    name: Молотая корица
+    quantity: 17
+    unit: г
+    group: coating
+steps:
+  - id: mix
+    title: Замесить тесто
+    ingredients:
+      - ingredient: flour
+      - ingredient: milk
+      - ingredient: water
+      - ingredient: egg
+      - ingredient: sugar
+      - ingredient: salt
+      - ingredient: yeast
+    instructions: Соедини ингредиенты и замеси в Ankarsrum до гладкого эластичного теста. В конце введи мягкое масло и продолжай замес до развития клейковины. Тесто должно быть мягким, но пригодным для формования.
+  - id: first-proof
+    title: Дать тесту подняться
+    instructions: Накрой и оставь при комнатной температуре до увеличения примерно вдвое. Точное время зависит от температуры помещения.
+  - id: coating
+    title: Приготовить оболочку
+    ingredients:
+      - ingredient: brown-sugar
+      - ingredient: white-sugar
+      - ingredient: cinnamon
+    instructions: Смешай оба сахара с корицей в глубоком подносе. Подготовь противень с пергаментом.
+  - id: divide
+    title: Разделить и покрыть сахаром
+    instructions: Раздели тесто на 10 одинаковых частей. Каждую часть обваляй в сахарно-коричной смеси, затем раскатай ладонями в длинный жгут, добавляя смесь по мере необходимости.
+  - id: shape
+    title: Свернуть спирали
+    instructions: Сверни каждый жгут в плотную спираль, подоткни конец снизу и хорошо покрой сахарной смесью. Разложи на противне с расстоянием между булочками.
+  - id: proof
+    title: Короткая расстойка
+    instructions: Оставь на 20–30 минут, пока спирали слегка не распухнут. Не допускай чрезмерной расстойки: сахарная оболочка должна хорошо карамелизоваться.
+  - id: bake
+    title: Выпечь
+    instructions: Выпекай при фактической температуре 225 °C в режиме верхнего и нижнего нагрева 7–10 минут, внимательно следя за сахаром. Болусы должны стать карамельными, но не обуглиться.
+  - id: invert
+    title: Перевернуть сразу
+    instructions: Сразу после духовки осторожно переверни каждую булочку сахарной стороной вверх, пока сироп ещё горячий. Дай остыть 10–15 минут.
+tips:
+  - Это классические дрожжевые булочки, а не слоёная выпечка: дополнительное слоение маслом не требуется.
+  - Сахарная оболочка быстро твердеет при остывании, поэтому переворачивать нужно сразу, соблюдая осторожность.
+storage:
+  - Лучше всего в день выпечки; храни в закрытой ёмкости при комнатной температуре до 2 дней.
