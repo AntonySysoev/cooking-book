@@ -44,6 +44,25 @@ def validate_recipe(path: Path) -> list[str]:
         error("'title' must be a non-empty string")
     if not isinstance(data.get("category"), str) or not data.get("category", "").strip():
         error("'category' must be a non-empty category ID")
+    categories_path = ROOT / "data" / "categories.yaml"
+    known_categories: dict[str, set[str]] = {}
+    if categories_path.exists():
+        try:
+            category_data = yaml.safe_load(categories_path.read_text(encoding="utf-8")) or {}
+            for item in category_data.get("categories", []):
+                if isinstance(item, dict) and item.get("id"):
+                    known_categories[str(item["id"])] = {
+                        str(sub["id"]) for sub in item.get("subcategories", [])
+                        if isinstance(sub, dict) and sub.get("id")
+                    }
+        except (OSError, yaml.YAMLError):
+            error("cannot parse data/categories.yaml")
+    category_id = data.get("category")
+    if known_categories and category_id not in known_categories:
+        error(f"unknown category ID '{category_id}' in data/categories.yaml")
+    subcategory_id = data.get("subcategory")
+    if subcategory_id and category_id in known_categories and subcategory_id not in known_categories[category_id]:
+        error(f"unknown subcategory ID '{subcategory_id}' for category '{category_id}'")
 
     groups = data.get("ingredient_groups", [])
     group_ids: set[str] = set()
@@ -197,8 +216,11 @@ def validate_recipe(path: Path) -> list[str]:
             error("'time' must be a mapping")
         else:
             for key, value in time_data.items():
-                if not key.endswith("_minutes"):
-                    error(f"time field '{key}' must end in '_minutes'")
+                if not (key.endswith("_minutes") or key in {
+                    "active_minutes_min", "active_minutes_max",
+                    "total_minutes_min", "total_minutes_max",
+                }):
+                    error(f"time field '{key}' must be a supported minute field")
                 if not isinstance(value, int) or isinstance(value, bool) or value < 0:
                     error(f"time field '{key}' must be a non-negative integer")
             for prefix in ("active", "total"):
