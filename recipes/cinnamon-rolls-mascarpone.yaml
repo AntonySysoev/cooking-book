@@ -1,0 +1,202 @@
+id: cinnamon-rolls-mascarpone
+title: Синабонны с кремом из маскарпоне
+description: >-
+  Пышные сдобные булочки с корицей и коричневым сахаром под нежным кремом
+  из маскарпоне. Тесто удобно замешивать в Ankarsrum.
+category: baking-and-dough
+subcategory: buns-and-pastries
+tags:
+  - корица
+  - маскарпоне
+  - сдобное тесто
+  - булочки
+yield:
+  quantity: 9
+  unit: крупных булочек
+time:
+  active_minutes: 45
+  total_minutes_min: 210
+  total_minutes_max: 270
+equipment:
+  - Планетарный тестомес Ankarsrum
+  - Форма для выпечки
+  - Лопатка
+ingredient_groups:
+  - id: dough
+    title: Тесто
+  - id: filling
+    title: Начинка
+  - id: frosting
+    title: Крем
+ingredients:
+  - id: bread-flour
+    name: Пшеничная хлебная мука
+    quantity: 500
+    unit: г
+    group: dough
+  - id: milk
+    name: Молоко 3–3,5%
+    quantity: 230
+    unit: г
+    group: dough
+  - id: eggs
+    name: Яйца без скорлупы
+    quantity: 100
+    unit: г
+    group: dough
+    note: Примерно 2 яйца; ориентируйся на массу без скорлупы.
+  - id: sugar
+    name: Сахар
+    quantity: 65
+    unit: г
+    group: dough
+  - id: butter
+    name: Сливочное масло 82%
+    quantity: 155
+    unit: г
+    note: Размягчённое для теста и начинки.
+    parts:
+      - id: dough
+        name: В тесто
+        quantity: 75
+        group: dough
+      - id: filling
+        name: В начинку
+        quantity: 80
+        group: filling
+  - id: instant-yeast
+    name: Сухие быстродействующие дрожжи
+    quantity: 6
+    unit: г
+    group: dough
+  - id: salt
+    name: Соль
+    quantity: 9.5
+    unit: г
+    parts:
+      - id: dough
+        name: В тесто
+        quantity: 8
+        group: dough
+      - id: filling
+        name: В начинку
+        quantity: 1
+        group: filling
+      - id: frosting
+        name: В крем
+        quantity: 0.5
+        group: frosting
+  - id: brown-sugar
+    name: Коричневый сахар
+    quantity: 150
+    unit: г
+    group: filling
+  - id: cinnamon
+    name: Молотая корица
+    quantity: 15
+    unit: г
+    group: filling
+  - id: mascarpone
+    name: Маскарпоне
+    quantity: 250
+    unit: г
+    group: frosting
+  - id: cream
+    name: Сливки 30%
+    quantity: 40
+    unit: г
+    group: frosting
+    note: Холодные.
+  - id: icing-sugar
+    name: Сахарная пудра
+    quantity: 45
+    unit: г
+    group: frosting
+  - id: vanilla
+    name: Ванильный экстракт
+    quantity: 3
+    unit: г
+    group: frosting
+steps:
+  - id: prepare
+    title: Подготовить ингредиенты
+    instructions: >-
+      Доведи масло для теста и начинки до мягкого состояния. Молоко должно быть
+      прохладным или слегка тёплым, не горячим. Подготовь форму для 9 булочек.
+  - id: mix
+    title: Замесить тесто
+    ingredients:
+      - ingredient: bread-flour
+      - ingredient: milk
+      - ingredient: eggs
+      - ingredient: sugar
+      - ingredient: instant-yeast
+      - ingredient: salt
+        part: dough
+    instructions: >-
+      Соедини муку, молоко, яйца, сахар, дрожжи и соль. Замешивай в Ankarsrum
+      до однородного теста, затем продолжай замес до развития клейковины.
+  - id: add-butter
+    title: Ввести масло
+    ingredients:
+      - ingredient: butter
+        part: dough
+    instructions: >-
+      Вводи 75 г мягкого масла частями, дожидаясь, пока каждая порция
+      распределится. Продолжай замес до гладкого, эластичного теста.
+  - id: first-proof
+    title: Первое брожение
+    instructions: >-
+      Накрой тесто и оставь в тёплом месте до заметного увеличения объёма,
+      ориентировочно в 1,5–2 раза. Время зависит от температуры помещения.
+  - id: filling
+    title: Приготовить начинку
+    ingredients:
+      - ingredient: butter
+        part: filling
+      - ingredient: brown-sugar
+      - ingredient: cinnamon
+      - ingredient: salt
+        part: filling
+    instructions: >-
+      Смешай коричневый сахар, корицу и 1 г соли. Мягкое масло равномерно
+      распредели по раскатанному тесту, затем посыпь сахарно-коричной смесью.
+  - id: shape
+    title: Сформовать булочки
+    instructions: >-
+      Раскатай тесто в прямоугольник, сверни плотным рулетом и нарежь на
+      9 равных частей. Переложи булочки в форму, оставляя пространство для подъёма.
+  - id: second-proof
+    title: Расстойка
+    instructions: >-
+      Накрой и оставь булочки до заметного увеличения объёма и лёгкости теста.
+      Не ориентируйся только на часы: недорасстойка ухудшит мякиш.
+  - id: bake
+    title: Выпечь
+    instructions: >-
+      Выпекай при фактической температуре духовки 175 °C, режим верхнего и
+      нижнего нагрева без конвекции, примерно 22–28 минут. Начни проверять
+      с 20-й минуты. Температура в центре готовой булочки — около 88–92 °C.
+  - id: frosting
+    title: Приготовить крем
+    ingredients:
+      - ingredient: mascarpone
+      - ingredient: cream
+      - ingredient: icing-sugar
+      - ingredient: vanilla
+      - ingredient: salt
+        part: frosting
+    instructions: >-
+      Смешай холодный маскарпоне, сливки, сахарную пудру, ваниль и 0,5 г соли
+      до гладкого крема. Не взбивай дольше необходимого, чтобы смесь не расслоилась.
+  - id: finish
+    title: Покрыть кремом
+    instructions: >-
+      Дай булочкам остыть 5–10 минут и нанеси примерно две трети крема.
+      Оставшийся крем подай отдельно или распредели перед подачей.
+tips:
+  - Не добавляй лишнюю муку при раскатке: тесто должно оставаться мягким.
+  - Если булочки быстро темнеют, прикрой их фольгой в конце выпечки.
+storage:
+  - Храни в закрытом контейнере в холодильнике до 3 дней; перед подачей дай немного согреться.
+  - Булочки без крема можно заморозить после полного остывания.
