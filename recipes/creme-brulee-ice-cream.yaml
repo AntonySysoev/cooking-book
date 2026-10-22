@@ -1,0 +1,91 @@
+id: creme-brulee-ice-cream
+title: Мороженое «Крем-брюле»
+description: Сливочное мороженое с карамельной основой. Для более выраженного вкуса карамель доводится до глубокого янтарного оттенка.
+category: desserts
+subcategory: ice-cream
+tags: [мороженое, крем-брюле, карамель, Ankarsrum]
+yield:
+  quantity: 1100
+  unit: г
+time:
+  active_minutes: 40
+  total_minutes_min: 600
+  total_minutes_max: 1080
+equipment:
+  - Ankarsrum с мороженицей
+  - Кастрюля с толстым дном
+  - Термометр
+ingredients:
+  - id: cream
+    name: Сливки 30%
+    quantity: 500
+    unit: г
+  - id: milk
+    name: Молоко 3–3,5%
+    quantity: 310
+    unit: г
+  - id: yolks
+    name: Яичные желтки
+    quantity: 90
+    unit: г
+  - id: sugar
+    name: Сахар
+    quantity: 175
+    unit: г
+    parts:
+      - id: caramel
+        name: Для карамели
+        quantity: 112
+      - id: custard
+        name: Для заварной основы
+        quantity: 63
+  - id: water
+    name: Вода
+    quantity: 38
+    unit: г
+  - id: locust-bean-gum
+    name: Камедь рожкового дерева E410
+    quantity: 0.6
+    unit: г
+  - id: salt
+    name: Соль
+    quantity: 0.8
+    unit: г
+steps:
+  - id: caramel
+    title: Сделать карамель
+    ingredients:
+      - ingredient: sugar
+        part: caramel
+      - ingredient: water
+    instructions: Соедини сахар для карамели с водой в сотейнике. Нагревай до глубокого медно-янтарного цвета, ориентировочно 170–175 °C. Не перемешивай ложкой после закипания; при необходимости осторожно покачивай сотейник.
+  - id: dairy
+    title: Ввести сливки и молоко
+    ingredients:
+      - ingredient: cream
+      - ingredient: milk
+    instructions: Слегка подогрей молоко со сливками отдельно. Осторожно влей горячую смесь в карамель небольшими порциями, постоянно помешивая. Будь осторожен: карамель сильно пенится. Если она затвердела, прогрей на слабом огне до растворения.
+  - id: dry
+    title: Подготовить стабилизатор
+    ingredients:
+      - ingredient: sugar
+        part: custard
+      - ingredient: locust-bean-gum
+      - ingredient: salt
+    instructions: Смешай сахар, камедь и соль, тщательно распределяя камедь в сахаре.
+  - id: custard
+    title: Заварить основу
+    ingredients:
+      - ingredient: yolks
+    instructions: Подогрей карамельно-молочную смесь, дождём всыпь сахар с камедью. Темперируй желтки небольшим количеством горячей жидкости, верни всё в кастрюлю и нагревай при постоянном перемешивании до 82–84 °C.
+  - id: chill
+    title: Охладить и выдержать
+    instructions: Процеди основу и быстро охлади. Выдержи в холодильнике 8–12 часов, чтобы стабилизировалась структура.
+  - id: churn
+    title: Заморозить
+    instructions: Перемешай основу и замораживай в предварительно охлаждённой чаше мороженицы Ankarsrum 20–25 минут или до нужной консистенции. Переложи в контейнер и дозаморозь 2–4 часа.
+tips:
+  - В предыдущем варианте вкус карамели оказался слишком слабым и цвет светлым; для более выраженной ноты важно получить глубокий янтарный цвет, но не сжечь сахар.
+  - Не оценивай густоту горячей основы: после охлаждения и созревания она станет заметно плотнее.
+storage:
+  - Храни в морозильнике в герметичном контейнере.
