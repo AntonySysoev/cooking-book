@@ -5,14 +5,14 @@ categories:
     subcategories:
       - id: cakes-and-pastries
         title: Торты и пирожные
-      - id: ice-cream
-        title: Мороженое
       - id: creams-and-fillings
         title: Кремы и начинки
       - id: cookies-and-candies
         title: Печенье и конфеты
       - id: puddings
         title: Пудинги
+  - id: ice-cream
+    title: Мороженое
   - id: baking-and-dough
     title: Выпечка и тесто
     subcategories:
