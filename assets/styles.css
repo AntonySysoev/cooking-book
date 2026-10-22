@@ -151,6 +151,8 @@ body[class*="category-"] { --accent:var(--category-ink); --accent-dark:var(--cat
   .panel { padding:18px; }
   .recipe-head { padding-bottom:18px; }
 }
+.reset-all-wrap { margin: 20px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line); text-align: center; }
+.reset-all-wrap p { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
 @media print {
   :root { --paper:#fff; --card:#fff; --ink:#000; --muted:#555; --line:#ddd; }
   body { background:#fff; font-size:11pt; }
