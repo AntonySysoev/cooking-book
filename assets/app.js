@@ -77,6 +77,7 @@
   function renderHome() {
     document.title = "Cooking Book — кулинарная книга";
     printButton.hidden = true;
+    $("#wake-card").hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button">${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || r.category === state.activeCategory) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")));
@@ -175,6 +176,7 @@
   }
   function renderRecipe(recipe) {
     printButton.hidden = false;
+    $("#wake-card").hidden = false;
     document.title = `${recipe.title} — Cooking Book`;
     state.currentRecipe = recipe;
     state.multiplier = 1;
