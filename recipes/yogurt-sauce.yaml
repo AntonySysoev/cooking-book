@@ -1,0 +1,71 @@
+id: yogurt-sauce
+title: Йогуртовый соус с лимоном и чесноком
+description: Свежий густой соус к фалафелю, лепёшкам и овощам.
+category: sauces-and-preserves
+subcategory: sauces
+tags: [йогурт, чеснок, лимон, соус к фалафелю]
+yield:
+  quantity: 350
+  unit: г
+time:
+  active_minutes: 10
+  total_minutes: 10
+ingredient_groups:
+  - id: sauce
+    title: Соус
+ingredients:
+  - id: yogurt
+    name: Густой натуральный йогурт
+    quantity: 250
+    unit: г
+    group: sauce
+  - id: lemon
+    name: Лимонный сок
+    quantity: 18
+    unit: г
+    group: sauce
+  - id: garlic
+    name: Чеснок
+    quantity: 5
+    unit: г
+    group: sauce
+  - id: olive-oil
+    name: Оливковое масло
+    quantity: 15
+    unit: г
+    group: sauce
+  - id: dill
+    name: Укроп или мята
+    quantity: 8
+    unit: г
+    group: sauce
+    optional: true
+  - id: salt
+    name: Соль
+    quantity: 3
+    unit: г
+    group: sauce
+  - id: pepper
+    name: Чёрный перец
+    quantity: 0.3
+    unit: г
+    group: sauce
+steps:
+  - id: mix
+    title: Смешать
+    ingredients:
+      - ingredient: yogurt
+      - ingredient: lemon
+      - ingredient: garlic
+      - ingredient: olive-oil
+      - ingredient: dill
+      - ingredient: salt
+      - ingredient: pepper
+    instructions: Мелко натри или разотри чеснок, мелко поруби зелень. Смешай всё с йогуртом до однородности.
+  - id: rest
+    title: Дать вкусам соединиться
+    instructions: Оставь в холодильнике на 15–30 минут. Перед подачей попробуй и скорректируй соль и кислотность.
+tips:
+  - Для более густого соуса используй процеженный йогурт; если йогурт кислый, начни с меньшего количества лимонного сока.
+storage:
+  - Храни в холодильнике в закрытой ёмкости до 3 дней.
