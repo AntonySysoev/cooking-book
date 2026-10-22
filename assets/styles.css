@@ -53,6 +53,8 @@ h3 { font-size:16px; margin:0 0 8px; }
 .category-soups { --category-ink:#8b7139; --category-soft:#f4efdf; --category-line:#e5dbb8; }
 .category-salads-and-sides { --category-ink:#6e7c48; --category-soft:#edf0e2; --category-line:#d8dfbf; }
 .category-sauces-and-preserves { --category-ink:#79638c; --category-soft:#eee8f3; --category-line:#d9cce5; }
+body[class*="category-"] { --accent:var(--category-ink); --accent-dark:var(--category-ink); --accent-soft:var(--category-soft); }
+.category-icon { display:inline-block; margin-right:3px; font-size:14px; line-height:1; vertical-align:-1px; }
 .pill[class*="category-"] { color:var(--category-ink); background:var(--category-soft); border-color:var(--category-line); }
 .pill[class*="category-"].active { color:var(--category-ink); background:var(--category-soft); border-color:var(--category-ink); box-shadow:inset 0 0 0 1px var(--category-ink); }
 .recipe-card[class*="category-"] { border-top:3px solid var(--category-line); }
@@ -63,7 +65,7 @@ h3 { font-size:16px; margin:0 0 8px; }
 .recipe-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
 .recipe-card { display:flex; flex-direction:column; gap:10px; min-height:190px; background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; text-decoration:none; box-shadow:var(--shadow); transition:transform .15s,border-color .15s; }
 .recipe-card:hover { transform:translateY(-2px); border-color:#d3b49e; }
-.card-category { color:var(--accent); font-size:12px; font-weight:700; }
+.card-category { color:var(--category-ink, var(--accent)); font-size:12px; font-weight:700; }
 .recipe-card h3 { font-family:Georgia,serif; font-size:23px; line-height:1.2; margin:0; letter-spacing:-.35px; }
 .card-description { color:var(--muted); font-size:14px; margin:0; flex:1; }
 .card-meta { display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:12px; margin-top:4px; }
