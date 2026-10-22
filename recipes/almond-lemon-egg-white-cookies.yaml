@@ -1,0 +1,127 @@
+id: almond-lemon-egg-white-cookies
+title: Миндальное печенье с лимонной цедрой
+description: Нежное безглютеновое миндальное печенье на яичных белках с ярким ароматом лимона и хрустящими миндальными лепестками.
+category: desserts
+subcategory: cookies
+tags:
+  - миндальное печенье
+  - яичные белки
+  - без глютена
+  - лимон
+yield:
+  quantity_min: 15
+  quantity_max: 20
+  unit: печений
+time:
+  active_minutes_min: 15
+  active_minutes_max: 20
+  total_minutes_min: 30
+  total_minutes_max: 40
+equipment:
+  - Две миски
+  - Венчик
+  - Силиконовая лопатка
+  - Противень
+  - Пергамент для выпечки
+ingredient_groups:
+  - id: dough
+    title: Тесто
+  - id: topping
+    title: Украшение
+ingredients:
+  - id: whites
+    name: Яичные белки
+    quantity: 150
+    unit: г
+    group: dough
+    note: Примерно 5 белков; ориентируйся на массу.
+  - id: almond-flour
+    name: Миндальная мука
+    quantity: 200
+    unit: г
+    group: dough
+  - id: powdered-sugar
+    name: Сахарная пудра
+    quantity_min: 150
+    quantity_max: 170
+    unit: г
+    group: dough
+    note: 150 г — менее сладкий вариант.
+  - id: lemon-zest
+    name: Свежая лимонная цедра
+    quantity: 1
+    unit: ч. л.
+    group: dough
+  - id: lemon-juice
+    name: Лимонный сок
+    quantity: 5
+    unit: г
+    group: dough
+  - id: vanilla-sugar
+    name: Ванильный сахар
+    quantity: 5
+    unit: г
+    group: dough
+  - id: salt
+    name: Соль
+    quantity: 0.3
+    unit: г
+    group: dough
+  - id: almond-flakes
+    name: Миндальные лепестки
+    quantity_min: 30
+    quantity_max: 50
+    unit: г
+    group: topping
+steps:
+  - id: prepare
+    title: Подготовить духовку и противень
+    instructions: >-
+      Разогрей духовку до фактической температуры 170 °C, режим верх-низ без конвекции.
+      Застели противень качественным пергаментом.
+  - id: dry-mix
+    title: Смешать сухие ингредиенты
+    ingredients:
+      - ingredient: almond-flour
+      - ingredient: powdered-sugar
+      - ingredient: vanilla-sugar
+      - ingredient: salt
+      - ingredient: lemon-zest
+    instructions: >-
+      Соедини миндальную муку, сахарную пудру, ванильный сахар и соль.
+      Добавь мелко натёртую лимонную цедру и перетри смесь пальцами, чтобы
+      высвободить ароматные масла цедры.
+  - id: whites
+    title: Взбить белки
+    ingredients:
+      - ingredient: whites
+      - ingredient: lemon-juice
+    instructions: >-
+      Венчиком слегка взбей белки с лимонным соком до мелкой пены, похожей
+      на пивную. Устойчивые пики не нужны.
+  - id: mix
+    title: Замесить тесто
+    instructions: >-
+      Всыпь сухую смесь в белки и аккуратно перемешай лопаткой до однородности.
+      Тесто получится густым и липким. Оставь на 10–15 минут при комнатной
+      температуре, чтобы миндальная мука впитала влагу.
+  - id: shape
+    title: Сформовать печенье
+    ingredients:
+      - ingredient: almond-flakes
+    instructions: >-
+      Влажными руками или двумя ложками сформируй 15–20 небольших шариков.
+      Выложи на противень с промежутками, слегка приплюсни и укрась миндальными
+      лепестками.
+  - id: bake
+    title: Выпечь
+    instructions: >-
+      Выпекай 12–16 минут при фактической температуре 170 °C, пока края слегка
+      не подрумянятся, а середина останется мягкой. Время зависит от размера
+      печенья и особенностей духовки. Полностью остуди на противне: горячее
+      печенье хрупкое и продолжает уплотняться при остывании.
+tips:
+  - Для безглютенового результата проверь маркировку миндальной муки, сахарной пудры и ванильного сахара на возможные следы глютена.
+  - Не взбивай белки до пиков: по этому рецепту они нужны только для равномерного распределения влаги и лёгкости теста.
+storage:
+  - После полного остывания сразу переложи печенье в герметичный контейнер, чтобы оно не подсыхало.
