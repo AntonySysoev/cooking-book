@@ -3,7 +3,26 @@
   const app = document.getElementById("app");
   const printButton = document.getElementById("print-button");
   const topButton = document.getElementById("top-button");
-  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1 };
+  const STORAGE_KEY = "cooking-book-user-state-v1";
+  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {} };
+  function loadUserState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      if (saved && typeof saved === "object") {
+        state.recentlyViewed = saved.recentlyViewed && typeof saved.recentlyViewed === "object" ? saved.recentlyViewed : {};
+        state.recipeProgress = saved.recipeProgress && typeof saved.recipeProgress === "object" ? saved.recipeProgress : {};
+      }
+    } catch (_) {}
+  }
+  function saveUserState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ recentlyViewed: state.recentlyViewed, recipeProgress: state.recipeProgress })); } catch (_) {}
+  }
+  function saveCurrentRecipeState() {
+    if (!state.currentRecipe) return;
+    state.recipeProgress[state.currentRecipe.id] = { multiplier: state.multiplier, checkedIngredients: [...state.checkedIngredients], doneSteps: [...state.doneSteps] };
+    saveUserState();
+  }
+  loadUserState();
   const $ = (selector, root = document) => root.querySelector(selector);
   const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
   const numberText = value => {
@@ -113,7 +132,10 @@
     $("#wake-toggle").hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || r.category === state.activeCategory) &&
-      allSearchText(r).includes(state.query.toLocaleLowerCase("ru")));
+      allSearchText(r).includes(state.query.toLocaleLowerCase("ru")))
+      .map((recipe, index) => ({ recipe, index, viewedAt: Number(state.recentlyViewed[recipe.id]) || 0 }))
+      .sort((a, b) => b.viewedAt - a.viewedAt || a.index - b.index)
+      .map(item => item.recipe);
     app.innerHTML = `
       <div class="toolbar">
         <label class="search-wrap"><span aria-hidden="true">⌕</span><input id="search" class="search-input" type="search" placeholder="Найти рецепт или ингредиент…" value="${escapeHtml(state.query)}" autocomplete="off" aria-label="Поиск рецептов"></label>
@@ -214,9 +236,13 @@
     $("#wake-toggle").hidden = false;
     document.title = `${recipe.title} — Cooking Book`;
     state.currentRecipe = recipe;
-    state.multiplier = 1;
-    state.checkedIngredients.clear();
-    state.doneSteps.clear();
+    state.recentlyViewed[recipe.id] = Date.now();
+    saveUserState();
+    const savedProgress = state.recipeProgress[recipe.id] || {};
+    state.multiplier = savedProgress.multiplier == null || !Number.isFinite(Number(savedProgress.multiplier))
+      ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(Number(savedProgress.multiplier) * 100) / 100));
+    state.checkedIngredients = new Set(Array.isArray(savedProgress.checkedIngredients) ? savedProgress.checkedIngredients : []);
+    state.doneSteps = new Set(Array.isArray(savedProgress.doneSteps) ? savedProgress.doneSteps : []);
     const subcategory = (state.categories.find(c => c.id === recipe.category)?.subcategories || []).find(s => s.id === recipe.subcategory)?.title;
     app.innerHTML = `
       <a class="back-link" href="./">← Все рецепты</a>
@@ -230,8 +256,8 @@
         <div>
           <section class="panel">
             <h2 class="panel-title">Ингредиенты</h2>
-            <div class="scale-box"><label for="multiplier-input">Множитель</label><div class="multiplier-control"><input id="multiplier-input" class="scale-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="1.00" aria-label="Множитель количества ингредиентов от 0.10 до 5.00" title="От 0.10 до 5.00"><div class="multiplier-arrows"><button class="multiplier-arrow" id="multiplier-up" type="button" aria-label="Увеличить множитель на четверть">▲</button><button class="multiplier-arrow" id="multiplier-down" type="button" aria-label="Уменьшить множитель на четверть">▼</button></div></div><small class="scale-hint" id="multiplier-yield-hint">${escapeHtml(yieldHint(recipe))}</small></div>
-            <div id="ingredient-groups">${ingredientRows(recipe, 1)}</div>
+            <div class="scale-box"><label for="multiplier-input">Множитель</label><div class="multiplier-control"><input id="multiplier-input" class="scale-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="${multiplierText(state.multiplier)}" aria-label="Множитель количества ингредиентов от 0.10 до 5.00" title="От 0.10 до 5.00"><div class="multiplier-arrows"><button class="multiplier-arrow" id="multiplier-up" type="button" aria-label="Увеличить множитель на четверть">▲</button><button class="multiplier-arrow" id="multiplier-down" type="button" aria-label="Уменьшить множитель на четверть">▼</button></div></div><small class="scale-hint" id="multiplier-yield-hint">${escapeHtml(yieldHint(recipe, state.multiplier))}</small></div>
+            <div id="ingredient-groups">${ingredientRows(recipe, state.multiplier)}</div>
             <div style="margin-top:14px"><button id="reset-checks" class="reset-button" type="button">Сбросить отметки</button></div>
           </section>
           ${recipe.equipment?.length ? `<section class="panel"><h2 class="panel-title">Оборудование</h2><ul class="tips-list">${recipe.equipment.map(item => `<li>${escapeHtml(contentText(item))}</li>`).join("")}</ul></section>` : ""}
@@ -240,7 +266,7 @@
         </div>
         <section class="panel">
           <div class="panel-head-row"><h2 class="panel-title" style="margin:0">Приготовление</h2><button id="reset-steps" class="reset-button" type="button">Сбросить шаги</button></div>
-          <ol class="step-list">${renderSteps(recipe, 1)}</ol>
+          <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
         </section>
       </div>
     `;
@@ -292,6 +318,7 @@
     };
     const updateMultiplier = () => {
       const factor = state.multiplier;
+      saveCurrentRecipeState();
       $("#multiplier-yield-hint").textContent = yieldHint(recipe, factor);
       $("#ingredient-groups").innerHTML = ingredientRows(recipe, factor);
       bindIngredientRows();
@@ -302,12 +329,14 @@
       const amount = parseMultiplier(e.target.value);
       if (amount == null || amount < MIN_MULTIPLIER || amount > MAX_MULTIPLIER) return;
       state.multiplier = Math.round(amount * 100) / 100;
+      saveCurrentRecipeState();
       updateMultiplier();
     });
     multiplierInput.addEventListener("change", e => {
       const amount = parseMultiplier(e.target.value);
       state.multiplier = amount == null ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(amount * 100) / 100));
       e.target.value = multiplierText(state.multiplier);
+      saveCurrentRecipeState();
       updateMultiplier();
     });
     const stepMultiplier = direction => {
@@ -320,12 +349,13 @@
         : (direction > 0 ? Math.ceil(quarterPosition - 1e-8) : Math.floor(quarterPosition + 1e-8)) / 4;
       state.multiplier = Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(next * 100) / 100));
       multiplierInput.value = multiplierText(state.multiplier);
+      saveCurrentRecipeState();
       updateMultiplier();
     };
     $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
     $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
-    $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); });
-    $("#reset-steps").addEventListener("click", () => { state.doneSteps.clear(); $(".step-list").innerHTML = renderSteps(recipe, state.multiplier); bindSteps(); });
+    $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); });
+    $("#reset-steps").addEventListener("click", () => { state.doneSteps.clear(); saveCurrentRecipeState(); $(".step-list").innerHTML = renderSteps(recipe, state.multiplier); bindSteps(); });
     bindIngredientRows();
     bindSteps();
   }
@@ -337,6 +367,7 @@
         row.classList.toggle("checked", state.checkedIngredients.has(key));
         row.setAttribute("aria-checked", String(state.checkedIngredients.has(key)));
         $(".check-dot", row).textContent = state.checkedIngredients.has(key) ? "✓" : "";
+        saveCurrentRecipeState();
       };
       row.addEventListener("click", toggle);
       row.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
@@ -347,6 +378,7 @@
       const toggle = () => {
         const id = row.dataset.stepId;
         state.doneSteps.has(id) ? state.doneSteps.delete(id) : state.doneSteps.add(id);
+        saveCurrentRecipeState();
         const recipe = state.currentRecipe;
         const factor = state.multiplier;
         $(".step-list").innerHTML = renderSteps(recipe, factor);
