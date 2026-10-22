@@ -119,6 +119,8 @@ steps:
   - id: vegetables
     title: Подготовить овощи и начинку
     ingredients:
+      - ingredient: pork
+      - ingredient: beef
       - ingredient: cabbage
       - ingredient: onion
       - ingredient: garlic
