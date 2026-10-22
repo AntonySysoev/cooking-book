@@ -1,8 +1,8 @@
 id: creme-brulee-ice-cream
 title: Мороженое «Крем-брюле»
 description: Сливочное мороженое с карамельной основой. Для более выраженного вкуса карамель доводится до глубокого янтарного оттенка.
-category: desserts
-subcategory: ice-cream
+category: ice-cream
+
 tags: [мороженое, крем-брюле, карамель, Ankarsrum]
 yield:
   quantity: 1100
