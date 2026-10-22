@@ -53,7 +53,7 @@ def main() -> int:
             "background_color": "#f7f1e7",
             "theme_color": "#f7f1e7",
             "description": "Личная кулинарная книга"
-        }, ensure_ascii=False, indent=2) + "\\n",
+        }, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     (DIST / "sw.js").write_text(
