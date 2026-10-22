@@ -46,6 +46,7 @@ h3 { font-size:16px; margin:0 0 8px; }
 .pill.active { color:var(--accent-dark); border-color:var(--category-ink, #d4b6a3); background:var(--accent-soft); }
 /* Спокойные природные оттенки для категорий: цвет помогает ориентироваться, не перегружая интерфейс. */
 .category-desserts { --category-ink:#925461; --category-soft:#f5e7e9; --category-line:#e7cbd0; }
+.category-ice-cream { --category-ink:#5d6f9b; --category-soft:#e9edf8; --category-line:#ccd5ed; }
 .category-baking-and-dough { --category-ink:#9a5e3d; --category-soft:#f5e9df; --category-line:#e7d0bd; }
 .category-main-dishes { --category-ink:#52745d; --category-soft:#e7efe7; --category-line:#cbdccb; }
 .category-snacks-and-light-meals { --category-ink:#3f7773; --category-soft:#e4f0ee; --category-line:#c7e0dc; }
