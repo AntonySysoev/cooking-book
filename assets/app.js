@@ -269,6 +269,10 @@
           <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
         </section>
       </div>
+      <section class="reset-all-wrap" aria-label="Сброс прогресса рецепта">
+        <button id="reset-recipe-progress" class="reset-button" type="button">Сбросить все отметки и шаги</button>
+        <p>Сбросит отметки ингредиентов, выполненные шаги и множитель только для этого рецепта.</p>
+      </section>
     `;
     const wakeToggle = $("#wake-toggle");
     const updateWakeButton = () => {
@@ -356,6 +360,15 @@
     $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
     $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); });
     $("#reset-steps").addEventListener("click", () => { state.doneSteps.clear(); saveCurrentRecipeState(); $(".step-list").innerHTML = renderSteps(recipe, state.multiplier); bindSteps(); });
+    $("#reset-recipe-progress").addEventListener("click", () => {
+      if (!window.confirm("Сбросить все отметки ингредиентов, выполненные шаги и множитель только для этого рецепта?")) return;
+      state.checkedIngredients.clear();
+      state.doneSteps.clear();
+      state.multiplier = 1;
+      multiplierInput.value = multiplierText(state.multiplier);
+      saveCurrentRecipeState();
+      updateMultiplier();
+    });
     bindIngredientRows();
     bindSteps();
   }
