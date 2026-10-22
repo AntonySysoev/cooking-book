@@ -12,16 +12,16 @@ tags:
   - десерт без выпечки
   - тирамису
 yield:
-  quantity_min: 8
-  quantity_max: 10
+  quantity_min: 6
+  quantity_max: 8
   unit: порций
 time:
-  active_minutes_min: 40
-  active_minutes_max: 50
-  total_minutes_min: 760
-  total_minutes_max: 1490
+  active_minutes_min: 35
+  active_minutes_max: 45
+  total_minutes_min: 755
+  total_minutes_max: 1485
 equipment:
-  - Форма примерно 20 × 25 см
+  - Форма примерно 20 × 20 см или небольшая форма около 20 × 25 см
   - Кастрюля для водяной бани
   - Металлическая миска
   - Кулинарный термометр
@@ -38,36 +38,36 @@ ingredient_groups:
 ingredients:
   - id: mascarpone
     name: Маскарпоне
-    quantity: 750
+    quantity: 600
     unit: г
     group: cream
   - id: eggs
     name: Яйца категории M–L
-    quantity: 4
+    quantity: 3
     unit: шт.
     parts_mode: components
     note: Яйца разделить на желтки и белки.
     parts:
       - id: yolks
         name: Желтки
-        quantity: 4
+        quantity: 3
         group: cream
       - id: whites
         name: Белки
-        quantity: 4
+        quantity: 3
         group: cream
   - id: sugar
     name: Белый сахар
-    quantity: 100
+    quantity: 75
     unit: г
     parts:
       - id: yolks
         name: Для желтков
-        quantity: 65
+        quantity: 50
         group: cream
       - id: whites
         name: Для белков
-        quantity: 35
+        quantity: 25
         group: cream
   - id: salt
     name: Мелкая соль
@@ -76,13 +76,13 @@ ingredients:
     group: cream
   - id: coffee
     name: Крепкий эспрессо или концентрированный кофе
-    quantity: 300
+    quantity: 250
     unit: г
     group: coffee
     note: Полностью остудить.
   - id: whiskey
     name: Jack Daniel’s, 45%
-    quantity: 15
+    quantity: 10
     unit: г
     group: coffee
     optional: true
@@ -97,14 +97,13 @@ ingredients:
     note: По желанию, для мягкой карамельной ноты в кофе.
   - id: savoiardi
     name: Печенье савоярди
-    quantity_min: 250
-    quantity_max: 300
+    quantity_min: 200
+    quantity_max: 250
     unit: г
     group: assembly
   - id: cocoa
     name: Какао-порошок без сахара
-    quantity_min: 10
-    quantity_max: 15
+    quantity: 10
     unit: г
     group: assembly
 steps:
@@ -125,7 +124,7 @@ steps:
       - ingredient: sugar
         part: yolks
     instructions: >-
-      Смешай желтки с 65 г сахара в жаропрочной миске. Поставь над слабо
+      Смешай желтки с 50 г сахара в жаропрочной миске. Поставь над слабо
       кипящей водой так, чтобы дно миски не касалось воды, и постоянно
       взбивай до густой светлой массы. Температура около 71 °C сама по себе
       не гарантирует пастеризацию: для безопасности используй пастеризованные
@@ -147,7 +146,7 @@ steps:
       - ingredient: sugar
         part: whites
     instructions: >-
-      В чистой обезжиренной миске соедини белки с 35 г сахара. Нагревай на
+      В чистой обезжиренной миске соедини белки с 25 г сахара. Нагревай на
       водяной бане, постоянно перемешивая, до растворения сахара и примерно
       71 °C, затем взбей до плотной блестящей пены и охлаждения. Обычная
       швейцарская меренга не гарантирует пастеризацию; для максимальной
