@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f1e7">
+  <meta name="description" content="Личная кулинарная книга с рецептами, масштабированием ингредиентов и удобным режимом готовки.">
+  <title>Cooking Book — кулинарная книга</title>
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Cooking Book — главная">
+      <span class="brand-mark" aria-hidden="true">cb</span>
+      <span><strong>Cooking Book</strong><small>моя кулинарная книга</small></span>
+    </a>
+    <button class="icon-button print-button" id="print-button" type="button" hidden aria-label="Печать рецепта" title="Печать">⎙</button>
+  </header>
+  <main id="app" class="page-shell">
+    <div class="loading-state">Загружаю рецепты…</div>
+  </main>
+  <footer class="site-footer">Cooking Book <span>·</span> рецепты, собранные в одном месте</footer>
+  <script src="./assets/app.js" defer></script>
+</body>
+</html>
