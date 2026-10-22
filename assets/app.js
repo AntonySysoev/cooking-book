@@ -87,6 +87,21 @@
     const allowed = ["desserts", "baking-and-dough", "main-dishes", "snacks-and-light-meals", "drinks", "soups", "salads-and-sides", "sauces-and-preserves"];
     return allowed.includes(id) ? `category-${id}` : "category-neutral";
   }
+  function categoryIcon(id) {
+    return ({
+      desserts: "🍰",
+      "baking-and-dough": "🥐",
+      "main-dishes": "🍽️",
+      "snacks-and-light-meals": "🥑",
+      drinks: "🥤",
+      soups: "🍲",
+      "salads-and-sides": "🥗",
+      "sauces-and-preserves": "🫙"
+    })[id] || "🍴";
+  }
+  function categoryLabel(id) {
+    return `${categoryIcon(id)} ${categoryName(id)}`;
+  }
   function allSearchText(recipe) {
     return [recipe.title, recipe.description, ...(recipe.tags || []), categoryName(recipe.category), recipe.subcategory,
       ...(recipe.ingredients || []).map(i => i.name)].join(" ").toLocaleLowerCase("ru");
@@ -95,7 +110,7 @@
     document.title = "Cooking Book — кулинарная книга";
     printButton.hidden = true;
     $("#wake-toggle").hidden = true;
-    const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button">${escapeHtml(c.title)}</button>`).join("");
+    const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || r.category === state.activeCategory) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")));
     app.innerHTML = `
@@ -103,14 +118,14 @@
         <label class="search-wrap"><span aria-hidden="true">⌕</span><input id="search" class="search-input" type="search" placeholder="Найти рецепт или ингредиент…" value="${escapeHtml(state.query)}" autocomplete="off" aria-label="Поиск рецептов"></label>
         <select id="category-select" class="category-select" aria-label="Фильтр по категории">
           <option value="all">Все категории</option>
-          ${state.categories.map(c => `<option value="${escapeHtml(c.id)}" ${state.activeCategory === c.id ? "selected" : ""}>${escapeHtml(c.title)}</option>`).join("")}
+          ${state.categories.map(c => `<option value="${escapeHtml(c.id)}" ${state.activeCategory === c.id ? "selected" : ""}>${categoryIcon(c.id)} ${escapeHtml(c.title)}</option>`).join("")}
         </select>
       </div>
       <div class="category-pills"><button class="pill ${state.activeCategory === "all" ? "active" : ""}" data-category="all" type="button">Все</button>${categories}</div>
       <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${filtered.length === 1 ? "рецепт" : filtered.length > 1 && filtered.length < 5 ? "рецепта" : "рецептов"}</span></div>
       ${filtered.length ? `<div class="recipe-grid">${filtered.map(r => `
         <a class="recipe-card ${categoryClass(r.category)}" href="?recipe=${encodeURIComponent(r.id)}">
-          <span class="card-category">${escapeHtml(categoryName(r.category))}${r.subcategory ? " · " + escapeHtml((state.categories.find(c => c.id === r.category)?.subcategories || []).find(s => s.id === r.subcategory)?.title || "") : ""}</span>
+          <span class="card-category"><span aria-hidden="true">${categoryIcon(r.category)}</span> ${escapeHtml(categoryName(r.category))}${r.subcategory ? " · " + escapeHtml((state.categories.find(c => c.id === r.category)?.subcategories || []).find(s => s.id === r.subcategory)?.title || "") : ""}</span>
           <h3>${escapeHtml(r.title)}</h3>
           <p class="card-description">${escapeHtml(r.description || "")}</p>
           <div class="card-meta"><span>◷ ${escapeHtml(timeLabel(r) || "Время не указано")}</span><span>♧ ${escapeHtml(yieldLabel(r) || "Выход не указан")}</span></div>
@@ -192,6 +207,8 @@
     }).join("");
   }
   function renderRecipe(recipe) {
+    document.body.className = document.body.className.replace(/\bcategory-[\w-]+\b/g, "").trim();
+    document.body.classList.add(categoryClass(recipe.category));
     printButton.hidden = false;
     $("#wake-toggle").hidden = false;
     document.title = `${recipe.title} — Cooking Book`;
@@ -203,7 +220,7 @@
     app.innerHTML = `
       <a class="back-link" href="./">← Все рецепты</a>
       <section class="recipe-head">
-        <div class="eyebrow">${escapeHtml(categoryName(recipe.category))}${subcategory ? " / " + escapeHtml(subcategory) : ""}</div>
+        <div class="eyebrow"><span aria-hidden="true">${categoryIcon(recipe.category)}</span> ${escapeHtml(categoryName(recipe.category))}${subcategory ? " / " + escapeHtml(subcategory) : ""}</div>
         <h1>${escapeHtml(recipe.title)}</h1>
         ${recipe.description ? `<p class="recipe-description">${escapeHtml(recipe.description)}</p>` : ""}
         <div class="recipe-meta">${timeLabel(recipe) ? `<span class="meta-chip">◷ ${escapeHtml(timeLabel(recipe))}</span>` : ""}${yieldHint(recipe) ? `<span class="meta-chip">♧ ${escapeHtml(yieldHint(recipe))}</span>` : ""}${(recipe.tags || []).slice(0,4).map(t => `<span class="meta-chip">${escapeHtml(t)}</span>`).join("")}</div>
