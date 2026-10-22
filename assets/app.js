@@ -36,6 +36,10 @@
     if (!Number.isFinite(minutes)) return "";
     const n = Math.round(minutes);
     if (n < 60) return `${n} ${pluralRu(n, "минута", "минуты", "минут")}`;
+    if (n > 180) {
+      const hours = Math.ceil(n / 60);
+      return `${hours} ${pluralRu(hours, "час", "часа", "часов")}`;
+    }
     const hours = Math.floor(n / 60), mins = n % 60;
     const hourText = `${hours} ${pluralRu(hours, "час", "часа", "часов")}`;
     return mins ? `${hourText} ${mins} ${pluralRu(mins, "минута", "минуты", "минут")}` : hourText;
@@ -77,7 +81,7 @@
   function renderHome() {
     document.title = "Cooking Book — кулинарная книга";
     printButton.hidden = true;
-    $("#wake-card").hidden = true;
+    $("#wake-toggle").hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button">${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || r.category === state.activeCategory) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")));
@@ -176,7 +180,7 @@
   }
   function renderRecipe(recipe) {
     printButton.hidden = false;
-    $("#wake-card").hidden = false;
+    $("#wake-toggle").hidden = false;
     document.title = `${recipe.title} — Cooking Book`;
     state.currentRecipe = recipe;
     state.multiplier = 1;
@@ -195,7 +199,7 @@
         <div>
           <section class="panel">
             <h2 class="panel-title">Ингредиенты</h2>
-            <div class="scale-box"><label for="multiplier-input">Множитель</label><input id="multiplier-input" class="scale-input" type="number" min="0.01" step="0.01" value="1" aria-label="Множитель количества ингредиентов"><small class="scale-hint">${escapeHtml(yieldHint(recipe))}</small></div>
+            <div class="scale-box"><label for="multiplier-input">Множитель</label><div class="multiplier-control"><input id="multiplier-input" class="scale-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="1" aria-label="Множитель количества ингредиентов"><div class="multiplier-arrows"><button class="multiplier-arrow" id="multiplier-up" type="button" aria-label="Увеличить множитель">▲</button><button class="multiplier-arrow" id="multiplier-down" type="button" aria-label="Уменьшить множитель">▼</button></div></div><small class="scale-hint">${escapeHtml(yieldHint(recipe))}</small></div>
             <div id="ingredient-groups">${ingredientRows(recipe, 1)}</div>
             <div style="margin-top:14px"><button id="reset-checks" class="reset-button" type="button">Сбросить отметки</button></div>
           </section>
@@ -210,36 +214,48 @@
       </div>
     `;
     const wakeToggle = $("#wake-toggle");
-    wakeToggle.checked = state.wakeEnabled;
-    wakeToggle.addEventListener("change", async () => {
-      state.wakeEnabled = wakeToggle.checked;
-      const status = $("#wake-status");
-      if (!state.wakeEnabled) {
+    const updateWakeButton = () => {
+      wakeToggle.setAttribute("aria-pressed", String(state.wakeEnabled));
+      wakeToggle.classList.toggle("is-active", state.wakeEnabled);
+      wakeToggle.title = state.wakeEnabled ? "Экран удерживается включённым — нажми, чтобы выключить" : "Не выключать экран во время готовки";
+      wakeToggle.setAttribute("aria-label", wakeToggle.title);
+    };
+    updateWakeButton();
+    wakeToggle.addEventListener("click", async () => {
+      if (state.wakeEnabled) {
+        state.wakeEnabled = false;
         try { if (state.wakeLock) await state.wakeLock.release(); } catch (_) {}
         state.wakeLock = null;
-        status.textContent = "Экран может выключаться автоматически.";
+        updateWakeButton();
         return;
       }
       if (!("wakeLock" in navigator)) {
-        status.textContent = "Браузер не поддерживает удержание экрана.";
-        wakeToggle.checked = false;
-        state.wakeEnabled = false;
+        wakeToggle.title = "Этот браузер не поддерживает удержание экрана";
+        wakeToggle.setAttribute("aria-label", wakeToggle.title);
         return;
       }
       try {
         state.wakeLock = await navigator.wakeLock.request("screen");
-        status.textContent = "Экран останется включённым во время готовки.";
+        state.wakeEnabled = true;
+        updateWakeButton();
         state.wakeLock.addEventListener("release", () => {
           state.wakeLock = null;
-          if (state.wakeEnabled) status.textContent = "Экран снова может выключиться. Включи переключатель ещё раз.";
+          if (state.wakeEnabled) { state.wakeEnabled = false; updateWakeButton(); }
         });
       } catch (_) {
-        status.textContent = "Не удалось удержать экран. Проверь разрешения браузера.";
-        wakeToggle.checked = false;
         state.wakeEnabled = false;
+        wakeToggle.title = "Не удалось удержать экран — проверь разрешения браузера";
+        wakeToggle.setAttribute("aria-label", wakeToggle.title);
+        updateWakeButton();
       }
     });
     const multiplierInput = $("#multiplier-input");
+    const parseMultiplier = value => {
+      const normalized = String(value).trim().replace(",", ".");
+      if (!normalized || !/^(?:\\d+(?:\\.\\d*)?|\\.\\d+)$/.test(normalized)) return null;
+      const amount = Number(normalized);
+      return Number.isFinite(amount) && amount > 0 ? amount : null;
+    };
     const updateMultiplier = () => {
       const factor = state.multiplier;
       $("#ingredient-groups").innerHTML = ingredientRows(recipe, factor);
@@ -248,22 +264,30 @@
       bindSteps();
     };
     multiplierInput.addEventListener("input", e => {
-      const amount = Number(e.target.value);
-      if (!Number.isFinite(amount) || amount <= 0) return;
+      const amount = parseMultiplier(e.target.value);
+      if (amount == null) return;
       state.multiplier = amount;
       updateMultiplier();
     });
     multiplierInput.addEventListener("change", e => {
-      const amount = Number(e.target.value);
-      if (!Number.isFinite(amount) || amount <= 0) {
-        state.multiplier = 1;
-        e.target.value = "1";
-      } else {
-        state.multiplier = Math.max(0.01, Math.round(amount * 100) / 100);
-        e.target.value = numberText(state.multiplier);
-      }
+      const amount = parseMultiplier(e.target.value);
+      state.multiplier = amount == null ? 1 : Math.max(0.01, Math.round(amount * 100) / 100);
+      e.target.value = numberText(state.multiplier);
       updateMultiplier();
     });
+    const stepMultiplier = direction => {
+      const current = parseMultiplier(multiplierInput.value) ?? state.multiplier ?? 1;
+      const doubled = current * 2;
+      const exactHalf = Math.abs(doubled - Math.round(doubled)) < 1e-8;
+      let next = exactHalf ? current + direction * 0.5
+        : (direction > 0 ? Math.ceil(doubled - 1e-8) : Math.floor(doubled + 1e-8)) / 2;
+      next = Math.max(0.01, Math.round(next * 100) / 100);
+      state.multiplier = next;
+      multiplierInput.value = numberText(next);
+      updateMultiplier();
+    };
+    $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
+    $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
     $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); });
     $("#reset-steps").addEventListener("click", () => { state.doneSteps.clear(); $(".step-list").innerHTML = renderSteps(recipe, state.multiplier); bindSteps(); });
     bindIngredientRows();
