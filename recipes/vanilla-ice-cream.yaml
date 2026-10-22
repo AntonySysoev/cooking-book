@@ -1,0 +1,98 @@
+id: vanilla-ice-cream
+title: Ванильное мороженое
+description: Французское заварное ванильное мороженое с желтками, сухим молоком и нежной текстурой.
+category: desserts
+subcategory: ice-cream
+tags: [мороженое, ваниль, заварная основа, Ankarsrum]
+yield:
+  quantity: 1100
+  unit: г
+time:
+  active_minutes: 30
+  total_minutes_min: 420
+  total_minutes_max: 900
+equipment:
+  - Ankarsrum с мороженицей
+  - Кастрюля
+  - Термометр
+ingredients:
+  - id: milk
+    name: Молоко 3–3,5%
+    quantity: 620
+    unit: г
+  - id: cream
+    name: Сливки 30%
+    quantity: 200
+    unit: г
+  - id: sugar
+    name: Сахар
+    quantity: 120
+    unit: г
+  - id: yolks
+    name: Яичные желтки
+    quantity: 90
+    unit: г
+  - id: skim-milk-powder
+    name: Сухое обезжиренное молоко
+    quantity: 40
+    unit: г
+  - id: dextrose
+    name: Декстроза
+    quantity: 20
+    unit: г
+    optional: true
+  - id: vanilla
+    name: Ванильный экстракт
+    quantity: 5
+    unit: г
+  - id: vanilla-pod
+    name: Стручок ванили
+    quantity: 1
+    unit: шт.
+    optional: true
+  - id: locust-bean-gum
+    name: Камедь рожкового дерева E410
+    quantity: 0.8
+    unit: г
+  - id: salt
+    name: Соль
+    quantity: 0.7
+    unit: г
+steps:
+  - id: dry
+    title: Смешать сухие ингредиенты
+    ingredients:
+      - ingredient: sugar
+      - ingredient: skim-milk-powder
+      - ingredient: dextrose
+      - ingredient: locust-bean-gum
+      - ingredient: salt
+    instructions: Смешай сахар, сухое молоко, декстрозу, камедь и соль.
+  - id: heat
+    title: Нагреть молоко со сливками
+    ingredients:
+      - ingredient: milk
+      - ingredient: cream
+      - ingredient: vanilla-pod
+    instructions: Если используешь стручок, разрежь его и выскреби семена. Нагрей молоко со сливками и ванилью примерно до 40 °C, затем дождём всыпь сухую смесь. Продолжай нагревать до горячего состояния.
+  - id: custard
+    title: Заварить желтки
+    ingredients:
+      - ingredient: yolks
+    instructions: Темперируй желтки небольшим количеством горячей молочной смеси. Верни в кастрюлю и нагревай при постоянном перемешивании до 82–84 °C, не допуская кипения.
+  - id: flavour
+    title: Добавить ваниль
+    ingredients:
+      - ingredient: vanilla
+    instructions: Сними с огня и вмешай ванильный экстракт. Процеди основу, если использовал стручок или видны комочки.
+  - id: chill
+    title: Охладить и выдержать
+    instructions: Быстро охлади основу и выдержи в холодильнике 6–12 часов, лучше ночь.
+  - id: churn
+    title: Заморозить
+    instructions: Перемешай основу и замораживай в мороженице Ankarsrum до мягкой плотной консистенции. Переложи в контейнер и дозаморозь 2–4 часа.
+tips:
+  - Для менее воздушной основы перемешивай охлаждённую смесь лопаткой или венчиками Ankarsrum для печенья, а не обычным воздушным венчиком.
+  - Декстроза помогает сделать мороженое мягче при подаче прямо из морозильника.
+storage:
+  - Храни в морозильнике в герметичном контейнере.
