@@ -74,7 +74,7 @@ def main() -> int:
     cache_name = f"cooking-book-{digest.hexdigest()[:12]}"
 
     service_worker = """const CACHE_NAME = "__CACHE_NAME__";
-const FILES = ["./", "./index.html", "./assets/styles.css", "./assets/app.js",
+const FILES = ["./", "./index.html", "./assets/styles.css", "./assets/app.js", "./assets/favicon.svg",
   "./data/categories.json", "./data/recipes.json", "./manifest.webmanifest"];
 
 self.addEventListener("install", event => {
