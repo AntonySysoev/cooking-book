@@ -20,9 +20,9 @@ button { cursor: pointer; }
 a { color: inherit; }
 .site-header { max-width: 1040px; padding: 22px 22px 14px; margin: 0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; }
 .header-actions { display:flex; align-items:center; justify-content:flex-end; gap:10px; min-width:0; }
-.font-size-toggle { width:auto; min-width:76px; padding:0 8px; display:flex; align-items:center; justify-content:center; gap:5px; font-size:12px; }
+.font-size-toggle { width:40px; height:40px; min-width:40px; padding:0; display:grid; place-items:center; flex:0 0 40px; }
 .font-size-toggle svg { width:20px; height:20px; flex:0 0 20px; }
-.font-size-toggle .font-size-value { font-size:12px; font-weight:750; font-variant-numeric:tabular-nums; }
+.font-size-toggle .font-size-value { display:none; }
 .font-size-toggle[aria-pressed="true"] { background:#000; color:#fff; border-color:#000; }
 .font-size-toggle:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
  .wake-toggle-button svg { display:block; width:20px; height:20px; }
@@ -147,9 +147,9 @@ body[class*="category-"] { --accent:var(--category-ink); --accent-dark:var(--cat
   .site-header { padding:16px 16px 8px; }
   .top-button { right:16px; bottom:18px; }
   .header-actions { gap:6px; }
-  .font-size-toggle { min-width:72px; padding:0 6px; gap:4px; }
+  .font-size-toggle { width:40px; height:40px; min-width:40px; padding:0; flex:0 0 40px; }
   .font-size-toggle svg { width:18px; height:18px; flex-basis:18px; }
-  .font-size-toggle .font-size-value { font-size:11px; }
+  .font-size-toggle .font-size-value { display:none; }
   .brand { gap:8px; }
   .brand-mark { width:36px; height:36px; font-size:var(--font-size-20, 20px); }
   .brand strong { font-size:var(--font-size-18, 18px); }
