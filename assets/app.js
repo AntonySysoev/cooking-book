@@ -4,19 +4,20 @@
   const printButton = document.getElementById("print-button");
   const topButton = document.getElementById("top-button");
   const STORAGE_KEY = "cooking-book-user-state-v1";
-  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100 };
+  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false };
   function loadUserState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
       if (saved && typeof saved === "object") {
         state.recentlyViewed = saved.recentlyViewed && typeof saved.recentlyViewed === "object" ? saved.recentlyViewed : {};
         state.recipeProgress = saved.recipeProgress && typeof saved.recipeProgress === "object" ? saved.recipeProgress : {};
-        state.fontScale = [50, 75, 100, 125, 150].includes(Number(saved.fontScale)) ? Number(saved.fontScale) : 100;
+        state.readingMode = typeof saved.readingMode === "boolean" ? saved.readingMode : Number(saved.fontScale) === 150;
+        state.fontScale = state.readingMode ? 150 : 100;
       }
     } catch (_) {}
   }
   function saveUserState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ recentlyViewed: state.recentlyViewed, recipeProgress: state.recipeProgress, fontScale: state.fontScale })); } catch (_) {}
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ recentlyViewed: state.recentlyViewed, recipeProgress: state.recipeProgress, fontScale: state.fontScale, readingMode: state.readingMode })); } catch (_) {}
   }
   function saveCurrentRecipeState() {
     if (!state.currentRecipe) return;
@@ -34,8 +35,15 @@
     const width = document.documentElement.clientWidth || 800;
     rootStyle.setProperty("--font-size-heading", (Math.round(Math.max(34, Math.min(width * 0.05, 52)) * scale * 100) / 100) + "px");
     rootStyle.setProperty("--font-size-recipe-heading", (Math.round(Math.max(34, Math.min(width * 0.05, 48)) * scale * 100) / 100) + "px");
-    const fontSizeSelect = document.getElementById("font-size-select");
-    if (fontSizeSelect) fontSizeSelect.value = String(state.fontScale);
+    document.documentElement.classList.toggle("high-contrast", state.readingMode);
+    const fontSizeButton = document.getElementById("font-size-toggle");
+    if (fontSizeButton) {
+      fontSizeButton.setAttribute("aria-pressed", String(state.readingMode));
+      fontSizeButton.setAttribute("aria-label", state.readingMode ? "Вернуть обычное оформление и размер текста 100%" : "Включить чёрно-белый режим чтения с размером текста 150%");
+      fontSizeButton.title = state.readingMode ? "Обычный режим · 100%" : "Крупный текст и чёрно-белое оформление · 150%";
+      const value = fontSizeButton.querySelector(".font-size-value");
+      if (value) value.textContent = state.readingMode ? "150%" : "100%";
+    }
   }
   applyFontScale();
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -434,16 +442,14 @@
       app.innerHTML = `<div class="error-state"><h2>Не удалось загрузить кулинарную книгу</h2><p>${escapeHtml(error.message || "Проверь соединение и попробуй ещё раз.")}</p></div>`;
     }
   }
-  const fontSizeSelect = document.getElementById("font-size-select");
-  if (fontSizeSelect) {
-    fontSizeSelect.value = String(state.fontScale);
-    fontSizeSelect.addEventListener("change", () => {
-      const nextScale = Number(fontSizeSelect.value);
-      if ([50, 75, 100, 125, 150].includes(nextScale)) {
-        state.fontScale = nextScale;
-        applyFontScale();
-        saveUserState();
-      }
+  const fontSizeButton = document.getElementById("font-size-toggle");
+  if (fontSizeButton) {
+    applyFontScale();
+    fontSizeButton.addEventListener("click", () => {
+      state.readingMode = !state.readingMode;
+      state.fontScale = state.readingMode ? 150 : 100;
+      applyFontScale();
+      saveUserState();
     });
   }
   printButton.addEventListener("click", () => window.print());
