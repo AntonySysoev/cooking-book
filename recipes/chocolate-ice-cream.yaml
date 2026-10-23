@@ -2,6 +2,7 @@ id: chocolate-ice-cream
 title: Шоколадное мороженое
 description: Насыщенное шоколадное мороженое на заварной молочной основе с какао и тёмным шоколадом.
 category: ice-cream
+also_in: [desserts]
 
 tags: [мороженое, шоколад, какао, Ankarsrum]
 yield:
