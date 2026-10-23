@@ -30,6 +30,8 @@ jobs:
         run: python scripts/validate_recipes.py
       - name: Build static site
         run: python scripts/build_site.py
+      - name: Build JavaScript for older browsers
+        run: npx --yes esbuild@0.25.0 assets/app.js --target=es2015 --outfile=dist/assets/app.js
       - name: Check that every source recipe is included in the site
         run: python scripts/check_built_recipes.py
       - name: Upload site artifact
