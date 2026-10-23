@@ -20,11 +20,11 @@ button { cursor: pointer; }
 a { color: inherit; }
 .site-header { max-width: 1040px; padding: 22px 22px 14px; margin: 0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; }
 .header-actions { display:flex; align-items:center; justify-content:flex-end; gap:10px; min-width:0; }
-.font-size-control { display:flex; align-items:center; gap:6px; height:40px; padding:0 8px 0 10px; border:1px solid var(--line); border-radius:12px; background:var(--card); color:var(--accent); }
-.font-size-control svg { display:block; width:20px; height:20px; flex:0 0 20px; }
-.font-size-control select { width:68px; max-width:68px; min-width:0; padding:7px 2px; border:0; outline:none; background:transparent; color:var(--ink); font-size:var(--font-size-13, 13px); }
-.font-size-control:focus-within { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft); }
-.visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.font-size-toggle { width:auto; min-width:76px; padding:0 8px; display:flex; align-items:center; justify-content:center; gap:5px; font-size:12px; }
+.font-size-toggle svg { width:20px; height:20px; flex:0 0 20px; }
+.font-size-toggle .font-size-value { font-size:12px; font-weight:750; font-variant-numeric:tabular-nums; }
+.font-size-toggle[aria-pressed="true"] { background:#000; color:#fff; border-color:#000; }
+.font-size-toggle:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
  .wake-toggle-button svg { display:block; width:20px; height:20px; }
 .wake-toggle-button.is-active { color:var(--accent-dark); background:var(--accent-soft); border-color:var(--category-line, #d4b6a3); box-shadow:inset 0 0 0 1px var(--category-line, #d4b6a3); }
  .scale-box { display:grid; grid-template-columns:minmax(0,1fr) minmax(88px, 104px); align-items:center; gap:4px 12px; margin:0 0 18px; }
@@ -147,9 +147,9 @@ body[class*="category-"] { --accent:var(--category-ink); --accent-dark:var(--cat
   .site-header { padding:16px 16px 8px; }
   .top-button { right:16px; bottom:18px; }
   .header-actions { gap:6px; }
-  .font-size-control { gap:3px; padding:0 5px 0 7px; }
-  .font-size-control svg { width:18px; height:18px; flex-basis:18px; }
-  .font-size-control select { width:58px; max-width:58px; font-size:var(--font-size-12, 12px); }
+  .font-size-toggle { min-width:72px; padding:0 6px; gap:4px; }
+  .font-size-toggle svg { width:18px; height:18px; flex-basis:18px; }
+  .font-size-toggle .font-size-value { font-size:11px; }
   .brand { gap:8px; }
   .brand-mark { width:36px; height:36px; font-size:var(--font-size-20, 20px); }
   .brand strong { font-size:var(--font-size-18, 18px); }
@@ -166,6 +166,96 @@ body[class*="category-"] { --accent:var(--category-ink); --accent-dark:var(--cat
 }
 .reset-all-wrap { margin: 20px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line); text-align: center; }
 .reset-all-wrap p { margin: 8px 0 0; color: var(--muted); font-size:var(--font-size-12, 12px); }
+
+/* Чёрно-белый режим чтения: намеренно простые цвета для старых браузеров Kindle. */
+html.high-contrast {
+  color-scheme: light;
+  --paper: #fff;
+  --card: #fff;
+  --ink: #000;
+  --muted: #000;
+  --line: #000;
+  --accent: #000;
+  --accent-dark: #000;
+  --accent-soft: #fff;
+  --shadow: none;
+}
+html.high-contrast body[class*="category-"] {
+  --category-ink: #000;
+  --category-soft: #fff;
+  --category-line: #000;
+}
+html.high-contrast body,
+html.high-contrast .page-shell,
+html.high-contrast .recipe-card,
+html.high-contrast .panel,
+html.high-contrast .empty-state,
+html.high-contrast .error-state,
+html.high-contrast .wake-card,
+html.high-contrast .search-input,
+html.high-contrast .category-select,
+html.high-contrast .scale-input,
+html.high-contrast .pill,
+html.high-contrast .meta-chip,
+html.high-contrast .step-number,
+html.high-contrast .step-ingredient-chip,
+html.high-contrast .check-dot {
+  color: #000;
+  background-color: #fff;
+  border-color: #000;
+  box-shadow: none;
+}
+html.high-contrast .site-header,
+html.high-contrast .site-footer,
+html.high-contrast .recipe-card,
+html.high-contrast .panel,
+html.high-contrast .ingredient-row,
+html.high-contrast .step,
+html.high-contrast .card-meta {
+  border-color: #000;
+}
+html.high-contrast .recipe-card[class*="category-"] { border-top-color: #000; }
+html.high-contrast .recipe-card h3,
+html.high-contrast .card-description,
+html.high-contrast .card-category,
+html.high-contrast .card-meta,
+html.high-contrast .eyebrow,
+html.high-contrast .recipe-description,
+html.high-contrast .ingredient-name,
+html.high-contrast .ingredient-note,
+html.high-contrast .ingredient-amount,
+html.high-contrast .step-title,
+html.high-contrast .step-instructions,
+html.high-contrast .tips-list,
+html.high-contrast .storage-list,
+html.high-contrast .panel-subtitle,
+html.high-contrast .scale-hint,
+html.high-contrast .back-link,
+html.high-contrast .site-footer,
+html.high-contrast .result-count,
+html.high-contrast .section-heading,
+html.high-contrast .empty-state,
+html.high-contrast .loading-state {
+  color: #000;
+}
+html.high-contrast .ingredient-row.checked .ingredient-name,
+html.high-contrast .step.done .step-title,
+html.high-contrast .step.done .step-instructions { color: #000; }
+html.high-contrast .ingredient-row.checked .check-dot,
+html.high-contrast .step.done .step-number { color: #fff; background: #000; border-color: #000; }
+html.high-contrast .pill.active,
+html.high-contrast .pill[class*="category-"],
+html.high-contrast .pill[class*="category-"].active { color: #000; background: #fff; border-color: #000; box-shadow: inset 0 0 0 1px #000; }
+html.high-contrast .brand-mark { color: #fff; background: #000; }
+html.high-contrast .icon-button { color: #000; background: #fff; border-color: #000; }
+html.high-contrast .font-size-toggle[aria-pressed="true"] { color: #fff; background: #000; border-color: #000; }
+html.high-contrast .category-icon,
+html.high-contrast .recipe-head .eyebrow span { filter: grayscale(1); }
+html.high-contrast a { color: #000; }
+html.high-contrast input,
+html.high-contrast select,
+html.high-contrast button { color: #000; }
+
 @media print {
   :root { --paper:#fff; --card:#fff; --ink:#000; --muted:#555; --line:#ddd; }
   body { background:#fff; font-size:11pt; }
