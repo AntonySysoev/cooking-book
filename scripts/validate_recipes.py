@@ -63,6 +63,17 @@ def validate_recipe(path: Path) -> list[str]:
     subcategory_id = data.get("subcategory")
     if subcategory_id and category_id in known_categories and subcategory_id not in known_categories[category_id]:
         error(f"unknown subcategory ID '{subcategory_id}' for category '{category_id}'")
+    also_in = data.get("also_in", [])
+    if not isinstance(also_in, list) or any(not isinstance(item, str) or not item.strip() for item in also_in):
+        error("'also_in' must be a list of category IDs")
+    else:
+        if category_id in also_in:
+            error("'also_in' must not repeat the primary 'category'")
+        if len(set(also_in)) != len(also_in):
+            error("'also_in' must not contain duplicate category IDs")
+        for extra_category in also_in:
+            if known_categories and extra_category not in known_categories:
+                error(f"unknown additional category ID '{extra_category}' in data/categories.yaml")
 
     groups = data.get("ingredient_groups", [])
     group_ids: set[str] = set()
