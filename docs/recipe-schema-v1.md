@@ -6,14 +6,16 @@
 
 - `id`: постоянный уникальный идентификатор в формате slug.
 - `title`: название.
-- `category`: ID категории из `data/categories.yaml`.
+- `category`: основная категория — ID из `data/categories.yaml`.
 - `yield`: выход рецепта с количеством или диапазоном и единицей.
 - `ingredients`: список канонических ингредиентов.
 - `steps`: список шагов приготовления.
 
 ## Необязательные поля
 
-`description`, `subcategory`, `tags`, `time`, `equipment`, `ingredient_groups`, `tips`, `storage`.
+`description`, `subcategory`, `also_in`, `tags`, `time`, `equipment`, `ingredient_groups`, `tips`, `storage`.
+
+Поле `also_in` — необязательный список дополнительных категорий. Рецепт остаётся одним файлом и показывается в каждой указанной категории; основная категория `category` используется для подкатегории и оформления. Пример: `category: ice-cream` и `also_in: [desserts]`.
 
 Время указывается только в целых минутах. Для диапазонов используются пары `*_minutes_min` и `*_minutes_max`. На странице время от 60 минут показывается в часах и минутах с правильными русскими формами.
 
