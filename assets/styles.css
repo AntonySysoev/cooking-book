@@ -264,7 +264,7 @@ html.high-contrast button { color: #000; }
   :root { --paper:#fff; --card:#fff; --ink:#000; --muted:#555; --line:#ddd; }
   html, body { width:auto; height:auto; margin:0; padding:0; background:#fff; }
   body { font-size:11pt; }
-  .site-header,.site-footer,.back-link,.wake-card,.scale-box,.reset-button,.print-button,.search-wrap,.category-select,.category-pills { display:none !important; }
+  .site-header,.site-footer,.back-link,.wake-card,.scale-box,.reset-button,.reset-all-wrap,.print-button,.search-wrap,.category-select,.category-pills { display:none !important; }
   .page-shell { width:auto; max-width:none; margin:0; padding:0; min-height:0; }
   .recipe-head { padding:0 0 8px; margin:0; }
   .recipe-head h1 { font-size:26pt; margin-bottom:8px; }
