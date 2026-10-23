@@ -2,6 +2,7 @@ id: vanilla-ice-cream
 title: Ванильное мороженое
 description: Французское заварное ванильное мороженое с желтками, сухим молоком и нежной текстурой.
 category: ice-cream
+also_in: [desserts]
 
 tags: [мороженое, ваниль, заварная основа, Ankarsrum]
 yield:
