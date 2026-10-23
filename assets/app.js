@@ -142,11 +142,14 @@
       "sauces-and-preserves": "🫙"
     })[id] || "🍴";
   }
-  function categoryLabel(id) {
-    return `${categoryIcon(id)} ${categoryName(id)}`;
+  function recipeCategories(recipe) {
+    return [...new Set([recipe.category, ...(Array.isArray(recipe.also_in) ? recipe.also_in : [])].filter(Boolean))];
+  }
+  function categoryLabels(recipe) {
+    return recipeCategories(recipe).map(id => `${categoryIcon(id)} ${categoryName(id)}`);
   }
   function allSearchText(recipe) {
-    return [recipe.title, recipe.description, ...(recipe.tags || []), categoryName(recipe.category), recipe.subcategory,
+    return [recipe.title, recipe.description, ...(recipe.tags || []), ...recipeCategories(recipe).map(categoryName), recipe.subcategory,
       ...(recipe.ingredients || []).map(i => i.name)].join(" ").toLocaleLowerCase("ru");
   }
   function renderHome() {
@@ -154,7 +157,7 @@
     printButton.hidden = true;
     $("#wake-toggle").hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
-    const filtered = state.recipes.filter(r => (state.activeCategory === "all" || r.category === state.activeCategory) &&
+    const filtered = state.recipes.filter(r => (state.activeCategory === "all" || recipeCategories(r).includes(state.activeCategory)) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")))
       .map((recipe, index) => ({ recipe, index, viewedAt: Number(state.recentlyViewed[recipe.id]) || 0 }))
       .sort((a, b) => b.viewedAt - a.viewedAt || a.index - b.index)
@@ -171,7 +174,7 @@
       <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${filtered.length === 1 ? "рецепт" : filtered.length > 1 && filtered.length < 5 ? "рецепта" : "рецептов"}</span></div>
       ${filtered.length ? `<div class="recipe-grid">${filtered.map(r => `
         <a class="recipe-card ${categoryClass(r.category)}" href="?recipe=${encodeURIComponent(r.id)}">
-          <span class="card-category"><span aria-hidden="true">${categoryIcon(r.category)}</span> ${escapeHtml(categoryName(r.category))}${r.subcategory ? " · " + escapeHtml((state.categories.find(c => c.id === r.category)?.subcategories || []).find(s => s.id === r.subcategory)?.title || "") : ""}</span>
+          <span class="card-category">${categoryLabels(r).map(label => escapeHtml(label)).join(" · ")}${r.subcategory ? " · " + escapeHtml((state.categories.find(c => c.id === r.category)?.subcategories || []).find(s => s.id === r.subcategory)?.title || "") : ""}</span>
           <h3>${escapeHtml(r.title)}</h3>
           <p class="card-description">${escapeHtml(r.description || "")}</p>
           <div class="card-meta"><span>◷ ${escapeHtml(timeLabel(r) || "Время не указано")}</span><span>♧ ${escapeHtml(yieldLabel(r) || "Выход не указан")}</span></div>
@@ -270,7 +273,7 @@
     app.innerHTML = `
       <a class="back-link" href="./">← Все рецепты</a>
       <section class="recipe-head">
-        <div class="eyebrow"><span aria-hidden="true">${categoryIcon(recipe.category)}</span> ${escapeHtml(categoryName(recipe.category))}${subcategory ? " / " + escapeHtml(subcategory) : ""}</div>
+        <div class="eyebrow">${categoryLabels(recipe).map(label => escapeHtml(label)).join(" · ")}${subcategory ? " / " + escapeHtml(subcategory) : ""}</div>
         <h1>${escapeHtml(recipe.title)}</h1>
         ${recipe.description ? `<p class="recipe-description">${escapeHtml(recipe.description)}</p>` : ""}
         <div class="recipe-meta">${timeLabel(recipe) ? `<span class="meta-chip">◷ ${escapeHtml(timeLabel(recipe))}</span>` : ""}${yieldHint(recipe) ? `<span class="meta-chip">♧ ${escapeHtml(yieldHint(recipe))}</span>` : ""}${(recipe.tags || []).slice(0,4).map(t => `<span class="meta-chip">${escapeHtml(t)}</span>`).join("")}</div>
