@@ -25,7 +25,15 @@
   }
   loadUserState();
   function applyFontScale() {
-    document.documentElement.style.setProperty("--text-scale", String(state.fontScale / 100));
+    const scale = state.fontScale / 100;
+    const rootStyle = document.documentElement.style;
+    rootStyle.setProperty("--text-scale", String(scale));
+    [10, 11, 12, 13, 14, 16, 18, 20, 21, 23, 26, 34, 48, 52].forEach(size => {
+      rootStyle.setProperty("--font-size-" + size, (Math.round(size * scale * 100) / 100) + "px");
+    });
+    const width = document.documentElement.clientWidth || 800;
+    rootStyle.setProperty("--font-size-heading", (Math.round(Math.max(34, Math.min(width * 0.05, 52)) * scale * 100) / 100) + "px");
+    rootStyle.setProperty("--font-size-recipe-heading", (Math.round(Math.max(34, Math.min(width * 0.05, 48)) * scale * 100) / 100) + "px");
     const fontSizeSelect = document.getElementById("font-size-select");
     if (fontSizeSelect) fontSizeSelect.value = String(state.fontScale);
   }
@@ -446,6 +454,7 @@
   };
   window.addEventListener("scroll", updateTopButton, { passive: true });
   window.addEventListener("resize", updateTopButton);
+  window.addEventListener("resize", applyFontScale);
   topButton.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
   updateTopButton();
   document.addEventListener("visibilitychange", async () => {
