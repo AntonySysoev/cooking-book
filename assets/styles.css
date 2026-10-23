@@ -256,17 +256,29 @@ html.high-contrast input,
 html.high-contrast select,
 html.high-contrast button { color: #000; }
 
+@page {
+  size: auto;
+  margin: 10mm;
+}
 @media print {
   :root { --paper:#fff; --card:#fff; --ink:#000; --muted:#555; --line:#ddd; }
-  body { background:#fff; font-size:11pt; }
+  html, body { width:auto; height:auto; margin:0; padding:0; background:#fff; }
+  body { font-size:11pt; }
   .site-header,.site-footer,.back-link,.wake-card,.scale-box,.reset-button,.print-button,.search-wrap,.category-select,.category-pills { display:none !important; }
-  .page-shell { max-width:none; padding:0; min-height:0; }
-  .recipe-head { padding:0 0 12px; }
-  .recipe-head h1 { font-size:26pt; }
+  .page-shell { width:auto; max-width:none; margin:0; padding:0; min-height:0; }
+  .recipe-head { padding:0 0 8px; margin:0; }
+  .recipe-head h1 { font-size:26pt; margin-bottom:8px; }
   .recipe-layout { display:block; }
-  .panel { box-shadow:none; border:1px solid #ddd; padding:14px; margin:0 0 12px !important; break-inside:avoid; }
-  .ingredient-row,.step { break-inside:avoid; }
+  .panel { box-shadow:none; border:0; border-radius:0; padding:0; margin:0 0 16px !important; break-inside:auto; page-break-inside:auto; }
+  .panel-title { margin-bottom:8px; }
+  .panel-subtitle { margin:0 0 8px; }
+  .ingredient-group { margin-top:12px; }
+  .ingredient-row { break-inside:auto; page-break-inside:auto; padding:5px 0; }
+  .step { break-inside:auto; page-break-inside:auto; padding:10px 0; }
+  .step:first-child { padding-top:0; }
+  .step:last-child { padding-bottom:0; }
   .ingredient-row.checked .ingredient-name,.step.done .step-title { text-decoration:none; color:inherit; }
   .step-instructions,.ingredient-name { color:#222; }
   .recipe-card { box-shadow:none; }
+  h1,h2,h3,p,ul,ol { orphans:2; widows:2; }
 }
