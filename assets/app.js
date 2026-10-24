@@ -112,7 +112,7 @@
   function interpolateRecipeText(text, recipe, factor = 1) {
     if (typeof text !== "string") return "";
     const quantity = recipe.yield?.quantity;
-    return text.replace(/\\{\\{yield\\.quantity\\}\\}/g, () => {
+    return text.replace(/\{\{yield\.quantity\}\}/g, () => {
       if (!Number.isFinite(Number(quantity))) return "";
       return numberText(Number(quantity) * factor);
     });
