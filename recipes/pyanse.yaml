@@ -48,6 +48,11 @@ ingredients:
     quantity: 6
     unit: г
     group: dough
+  - id: oil-dough
+    name: Растительное масло для теста
+    quantity: 20
+    unit: г
+    group: dough
   - id: pork
     name: Свинина
     quantity: 600
@@ -159,8 +164,9 @@ steps:
       - ingredient: yeast
       - ingredient: sugar
       - ingredient: salt
+      - ingredient: oil-dough
     instructions: >-
-      Смешай тёплую воду, дрожжи и сахар. Добавь муку и соль, замеси в Ankarsrum до гладкого эластичного теста. Гидратация теста — около 67%; не добавляй лишнюю муку только из-за небольшой липкости.
+      Смешай тёплую воду, дрожжи и сахар. Добавь муку и соль, замеси в Ankarsrum до гладкого эластичного теста, затем введи растительное масло и вымеси до однородности. Гидратация по воде — около 67%; не добавляй лишнюю муку только из-за небольшой липкости.
   - id: first-proof
     title: Дать тесту подняться
     instructions: >-
