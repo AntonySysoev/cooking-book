@@ -1,14 +1,14 @@
 id: pyanse
 title: Пянсе
-description: Паровые дрожжевые булочки со свининой, белой и красной капустой, сладким и острым перцем.
+description: Паровые дрожжевые булочки со свининой, обжаренными овощами, белой и красной капустой, сладким и острым перцем; подаются с пикантным соусом.
 category: main-dishes
 subcategory: dumplings
 tags: [пянсе, паровые булочки, свинина, капуста, острый перец]
 yield:
-  quantity: 12
+  quantity: 16
   unit: булочек
 time:
-  active_minutes: 60
+  active_minutes: 75
   total_minutes_min: 150
   total_minutes_max: 210
 equipment:
@@ -20,6 +20,8 @@ ingredient_groups:
     title: Тесто
   - id: filling
     title: Начинка
+  - id: sauce
+    title: Соус
 ingredients:
   - id: flour
     name: Пшеничная мука
@@ -28,27 +30,22 @@ ingredients:
     group: dough
   - id: water
     name: Тёплая вода
-    quantity: 330
+    quantity: 400
     unit: г
     group: dough
   - id: yeast
     name: Сухие быстродействующие дрожжи
-    quantity: 7
+    quantity: 8
     unit: г
     group: dough
   - id: sugar
     name: Сахар
-    quantity: 15
+    quantity: 12
     unit: г
     group: dough
   - id: salt
     name: Соль
-    quantity: 10
-    unit: г
-    group: dough
-  - id: oil-dough
-    name: Растительное масло
-    quantity: 20
+    quantity: 6
     unit: г
     group: dough
   - id: pork
@@ -58,12 +55,12 @@ ingredients:
     group: filling
   - id: cabbage-white
     name: Капуста белокочанная
-    quantity: 250
+    quantity: 350
     unit: г
     group: filling
   - id: cabbage-red
     name: Капуста краснокочанная
-    quantity: 100
+    quantity: 130
     unit: г
     group: filling
   - id: onion
@@ -73,12 +70,12 @@ ingredients:
     group: filling
   - id: sweet-pepper
     name: Перец сладкий красный
-    quantity: 80
+    quantity: 100
     unit: г
     group: filling
   - id: hot-pepper
     name: Перец острый свежий
-    quantity: 5
+    quantity: 4
     unit: г
     group: filling
   - id: garlic
@@ -86,27 +83,73 @@ ingredients:
     quantity: 12
     unit: г
     group: filling
-  - id: soy
-    name: Соевый соус
-    quantity: 25
+  - id: coriander
+    name: Молотый кориандр
+    quantity: 2
     unit: г
     group: filling
-  - id: sesame-oil
-    name: Кунжутное масло
-    quantity: 10
-    unit: г
-    group: filling
-    optional: true
   - id: black-pepper
     name: Чёрный перец
     quantity: 2
     unit: г
     group: filling
+  - id: soy
+    name: Соевый соус
+    quantity: 25
+    unit: г
+    group: filling
+  - id: oil-vegetables
+    name: Растительное масло для овощей
+    quantity: 25
+    unit: г
+    group: filling
+  - id: sesame-oil
+    name: Кунжутное масло
+    quantity: 5
+    unit: г
+    group: filling
+    optional: true
   - id: salt-filling
     name: Соль для начинки
     quantity: 5
     unit: г
     group: filling
+  - id: msg
+    name: Глутамат натрия
+    quantity: 1.5
+    unit: г
+    group: filling
+    optional: true
+  - id: soy-sauce
+    name: Соевый соус для подачи
+    quantity: 75
+    unit: г
+    group: sauce
+  - id: chili-oil
+    name: Чили-масло
+    quantity: 15
+    unit: г
+    group: sauce
+  - id: sesame
+    name: Жареный кунжут
+    quantity: 4
+    unit: г
+    group: sauce
+  - id: sauce-coriander
+    name: Молотый кориандр для соуса
+    quantity: 1
+    unit: г
+    group: sauce
+  - id: spring-onion
+    name: Зелёный лук
+    quantity: 15
+    unit: г
+    group: sauce
+  - id: sauce-garlic
+    name: Чеснок для соуса
+    quantity: 7
+    unit: г
+    group: sauce
 steps:
   - id: dough
     title: Замесить тесто
@@ -116,39 +159,40 @@ steps:
       - ingredient: yeast
       - ingredient: sugar
       - ingredient: salt
-      - ingredient: oil-dough
     instructions: >-
-      Смешай воду, дрожжи и сахар. Добавь муку и соль, замеси в Ankarsrum до гладкого теста, затем введи масло.
+      Смешай тёплую воду, дрожжи и сахар. Добавь муку и соль, замеси в Ankarsrum до гладкого эластичного теста. Гидратация теста — около 67%; не добавляй лишнюю муку только из-за небольшой липкости.
   - id: first-proof
     title: Дать тесту подняться
     instructions: >-
       Накрой тесто и оставь примерно на 45–60 минут при температуре около 24–26 °C, пока объём не увеличится примерно в 1,5–2 раза. В прохладном помещении подъём займёт больше времени.
-  - id: meat
-    title: Подготовить мясо
-    ingredients:
-      - ingredient: pork
-    instructions: >-
-      Пропусти охлаждённую свинину через мясорубку с решёткой 6 мм. Если мясо уже фарш, просто охлади его перед смешиванием.
   - id: vegetables
-    title: Подготовить овощи и начинку
+    title: Подготовить овощи
     ingredients:
-      - ingredient: pork
       - ingredient: cabbage-white
       - ingredient: cabbage-red
       - ingredient: onion
       - ingredient: sweet-pepper
       - ingredient: hot-pepper
       - ingredient: garlic
+      - ingredient: coriander
+      - ingredient: black-pepper
+      - ingredient: oil-vegetables
+    instructions: >-
+      Тонко нашинкуй обе капусты, мелко нарежь лук и сладкий перец. Острый перец измельчи; при необходимости удали семена и перегородки. Чеснок измельчи. Разогрей растительное масло в большой сковороде. Обжарь лук 3–4 минуты, добавь капусту и готовь ещё 6–10 минут, пока она не осядет и лишняя влага в основном не испарится. Добавь сладкий перец и жарь 2–3 минуты. В конце добавь острый перец, чеснок, кориандр и чёрный перец, перемешай и готовь ещё 30–60 секунд. Полностью остуди овощи.
+  - id: meat
+    title: Смешать начинку
+    ingredients:
+      - ingredient: pork
       - ingredient: soy
       - ingredient: sesame-oil
-      - ingredient: black-pepper
       - ingredient: salt-filling
+      - ingredient: msg
     instructions: >-
-      Тонко нашинкуй белую и красную капусту, мелко нарежь лук и сладкий перец. Острый перец мелко нарежь; при необходимости удали семена и перегородки. Чеснок измельчи. Смешай всё с сырой свининой, соевым соусом, кунжутным маслом, чёрным перцем и солью. Не обжаривай ингредиенты и не отжимай капусту насухо: сок поможет сохранить начинку сочной. До формования держи начинку в холодильнике.
+      Пропусти охлаждённую свинину через мясорубку с решёткой 6 мм. Смешай сырой фарш с полностью остывшими овощами, соевым соусом, кунжутным маслом, солью и, по желанию, глутаматом натрия. Держи начинку в холодильнике до формования.
   - id: divide
     title: Разделить тесто
     instructions: >-
-      Раздели поднявшееся тесто на равные части — всего {{yield.quantity}}. Каждую округли, накрой и дай отдохнуть 5–10 минут.
+      Раздели поднявшееся тесто на равные части — всего {{yield.quantity}}. Каждую округли, накрой и дай отдохнуть 10 минут.
   - id: fill
     title: Сформовать пянсе
     instructions: >-
@@ -160,10 +204,21 @@ steps:
   - id: steam
     title: Приготовить на пару
     instructions: >-
-      Доведи воду в мантоварке до устойчивого кипения. Разложи булочки на смазанные или выстеленные пергаментом уровни, не перегружая их. Готовь на сильном пару 30–35 минут после восстановления активного парообразования. После выключения оставь под крышкой 5 минут, затем открывай осторожно.
+      Доведи воду в мантоварке до устойчивого кипения. Разложи булочки на выстеленные пергаментом уровни, не перегружая их. Готовь на сильном пару 25–30 минут после восстановления активного парообразования; крупным булочкам может понадобиться больше времени. Не открывай крышку во время приготовления. После выключения оставь под крышкой 5 минут, затем открывай осторожно. В самой крупной булочке температура в центре мясной начинки должна достигнуть как минимум 71 °C.
+  - id: sauce
+    title: Приготовить соус
+    ingredients:
+      - ingredient: soy-sauce
+      - ingredient: chili-oil
+      - ingredient: sesame
+      - ingredient: sauce-coriander
+      - ingredient: spring-onion
+      - ingredient: sauce-garlic
+    instructions: >-
+      Мелко нарежь зелёный лук и измельчи чеснок. Смешай с соевым соусом, чили-маслом, кунжутом и молотым кориандром. Дай постоять 5–10 минут и подавай отдельно к горячим пянсе.
 tips:
-  - Не открывай крышку во время приготовления: резкий перепад температуры может осадить тесто.
-  - Для начинки используй охлаждённое мясо; готовность проверь в самой крупной булочке. Температура в центре мясной начинки должна достигнуть как минимум 71 °C.
-  - Острый перец бывает разной жгучести: 5 г — ориентир, для очень острого сорта начни с 2–3 г.
+  - На 600 г муки и 400 г воды гидратация теста составляет 66,7% — тесто будет мягким и немного липким, что нормально для пышных паровых булочек.
+  - Начинку смешивай только после полного остывания овощей, чтобы не начать готовить свиной фарш заранее.
+  - Острота перца различается: 4 г — ориентир; для очень острого перца начни с 2 г.
 storage:
   - Готовые пянсе храни в холодильнике до 2 дней. Разогревай на пару 5–8 минут.
