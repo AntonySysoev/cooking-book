@@ -109,6 +109,14 @@
     }
     return Object.values(item).filter(value => typeof value === "string" || typeof value === "number").join(" — ");
   }
+  function interpolateRecipeText(text, recipe, factor = 1) {
+    if (typeof text !== "string") return "";
+    const quantity = recipe.yield?.quantity;
+    return text.replace(/\\{\\{yield\\.quantity\\}\\}/g, () => {
+      if (!Number.isFinite(Number(quantity))) return "";
+      return numberText(Number(quantity) * factor);
+    });
+  }
   function yieldHint(recipe, factor = 1) {
     const y = recipe.yield || {};
     const amount = y.quantity != null ? numberText(y.quantity * factor)
@@ -251,7 +259,7 @@
       return `<li class="step ${done ? "done" : ""}" data-step-id="${escapeHtml(step.id)}" tabindex="0" role="checkbox" aria-checked="${done}">
         <span class="step-number">${done ? "✓" : index + 1}</span><div><div class="step-title">${escapeHtml(step.title || `Шаг ${index + 1}`)}</div>
         ${chips.length ? `<div class="step-ingredients">${chips.map(chip => `<span class="step-ingredient-chip">${escapeHtml(chip)}</span>`).join("")}</div>` : ""}
-        <p class="step-instructions">${escapeHtml(step.instructions || "")}</p></div>
+        <p class="step-instructions">${escapeHtml(interpolateRecipeText(step.instructions || "", recipe, factor))}</p></div>
       </li>`;
     }).join("");
   }
