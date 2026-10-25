@@ -1,0 +1,224 @@
+id: espresso-macarons
+title: Французские макароны с эспрессо и тёмным шоколадом
+description: >-
+  Кофейные макароны с интенсивным вкусом эспрессо и мягкой горчинкой тёмного
+  шоколада. Начинка — шоколадный ганаш с концентрированным кофе, без лишней
+  сладости и без водянистой текстуры.
+category: desserts
+subcategory: cakes-and-pastries
+tags:
+  - макароны
+  - macarons
+  - эспрессо
+  - кофе
+  - тёмный шоколад
+  - итальянская меренга
+yield:
+  quantity: 32
+  unit: макарона
+time:
+  active_minutes: 100
+  total_minutes_min: 300
+  total_minutes_max: 420
+equipment:
+  - Весы с точностью до 0,1 г
+  - Ankarsrum с Balloon Whisks для итальянской меренги
+  - Блендер Ninja PowerBowl или большая чаша с короткими импульсами
+  - Кондитерский мешок с круглой насадкой 8–10 мм
+  - Кухонный термометр для сиропа
+  - Противни и пергамент
+  - Мелкое сито для сухих ингредиентов
+  - Нейлоновая мелкая сетка для фильтрации ароматизированных сливок при необходимости
+ingredient_groups:
+  - id: shells
+    title: Миндальные оболочки
+  - id: coffee-ganache
+    title: Ганаш с эспрессо
+ingredients:
+  - id: almond-flour
+    name: Миндальная мука
+    quantity: 150
+    unit: г
+    group: shells
+    note: Мелкого помола, без крупных частиц.
+  - id: icing-sugar
+    name: Сахарная пудра
+    quantity: 150
+    unit: г
+    group: shells
+  - id: egg-whites
+    name: Яичные белки
+    quantity: 110
+    unit: г
+    group: shells
+    note: Без следов желтка; разделить на две порции по 55 г.
+    parts:
+      - id: almond-mixture
+        name: Для миндальной пасты
+        quantity: 55
+        group: shells
+      - id: meringue
+        name: Для меренги
+        quantity: 55
+        group: shells
+  - id: caster-sugar
+    name: Сахар
+    quantity: 150
+    unit: г
+    group: shells
+  - id: syrup-water
+    name: Вода для сиропа
+    quantity: 38
+    unit: г
+    group: shells
+  - id: chocolate
+    name: Тёмный шоколад 60–70%
+    quantity: 130
+    unit: г
+    group: coffee-ganache
+  - id: cream
+    name: Сливки 30%
+    quantity: 70
+    unit: г
+    group: coffee-ganache
+  - id: espresso
+    name: Свежеприготовленный эспрессо
+    quantity: 25
+    unit: г
+    group: coffee-ganache
+    note: Крепкий, без сахара; охлади и отвесь после приготовления.
+  - id: butter
+    name: Сливочное масло 82%
+    quantity: 10
+    unit: г
+    group: coffee-ganache
+  - id: salt
+    name: Мелкая соль
+    quantity: 0.4
+    unit: г
+    group: coffee-ganache
+steps:
+  - id: prepare
+    title: Подготовить ингредиенты и противни
+    ingredients:
+      - ingredient: almond-flour
+      - ingredient: icing-sugar
+      - ingredient: egg-whites
+        part: almond-mixture
+      - ingredient: egg-whites
+        part: meringue
+      - ingredient: caster-sugar
+      - ingredient: syrup-water
+    instructions: >-
+      Точно отвесь ингредиенты. Обезжирь чашу и Balloon Whisks. Подготовь
+      противень с пергаментом и шаблон кругов диаметром 3,5–4 см.
+  - id: sift
+    title: Подготовить сухую смесь
+    ingredients:
+      - ingredient: almond-flour
+      - ingredient: icing-sugar
+    instructions: >-
+      Просей миндальную муку с сахарной пудрой. Если остаются крупные частицы,
+      измельчи их короткими импульсами и просей повторно; не перемалывай долго,
+      чтобы миндаль не начал выделять масло.
+  - id: almond-paste
+    title: Смешать миндальную пасту
+    ingredients:
+      - ingredient: almond-flour
+      - ingredient: icing-sugar
+      - ingredient: egg-whites
+        part: almond-mixture
+    instructions: >-
+      Добавь 55 г белков к сухой смеси и перемешай лопаткой до густой однородной
+      пасты. Накрой, чтобы она не подсыхала.
+  - id: meringue
+    title: Приготовить итальянскую меренгу
+    ingredients:
+      - ingredient: egg-whites
+        part: meringue
+      - ingredient: caster-sugar
+      - ingredient: syrup-water
+    instructions: >-
+      Нагрей сахар с водой в сотейнике до 118 °C по термометру, не перемешивая
+      после растворения сахара. Когда сироп достигнет 108–110 °C, начни взбивать
+      оставшиеся 55 г белков в Ankarsrum с Balloon Whisks до мягких пиков.
+      Влей сироп тонкой струёй между венчиком и стенкой чаши и взбивай до плотной
+      блестящей меренги, остывшей примерно до 40–45 °C.
+  - id: macaronage
+    title: Выполнить макаронаж
+    ingredients:
+      - ingredient: egg-whites
+        part: almond-mixture
+      - ingredient: egg-whites
+        part: meringue
+      - ingredient: almond-flour
+      - ingredient: icing-sugar
+    instructions: >-
+      Вмешай треть меренги в миндальную пасту, затем в 2–3 приёма введи остаток.
+      Складывай массу лопаткой снизу вверх. Остановись, когда тесто блестит,
+      стекает широкой непрерывной лентой, а след исчезает за 10–20 секунд.
+  - id: pipe
+    title: Отсадить и подсушить оболочки
+    instructions: >-
+      Отсади круги 3,5–4 см вертикально держа мешок с круглой насадкой 8–10 мм.
+      Постучи противнем по столу, проколи видимые пузырьки и оставь на 20–45 минут,
+      пока поверхность не станет сухой и не будет липнуть к пальцу.
+  - id: bake
+    title: Выпечь оболочки
+    instructions: >-
+      Выпекай при фактической температуре 145 °C, верхний и нижний нагрев без
+      конвекции, на среднем уровне 15–18 минут, по одному противню. Начни проверять
+      с 14-й минуты. Полностью остуди перед снятием с пергамента. Готовая оболочка
+      не должна скользить верхом отдельно от основания при лёгком касании.
+  - id: prepare-espresso
+    title: Подготовить эспрессо
+    ingredients:
+      - ingredient: espresso
+    instructions: >-
+      Приготовь крепкий эспрессо без сахара и отвесь 25 г. Если напитка получилось
+      больше, не вливай его весь: избыток воды сделает ганаш мягким. Полностью
+      остуди кофе перед использованием.
+  - id: coffee-ganache
+    title: Приготовить ганаш с эспрессо
+    ingredients:
+      - ingredient: chocolate
+      - ingredient: cream
+      - ingredient: espresso
+      - ingredient: butter
+      - ingredient: salt
+    instructions: >-
+      Мелко наруби шоколад и положи в высокий узкий сосуд или чашу блендера.
+      Нагрей сливки почти до кипения, сними с огня и добавь эспрессо. Влей горячую
+      смесь на шоколад, подожди 1 минуту, затем перемешивай от центра к краям
+      до блестящей эмульсии. Добавь масло и соль, перемешай до гладкости. Если
+      используешь Ninja, бери небольшую подходящую чашу и работай короткими
+      импульсами, не вводя воздух. Накрой плёнкой в контакт и охлади 6–12 часов.
+  - id: fill
+    title: Наполнить макароны
+    ingredients:
+      - ingredient: chocolate
+      - ingredient: cream
+      - ingredient: espresso
+      - ingredient: butter
+      - ingredient: salt
+    instructions: >-
+      Размешай охлаждённый ганаш лопаткой до пластичности. Отсади примерно по
+      6 г на половину оболочек и накрой оставшимися. Оставь в закрытом контейнере
+      в холодильнике на 12–24 часа для созревания вкуса. Перед подачей дай постоять
+      15–20 минут при комнатной температуре.
+tips:
+  - >-
+    Не заменяй весь эспрессо дополнительными сливками: кофе должен отчётливо
+    ощущаться, но общая доля жидкости уже рассчитана для устойчивого ганаша.
+  - >-
+    Для более выраженного кофейного профиля можно использовать робустовый бленд
+    или двойной ристретто, но всё равно отвесить ровно 25 г готового напитка.
+  - >-
+    Если ганаш кажется мягким после ночи в холодильнике, дай ему ещё 2–3 часа
+    охлаждения; не добавляй шоколад на глаз в уже готовую эмульсию.
+storage:
+  - >-
+    Храни собранные макароны в холодильнике в герметичном контейнере до 3 дней.
+    Перед подачей дай им постоять 15–20 минут.
+  - >-
+    Пустые оболочки можно заморозить в герметичной упаковке.
