@@ -485,7 +485,6 @@
   });
   printMenuLink.addEventListener("click", async () => {
     const url = window.location.href;
-    closePrintMenu();
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(url);
