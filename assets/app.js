@@ -1,7 +1,11 @@
 (() => {
   "use strict";
   const app = document.getElementById("app");
+  const printMenuWrap = document.getElementById("print-menu-wrap");
   const printButton = document.getElementById("print-button");
+  const printMenu = document.getElementById("print-menu");
+  const printMenuPrint = document.getElementById("print-menu-print");
+  const printMenuLink = document.getElementById("print-menu-link");
   const topButton = document.getElementById("top-button");
   const STORAGE_KEY = "cooking-book-user-state-v1";
   const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false };
@@ -162,7 +166,8 @@
   }
   function renderHome() {
     document.title = "Cooking Book — кулинарная книга";
-    printButton.hidden = true;
+    printMenuWrap.hidden = true;
+    closePrintMenu();
     $("#wake-toggle").hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || recipeCategories(r).includes(state.activeCategory)) &&
@@ -266,7 +271,7 @@
   function renderRecipe(recipe) {
     document.body.className = document.body.className.replace(/\bcategory-[\w-]+\b/g, "").trim();
     document.body.classList.add(categoryClass(recipe.category));
-    printButton.hidden = false;
+    printMenuWrap.hidden = false;
     $("#wake-toggle").hidden = false;
     document.title = `${recipe.title} — Cooking Book`;
     state.currentRecipe = recipe;
@@ -463,7 +468,51 @@
       saveUserState();
     });
   }
-  printButton.addEventListener("click", () => window.print());
+  function closePrintMenu() {
+    if (!printMenu || !printButton) return;
+    printMenu.hidden = true;
+    printButton.setAttribute("aria-expanded", "false");
+  }
+  printButton.addEventListener("click", event => {
+    event.stopPropagation();
+    const opening = printMenu.hidden;
+    printMenu.hidden = !opening;
+    printButton.setAttribute("aria-expanded", String(opening));
+  });
+  printMenuPrint.addEventListener("click", () => {
+    closePrintMenu();
+    window.print();
+  });
+  printMenuLink.addEventListener("click", async () => {
+    const url = window.location.href;
+    closePrintMenu();
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const field = document.createElement("textarea");
+        field.value = url;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.appendChild(field);
+        field.select();
+        const copied = document.execCommand("copy");
+        field.remove();
+        if (!copied) throw new Error("copy failed");
+      }
+      printMenuLink.textContent = "Ссылка скопирована";
+      window.setTimeout(() => { printMenuLink.textContent = "Скопировать ссылку"; }, 1800);
+    } catch (_) {
+      window.prompt("Скопируй ссылку на рецепт:", url);
+    }
+  });
+  document.addEventListener("click", event => {
+    if (!printMenuWrap.contains(event.target)) closePrintMenu();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closePrintMenu();
+  });
   const updateTopButton = () => {
     const shouldShow = window.scrollY > window.innerHeight;
     topButton.hidden = !shouldShow;
