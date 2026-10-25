@@ -282,3 +282,15 @@ html.high-contrast button { color: #000; }
   .recipe-card { box-shadow:none; }
   h1,h2,h3,p,ul,ol { orphans:2; widows:2; }
 }
+
+
+/* Компактное меню действий с рецептом: сама кнопка сохраняет размер 40×40 px. */
+.print-menu-wrap { position:relative; width:40px; height:40px; flex:0 0 40px; }
+.print-menu-wrap[hidden] { display:none !important; }
+.print-menu { position:absolute; top:calc(100% + 8px); right:0; z-index:50; min-width:184px; padding:5px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:0 8px 24px rgba(65,43,24,.16); }
+.print-menu[hidden] { display:none !important; }
+.print-menu button { display:block; width:100%; padding:10px 12px; border:0; border-radius:8px; background:transparent; color:var(--ink); text-align:left; white-space:nowrap; font:inherit; font-size:var(--font-size-13, 13px); cursor:pointer; }
+.print-menu button:hover,.print-menu button:focus-visible { background:var(--accent-soft); outline:none; }
+html.high-contrast .print-menu { color:#000; background:#fff; border-color:#000; box-shadow:none; }
+html.high-contrast .print-menu button { color:#000; }
+@media print { .print-menu-wrap { display:none !important; } }
