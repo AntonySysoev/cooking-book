@@ -50,104 +50,104 @@ ingredients:
     group: dough
   - id: pork
     name: Свинина
-    quantity: 600
+    quantity: 450
     unit: г
     group: filling
   - id: cabbage-white
     name: Капуста белокочанная
-    quantity: 350
+    quantity: 263
     unit: г
     group: filling
   - id: cabbage-red
     name: Капуста краснокочанная
-    quantity: 130
+    quantity: 98
     unit: г
     group: filling
   - id: onion
     name: Репчатый лук
-    quantity: 180
+    quantity: 135
     unit: г
     group: filling
   - id: sweet-pepper
     name: Перец сладкий красный
-    quantity: 100
+    quantity: 75
     unit: г
     group: filling
   - id: hot-pepper
     name: Перец острый свежий
-    quantity: 4
+    quantity: 3
     unit: г
     group: filling
   - id: garlic
     name: Чеснок
-    quantity: 12
+    quantity: 9
     unit: г
     group: filling
   - id: coriander
     name: Молотый кориандр
-    quantity: 2
+    quantity: 1.5
     unit: г
     group: filling
   - id: black-pepper
     name: Молотый чёрный перец
-    quantity: 2
+    quantity: 1.5
     unit: г
     group: filling
   - id: soy
     name: Соевый соус
-    quantity: 25
+    quantity: 19
     unit: г
     group: filling
   - id: oil-vegetables
     name: Растительное масло для обжаривания
-    quantity: 25
+    quantity: 19
     unit: г
     group: filling
   - id: sesame-oil
     name: Кунжутное масло
-    quantity: 5
+    quantity: 4
     unit: г
     group: filling
     optional: true
   - id: salt-filling
     name: Соль для начинки
-    quantity: 5
+    quantity: 3.8
     unit: г
     group: filling
   - id: msg
     name: Глутамат натрия
-    quantity: 1.5
+    quantity: 1.1
     unit: г
     group: filling
     optional: true
   - id: soy-sauce
     name: Соевый соус для подачи
-    quantity: 75
+    quantity: 56
     unit: г
     group: sauce
   - id: chili-oil
     name: Чили-масло
-    quantity: 15
+    quantity: 11
     unit: г
     group: sauce
   - id: sesame
     name: Жареный кунжут
-    quantity: 4
+    quantity: 3
     unit: г
     group: sauce
   - id: sauce-coriander
     name: Молотый кориандр для соуса
-    quantity: 1
+    quantity: 0.8
     unit: г
     group: sauce
   - id: spring-onion
     name: Зелёный лук
-    quantity: 15
+    quantity: 11
     unit: г
     group: sauce
   - id: sauce-garlic
     name: Чеснок для соуса
-    quantity: 7
+    quantity: 5.3
     unit: г
     group: sauce
 steps:
@@ -219,9 +219,10 @@ steps:
       Мелко нарежь зелёный лук и измельчи чеснок. Смешай их с соевым соусом, чили-маслом, жареным кунжутом и молотым кориандром. Дай соусу постоять 5–10 минут. Подавай отдельно; по желанию соус можно добавить внутрь надрезанной булочки.
 tips:
   - Тесто масштабировано с оригинала на 12 булочек: примерно по 67 г теста на каждую.
+  - Начинка также уменьшена относительно предыдущей версии на 16 штук, чтобы порции соответствовали размеру теста.
   - Капусту важно хорошо отжать, а готовую начинку полностью остудить перед лепкой.
   - В оригинале начинка обжаривается до готовности, поэтому 15 минут на пару достаточно для прогрева булочек обычного размера. Если делаешь булочки крупнее или сомневаешься в готовности начинки, увеличь время и проверь самую крупную булочку.
-  - Острота перца различается: 4 г — ориентир; для очень острого перца начни с 2 г.
+  - Острота перца различается: 3 г — ориентир; для очень острого перца начни с 1.5 г.
 storage:
   - Готовые пянсе храни в холодильнике до 2 дней. Разогревай на пару 5–8 минут.
   - Готовые остывшие пянсе можно заморозить в герметичной упаковке. Для лучшего результата сначала заморозь их в один слой, затем переложи в пакет или контейнер. Разогревай без предварительного размораживания на пару примерно 10–15 минут, до полного прогрева.
