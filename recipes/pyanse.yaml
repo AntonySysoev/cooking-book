@@ -25,12 +25,12 @@ ingredient_groups:
 ingredients:
   - id: flour
     name: Пшеничная мука
-    quantity: 462
+    quantity: 460
     unit: г
     group: dough
   - id: water
     name: Тёплая вода
-    quantity: 323
+    quantity: 325
     unit: г
     group: dough
   - id: yeast
@@ -40,12 +40,12 @@ ingredients:
     group: dough
   - id: sugar
     name: Сахар
-    quantity: 9.2
+    quantity: 9
     unit: г
     group: dough
   - id: salt
     name: Соль
-    quantity: 4.6
+    quantity: 4.5
     unit: г
     group: dough
   - id: pork
@@ -55,12 +55,12 @@ ingredients:
     group: filling
   - id: cabbage-white
     name: Капуста белокочанная
-    quantity: 263
+    quantity: 260
     unit: г
     group: filling
   - id: cabbage-red
     name: Капуста краснокочанная
-    quantity: 98
+    quantity: 100
     unit: г
     group: filling
   - id: onion
@@ -80,27 +80,27 @@ ingredients:
     group: filling
   - id: garlic
     name: Чеснок
-    quantity: 9
+    quantity: 10
     unit: г
     group: filling
   - id: coriander
     name: Молотый кориандр
-    quantity: 1.5
+    quantity: 3
     unit: г
     group: filling
   - id: black-pepper
     name: Молотый чёрный перец
-    quantity: 1.5
+    quantity: 3
     unit: г
     group: filling
   - id: soy
     name: Соевый соус
-    quantity: 19
+    quantity: 20
     unit: г
     group: filling
   - id: oil-vegetables
     name: Растительное масло для обжаривания
-    quantity: 19
+    quantity: 20
     unit: г
     group: filling
   - id: sesame-oil
@@ -111,23 +111,23 @@ ingredients:
     optional: true
   - id: salt-filling
     name: Соль для начинки
-    quantity: 3.8
+    quantity: 3.5
     unit: г
     group: filling
   - id: msg
     name: Глутамат натрия
-    quantity: 1.1
+    quantity: 1
     unit: г
     group: filling
     optional: true
   - id: soy-sauce
     name: Соевый соус для подачи
-    quantity: 56
+    quantity: 55
     unit: г
     group: sauce
   - id: chili-oil
     name: Чили-масло
-    quantity: 11
+    quantity: 10
     unit: г
     group: sauce
   - id: sesame
@@ -137,17 +137,17 @@ ingredients:
     group: sauce
   - id: sauce-coriander
     name: Молотый кориандр для соуса
-    quantity: 0.8
+    quantity: 1
     unit: г
     group: sauce
   - id: spring-onion
     name: Зелёный лук
-    quantity: 11
+    quantity: 10
     unit: г
     group: sauce
   - id: sauce-garlic
     name: Чеснок для соуса
-    quantity: 5.3
+    quantity: 5
     unit: г
     group: sauce
 steps:
