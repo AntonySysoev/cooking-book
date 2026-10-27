@@ -206,8 +206,8 @@
     const name = part?.name ? `${ingredient.name} — ${part.name.toLocaleLowerCase("ru")}` : ingredient.name;
     return `${name}${amount == null ? "" : " " + formatAmount(amount, ingredient.unit)}`;
   }
-  function ingredientRows(recipe, factor) {
-    const groups = recipe.ingredient_groups || [];
+  function ingredientRows(recipe, factor, targetGroupId = null, onlyTarget = false) {
+    const groups = (recipe.ingredient_groups || []).filter(group => !targetGroupId || group.id === targetGroupId);
     const rendered = new Set();
     const groupBlocks = [];
     for (const group of groups) {
@@ -238,6 +238,7 @@
     const other = [];
     for (const item of recipe.ingredients || []) {
       if (rendered.has(item.id)) continue;
+      if (onlyTarget) continue;
       if (item.parts_mode === "components" || !item.parts?.length) {
         other.push(renderIngredientRow(item, null, factor, item.id));
       } else {
@@ -556,8 +557,8 @@
     updateCookingNavigation(recipe);
     scrollToCurrentStage(false, recipe);
   }
-  function bindIngredientRows() {
-    app.querySelectorAll("[data-ingredient-key]").forEach(row => {
+  function bindIngredientRows(root = app) {
+    root.querySelectorAll("[data-ingredient-key]").forEach(row => {
       const toggle = () => {
         const key = row.dataset.ingredientKey;
         state.checkedIngredients.has(key) ? state.checkedIngredients.delete(key) : state.checkedIngredients.add(key);
@@ -576,6 +577,8 @@
         const id = row.dataset.stepId;
         const allSteps = [...app.querySelectorAll("[data-step-id]")];
         state.currentStepIndex = Math.max(0, allSteps.findIndex(step => step.dataset.stepId === id));
+        const matchingStage = cookingStages(state.currentRecipe).findIndex(stage => stage.type === "step" && stage.stepIndex === state.currentStepIndex);
+        if (matchingStage >= 0) state.cookingStageIndex = matchingStage;
         const progress = state.recipeProgress[state.currentRecipe.id] || {};
         progress.hasStepPosition = true;
         state.recipeProgress[state.currentRecipe.id] = progress;
