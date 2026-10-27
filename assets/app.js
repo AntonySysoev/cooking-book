@@ -203,8 +203,6 @@
     $("#recipe-menu-separator").hidden = true;
     const cookingToggle = document.getElementById("cooking-mode-toggle");
     if (cookingToggle) cookingToggle.hidden = true;
-    const requestedCategory = new URLSearchParams(location.search).get("category");
-    if (requestedCategory && (requestedCategory === "all" || state.categories.some(c => c.id === requestedCategory))) state.activeCategory = requestedCategory;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || recipeCategories(r).includes(state.activeCategory)) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")))
@@ -633,7 +631,10 @@
       if (!recipesResponse.ok || !categoriesResponse.ok) throw new Error("Не удалось загрузить данные.");
       state.recipes = await recipesResponse.json();
       state.categories = (await categoriesResponse.json()).categories || [];
-      const id = new URLSearchParams(location.search).get("recipe");
+      const params = new URLSearchParams(location.search);
+      const id = params.get("recipe");
+      const requestedCategory = params.get("category");
+      if (requestedCategory && (requestedCategory === "all" || state.categories.some(c => c.id === requestedCategory))) state.activeCategory = requestedCategory;
       const recipe = id ? state.recipes.find(r => r.id === id) : null;
       if (id && !recipe) {
         app.innerHTML = `<div class="error-state"><h2>Рецепт не найден</h2><p>Возможно, ссылка устарела или рецепт ещё не опубликован.</p><a class="back-link" href="./">← Вернуться к рецептам</a></div>`;
