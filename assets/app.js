@@ -8,7 +8,7 @@
   const printMenuLink = document.getElementById("print-menu-link");
   const topButton = document.getElementById("top-button");
   const STORAGE_KEY = "cooking-book-user-state-v1";
-  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false, currentStepIndex: 0, cookingMode: false };
+  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false, currentStepIndex: 0, cookingStageIndex: 0, cookingMode: false };
   function loadUserState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -25,7 +25,7 @@
   }
   function saveCurrentRecipeState() {
     if (!state.currentRecipe) return;
-    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, checkedIngredients: [...state.checkedIngredients], doneSteps: [...state.doneSteps], currentStepIndex: state.currentStepIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
+    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, checkedIngredients: [...state.checkedIngredients], doneSteps: [...state.doneSteps], currentStepIndex: state.currentStepIndex, cookingStageIndex: state.cookingStageIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
     saveUserState();
   }
   loadUserState();
@@ -454,26 +454,75 @@
       }, 180);
     }, { passive: true });
   }
+  function cookingIngredientGroups(recipe) {
+    const groups = recipe.ingredient_groups || [];
+    const relevant = groups.filter(group => {
+      const preview = ingredientRows(recipe, 1, group.id, true);
+      return preview.trim().length > 0;
+    });
+    const assignedIds = new Set(groups.map(group => group.id));
+    const hasUngrouped = (recipe.ingredients || []).some(item => {
+      if (item.parts_mode === "components") return !(item.parts || []).some(part => assignedIds.has(part.group)) && !assignedIds.has(item.group);
+      return !item.group && !(item.parts || []).some(part => assignedIds.has(part.group));
+    });
+    if (hasUngrouped) relevant.push({ id: "__other__", title: "Дополнительные ингредиенты" });
+    return relevant;
+  }
+  function cookingStages(recipe) {
+    return [
+      ...cookingIngredientGroups(recipe).map(group => ({ type: "ingredients", id: group.id, title: group.title })),
+      ...(recipe.steps || []).map((step, index) => ({ type: "step", id: step.id, title: step.title || `Шаг ${index + 1}`, stepIndex: index }))
+    ];
+  }
+  function renderCookingIngredientScreen(recipe, group, factor) {
+    const html = group.id === "__other__"
+      ? ingredientRows(recipe, factor)
+      : ingredientRows(recipe, factor, group.id, true);
+    return `<h2 class="cooking-ingredient-title">${escapeHtml(group.title)}</h2><div class="cooking-ingredient-list">${html || "<p>Нет отдельных ингредиентов для этого этапа.</p>"}</div>`;
+  }
   function applyCookingMode() {
     document.body.classList.toggle("cooking-mode", state.cookingMode);
-    const toggle = $("#cooking-mode-toggle");
+    const toggle = document.getElementById("cooking-mode-toggle");
     const navigation = $("#cooking-navigation");
     if (toggle) {
-      toggle.textContent = state.cookingMode ? "Обычный вид" : "Режим готовки";
       toggle.setAttribute("aria-pressed", String(state.cookingMode));
+      toggle.setAttribute("aria-label", state.cookingMode ? "Выйти из режима готовки" : "Включить режим готовки");
+      toggle.title = state.cookingMode ? "Выйти из режима готовки" : "Режим готовки";
+      toggle.classList.toggle("is-active", state.cookingMode);
     }
     if (navigation) navigation.hidden = !state.cookingMode;
+    const recipe = state.currentRecipe;
+    if (!recipe) return;
+    const stages = cookingStages(recipe);
+    state.cookingStageIndex = Math.max(0, Math.min(Math.max(0, stages.length - 1), state.cookingStageIndex));
+    const current = stages[state.cookingStageIndex];
+    const ingredientScreen = $("#cooking-ingredient-screen");
+    const stepList = $(".step-list");
+    if (ingredientScreen) {
+      if (state.cookingMode && current?.type === "ingredients") {
+        const group = cookingIngredientGroups(recipe).find(item => item.id === current.id);
+        ingredientScreen.innerHTML = renderCookingIngredientScreen(recipe, group, state.multiplier);
+        ingredientScreen.hidden = false;
+        bindIngredientRows(ingredientScreen);
+      } else {
+        ingredientScreen.hidden = true;
+        ingredientScreen.innerHTML = "";
+      }
+    }
+    if (stepList) stepList.hidden = state.cookingMode && current?.type === "ingredients";
     const steps = [...app.querySelectorAll("[data-step-id]")];
     steps.forEach((step, index) => step.classList.toggle("current-cooking-step", index === state.currentStepIndex));
   }
   function updateCookingNavigation(recipe) {
-    const total = (recipe.steps || []).length;
+    const stages = cookingStages(recipe);
+    const total = stages.length;
     const counter = $("#cooking-step-counter");
     const previous = $("#cooking-prev");
     const next = $("#cooking-next");
-    if (counter) counter.textContent = total ? `Шаг ${state.currentStepIndex + 1} из ${total}` : "Нет шагов";
-    if (previous) previous.disabled = state.currentStepIndex <= 0;
-    if (next) next.disabled = state.currentStepIndex >= total - 1;
+    const current = stages[state.cookingStageIndex];
+    if (counter) counter.textContent = total ? `${current?.type === "ingredients" ? current.title : "Шаг " + ((current?.stepIndex ?? 0) + 1)} · ${state.cookingStageIndex + 1} из ${total}` : "Нет этапов";
+    if (previous) previous.disabled = state.cookingStageIndex <= 0;
+    if (next) next.disabled = state.cookingStageIndex >= total - 1;
     applyCookingMode();
   }
   function scrollToCurrentStep(restore) {
@@ -484,15 +533,28 @@
     catch (_) { step.scrollIntoView(true); }
     if (restore) window.scrollBy(0, -24);
   }
-  function moveCookingStep(direction, recipe) {
-    const total = (recipe.steps || []).length;
-    state.currentStepIndex = Math.max(0, Math.min(total - 1, state.currentStepIndex + direction));
+  function scrollToCurrentStage(restore, recipe) {
+    const stages = cookingStages(recipe);
+    const current = stages[state.cookingStageIndex];
+    if (current?.type === "step") {
+      state.currentStepIndex = current.stepIndex;
+      scrollToCurrentStep(restore);
+    } else {
+      const screen = $("#cooking-ingredient-screen");
+      if (screen) screen.scrollIntoView({ behavior: "auto", block: "start" });
+    }
+  }
+  function moveCookingStage(direction, recipe) {
+    const stages = cookingStages(recipe);
+    state.cookingStageIndex = Math.max(0, Math.min(stages.length - 1, state.cookingStageIndex + direction));
+    const current = stages[state.cookingStageIndex];
+    if (current?.type === "step") state.currentStepIndex = current.stepIndex;
     const progress = state.recipeProgress[recipe.id] || {};
     progress.hasStepPosition = true;
     state.recipeProgress[recipe.id] = progress;
     saveCurrentRecipeState();
     updateCookingNavigation(recipe);
-    scrollToCurrentStep(false);
+    scrollToCurrentStage(false, recipe);
   }
   function bindIngredientRows() {
     app.querySelectorAll("[data-ingredient-key]").forEach(row => {
