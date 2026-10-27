@@ -329,7 +329,6 @@
       const savedStepStage = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === state.currentStepIndex);
       if (savedStepStage >= 0) state.cookingStageIndex = savedStepStage;
     }
-    state.cookingMode = false;
     const subcategory = (state.categories.find(c => c.id === recipe.category)?.subcategories || []).find(s => s.id === recipe.subcategory)?.title;
     app.innerHTML = `
       <a class="back-link" href="./">← Все рецепты</a>
@@ -567,7 +566,7 @@
     const previous = $("#cooking-prev");
     const next = $("#cooking-next");
     const current = stages[state.cookingStageIndex];
-    if (counter) { const ingredientStages = stages.filter(stage => stage.type === "ingredients"); const ingredientIndex = current?.type === "ingredients" ? ingredientStages.findIndex(stage => stage.id === current.id) : -1; counter.textContent = !total ? "Нет этапов" : current?.type === "ingredients" ? (ingredientStages.length > 1 ? `${ingredientIndex + 1} из ${ingredientStages.length}` : "Ингредиенты") : `Шаг ${(current?.stepIndex ?? 0) + 1} из ${(recipe.steps || []).length}`; }
+    if (counter) { const ingredientStages = stages.filter(stage => stage.type === "ingredients"); const ingredientIndex = current?.type === "ingredients" ? ingredientStages.findIndex(stage => stage.id === current.id) : -1; counter.textContent = !total ? "Нет этапов" : current?.type === "ingredients" ? (ingredientStages.length > 1 ? `Ингредиенты ${ingredientIndex + 1} из ${ingredientStages.length}` : "Ингредиенты") : `Шаг ${(current?.stepIndex ?? 0) + 1} из ${(recipe.steps || []).length}`; }
     if (previous) previous.disabled = state.cookingStageIndex <= 0;
     if (next) next.disabled = state.cookingStageIndex >= total - 1;
     applyCookingMode();
