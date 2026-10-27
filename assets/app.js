@@ -516,6 +516,12 @@
   }
   function applyCookingMode() {
     document.body.classList.toggle("cooking-mode", state.cookingMode);
+    const brand = document.querySelector(".brand");
+    const brandTitle = brand?.querySelector("strong");
+    const brandSubtitle = brand?.querySelector("small");
+    if (brandTitle) brandTitle.textContent = state.cookingMode && state.currentRecipe ? state.currentRecipe.title : "Cooking Book";
+    if (brandSubtitle) brandSubtitle.hidden = state.cookingMode;
+    if (brand) brand.setAttribute("aria-label", state.cookingMode && state.currentRecipe ? state.currentRecipe.title : "Cooking Book — главная");
     const toggle = document.getElementById("cooking-mode-toggle");
     const navigation = $("#cooking-navigation");
     if (toggle) {
