@@ -211,7 +211,7 @@
         </select>
       </div>
       <div class="category-pills"><button class="pill ${state.activeCategory === "all" ? "active" : ""}" data-category="all" type="button">Все</button>${categories}</div>
-      <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${filtered.length === 1 ? "рецепт" : filtered.length > 1 && filtered.length < 5 ? "рецепта" : "рецептов"}</span></div>
+      <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${pluralRu(filtered.length, "рецепт", "рецепта", "рецептов")}</span></div>
       ${filtered.length ? `<div class="recipe-grid">${filtered.map(r => `
         <a class="recipe-card ${categoryClass(r.category)}" href="?recipe=${encodeURIComponent(r.id)}">
           <span class="card-category">${categoryLabels(r).map(label => escapeHtml(label)).join(" · ")}${r.subcategory ? " · " + escapeHtml((state.categories.find(c => c.id === r.category)?.subcategories || []).find(s => s.id === r.subcategory)?.title || "") : ""}</span>
@@ -554,7 +554,7 @@
     const previous = $("#cooking-prev");
     const next = $("#cooking-next");
     const current = stages[state.cookingStageIndex];
-    if (counter) counter.textContent = !total ? "Нет этапов" : current?.type === "ingredients" ? "Ингредиенты" : `Шаг ${(current?.stepIndex ?? 0) + 1} из ${(recipe.steps || []).length}`;
+    if (counter) { const ingredientStages = stages.filter(stage => stage.type === "ingredients"); const ingredientIndex = current?.type === "ingredients" ? ingredientStages.findIndex(stage => stage.id === current.id) : -1; counter.textContent = !total ? "Нет этапов" : current?.type === "ingredients" ? (ingredientStages.length > 1 ? `${ingredientIndex + 1} из ${ingredientStages.length}` : "Ингредиенты") : `Шаг ${(current?.stepIndex ?? 0) + 1} из ${(recipe.steps || []).length}`; }
     if (previous) previous.disabled = state.cookingStageIndex <= 0;
     if (next) next.disabled = state.cookingStageIndex >= total - 1;
     applyCookingMode();
