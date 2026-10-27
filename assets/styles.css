@@ -385,3 +385,5 @@ html.high-contrast .wake-toggle-button[aria-pressed="true"] svg { color:#fff; }
 /* Полноширинная навигация в старых браузерах, включая Kindle. */
 body.cooking-mode .cooking-navigation { display:grid; grid-template-columns:52px minmax(0,1fr) 52px; }
 body.cooking-mode .cooking-nav-button { width:100%; min-width:52px; }
+
+body.cooking-mode .cooking-panel-heading { display:none !important; }
