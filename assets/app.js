@@ -8,7 +8,7 @@
   const printMenuLink = document.getElementById("print-menu-link");
   const topButton = document.getElementById("top-button");
   const STORAGE_KEY = "cooking-book-user-state-v1";
-  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false, currentStepIndex: 0, cookingStageIndex: 0, cookingMode: false };
+  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false, currentStepIndex: 0, cookingStageIndex: 0, cookingMode: false };
   function loadUserState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -25,7 +25,7 @@
   }
   function saveCurrentRecipeState() {
     if (!state.currentRecipe) return;
-    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, checkedIngredients: [...state.checkedIngredients], doneSteps: [...state.doneSteps], currentStepIndex: state.currentStepIndex, cookingStageIndex: state.cookingStageIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
+    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, checkedIngredients: [...state.checkedIngredients], currentStepIndex: state.currentStepIndex, cookingStageIndex: state.cookingStageIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
     saveUserState();
   }
   loadUserState();
@@ -178,6 +178,8 @@
     printMenuWrap.hidden = true;
     closePrintMenu();
     $("#wake-toggle").hidden = true;
+    const cookingToggle = document.getElementById("cooking-mode-toggle");
+    if (cookingToggle) cookingToggle.hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || recipeCategories(r).includes(state.activeCategory)) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")))
@@ -269,10 +271,9 @@
   }
   function renderSteps(recipe, factor) {
     return (recipe.steps || []).map((step, index) => {
-      const done = state.doneSteps.has(step.id);
       const chips = (step.ingredients || []).map(ref => displayRef(ref, recipe, factor)).filter(Boolean);
-      return `<li class="step ${done ? "done" : ""}" data-step-id="${escapeHtml(step.id)}" tabindex="0" role="checkbox" aria-checked="${done}">
-        <span class="step-number">${done ? "✓" : index + 1}</span><div><div class="step-title">${escapeHtml(step.title || `Шаг ${index + 1}`)}</div>
+      return `<li class="step" data-step-id="${escapeHtml(step.id)}">
+        <span class="step-number">${index + 1}</span><div><div class="step-title">${escapeHtml(step.title || `Шаг ${index + 1}`)}</div>
         ${chips.length ? `<div class="step-ingredients">${chips.map(chip => `<span class="step-ingredient-chip">${escapeHtml(chip)}</span>`).join("")}</div>` : ""}
         <p class="step-instructions">${escapeHtml(interpolateRecipeText(step.instructions || "", recipe, factor))}</p></div>
       </li>`;
@@ -283,6 +284,8 @@
     document.body.classList.add(categoryClass(recipe.category));
     printMenuWrap.hidden = false;
     $("#wake-toggle").hidden = false;
+    const cookingToggle = document.getElementById("cooking-mode-toggle");
+    if (cookingToggle) cookingToggle.hidden = false;
     document.title = `${recipe.title} — Cooking Book`;
     state.currentRecipe = recipe;
     state.recentlyViewed[recipe.id] = Date.now();
@@ -291,7 +294,6 @@
     state.multiplier = savedProgress.multiplier == null || !Number.isFinite(Number(savedProgress.multiplier))
       ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(Number(savedProgress.multiplier) * 100) / 100));
     state.checkedIngredients = new Set(Array.isArray(savedProgress.checkedIngredients) ? savedProgress.checkedIngredients : []);
-    state.doneSteps = new Set(Array.isArray(savedProgress.doneSteps) ? savedProgress.doneSteps : []);
     state.currentStepIndex = Math.max(0, Math.min(Math.max(0, (recipe.steps || []).length - 1), Number.isInteger(savedProgress.currentStepIndex) ? savedProgress.currentStepIndex : 0));
     state.cookingStageIndex = Number.isInteger(savedProgress.cookingStageIndex) ? savedProgress.cookingStageIndex : 0;
     if (!Number.isInteger(savedProgress.cookingStageIndex)) {
@@ -321,14 +323,15 @@
           ${recipe.storage?.length ? `<section class="panel"><h2 class="panel-title">Хранение</h2><ul class="storage-list">${recipe.storage.map(item => `<li>${escapeHtml(contentText(item))}</li>`).join("")}</ul></section>` : ""}
         </div>
         <section class="panel">
-          <div class="panel-head-row cooking-panel-heading"><h2 class="panel-title" style="margin:0">Приготовление</h2><div class="cooking-panel-actions"><button id="cooking-mode-toggle" class="secondary-button cooking-mode-toggle" type="button" aria-pressed="${state.cookingMode}">${state.cookingMode ? "Обычный вид" : "Режим готовки"}</button><button id="reset-steps" class="reset-button" type="button">Сбросить шаги</button></div></div>
-          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button">← Назад</button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button">Далее →</button></div>
+          <div class="panel-head-row cooking-panel-heading"><h2 class="panel-title" style="margin:0">Приготовление</h2></div>
+          <div id="cooking-navigation class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button">← Назад</button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button">Далее →</button></div>
+          <div id="cooking-ingredient-screen" class="cooking-ingredient-screen" hidden></div>
           <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
         </section>
       </div>
       <section class="reset-all-wrap" aria-label="Сброс прогресса рецепта">
-        <button id="reset-recipe-progress" class="reset-button" type="button">Сбросить все отметки и шаги</button>
-        <p>Сбросит отметки ингредиентов, выполненные шаги и множитель только для этого рецепта.</p>
+        <button id="reset-recipe-progress" class="reset-button" type="button">Сбросить отметки ингредиентов</button>
+        <p>Сбросит отметки ингредиентов и множитель только для этого рецепта.</p>
       </section>
     `;
     const wakeToggle = $("#wake-toggle");
@@ -386,7 +389,7 @@
       $("#ingredient-groups").innerHTML = ingredientRows(recipe, factor);
       bindIngredientRows();
       $(".step-list").innerHTML = renderSteps(recipe, factor);
-      bindSteps();
+      
       updateCookingNavigation(recipe);
     };
     multiplierInput.addEventListener("input", e => {
@@ -416,30 +419,21 @@
       saveCurrentRecipeState();
       updateMultiplier();
     };
-    $("#cooking-mode-toggle").addEventListener("click", () => {
-      state.cookingMode = !state.cookingMode;
-      saveCurrentRecipeState();
-      applyCookingMode();
-      updateCookingNavigation(recipe);
-      if (state.cookingMode) scrollToCurrentStep(false);
-    });
-    $("#cooking-prev").addEventListener("click", () => moveCookingStep(-1, recipe));
-    $("#cooking-next").addEventListener("click", () => moveCookingStep(1, recipe));
+    $("#cooking-prev").addEventListener("click", () => moveCookingStage(-1, recipe));
+    $("#cooking-next").addEventListener("click", () => moveCookingStage(1, recipe));
     $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
     $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
     $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); updateCookingNavigation(recipe); });
-    $("#reset-steps").addEventListener("click", () => { state.doneSteps.clear(); saveCurrentRecipeState(); $(".step-list").innerHTML = renderSteps(recipe, state.multiplier); bindSteps(); });
     $("#reset-recipe-progress").addEventListener("click", () => {
-      if (!window.confirm("Сбросить все отметки ингредиентов, выполненные шаги и множитель только для этого рецепта?")) return;
+      if (!window.confirm("Сбросить отметки ингредиентов и множитель только для этого рецепта?")) return;
       state.checkedIngredients.clear();
-      state.doneSteps.clear();
       state.multiplier = 1;
       multiplierInput.value = multiplierText(state.multiplier);
       saveCurrentRecipeState();
       updateMultiplier();
     });
     bindIngredientRows();
-    bindSteps();
+    
     window.setTimeout(() => {
       if (state.recipeProgress[recipe.id]?.hasStepPosition) scrollToCurrentStage(true, recipe);
       else if (state.cookingMode) scrollToCurrentStage(false, recipe);
@@ -587,30 +581,6 @@
         row.setAttribute("aria-checked", String(state.checkedIngredients.has(key)));
         $(".check-dot", row).textContent = state.checkedIngredients.has(key) ? "✓" : "";
         saveCurrentRecipeState();
-      };
-      row.addEventListener("click", toggle);
-      row.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
-    });
-  }
-  function bindSteps() {
-    app.querySelectorAll("[data-step-id]").forEach(row => {
-      const toggle = () => {
-        const id = row.dataset.stepId;
-        const allSteps = [...app.querySelectorAll("[data-step-id]")];
-        state.currentStepIndex = Math.max(0, allSteps.findIndex(step => step.dataset.stepId === id));
-        const matchingStage = cookingStages(state.currentRecipe).findIndex(stage => stage.type === "step" && stage.stepIndex === state.currentStepIndex);
-        if (matchingStage >= 0) state.cookingStageIndex = matchingStage;
-        const progress = state.recipeProgress[state.currentRecipe.id] || {};
-        progress.hasStepPosition = true;
-        state.recipeProgress[state.currentRecipe.id] = progress;
-        state.doneSteps.has(id) ? state.doneSteps.delete(id) : state.doneSteps.add(id);
-        saveCurrentRecipeState();
-        const recipe = state.currentRecipe;
-        const factor = state.multiplier;
-        $(".step-list").innerHTML = renderSteps(recipe, factor);
-        bindSteps();
-        applyCookingMode();
-        updateCookingNavigation(recipe);
       };
       row.addEventListener("click", toggle);
       row.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
