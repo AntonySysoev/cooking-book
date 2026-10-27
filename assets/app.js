@@ -311,7 +311,7 @@
       const savedStepStage = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === state.currentStepIndex);
       if (savedStepStage >= 0) state.cookingStageIndex = savedStepStage;
     }
-    state.cookingMode = savedProgress.cookingMode === true;
+    state.cookingMode = false;
     const subcategory = (state.categories.find(c => c.id === recipe.category)?.subcategories || []).find(s => s.id === recipe.subcategory)?.title;
     app.innerHTML = `
       <a class="back-link" href="./">← Все рецепты</a>
@@ -337,7 +337,7 @@
           <div class="panel-head-row cooking-panel-heading"><h2 class="panel-title" style="margin:0">Приготовление</h2></div>
           <div id="cooking-ingredient-screen" class="cooking-ingredient-screen" hidden></div>
           <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
-          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button">← Назад</button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button">Далее →</button></div>
+          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button" aria-label="Вперёд" title="Вперёд"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
         </section>
       </div>
       <section class="reset-all-wrap" aria-label="Сброс прогресса рецепта">
@@ -670,7 +670,7 @@
     if (event.key === "Escape") closePrintMenu();
   });
   const updateTopButton = () => {
-    const shouldShow = window.scrollY > window.innerHeight;
+    const shouldShow = window.scrollY > window.innerHeight && !state.cookingMode;
     topButton.hidden = !shouldShow;
     topButton.classList.toggle("is-visible", shouldShow);
   };
