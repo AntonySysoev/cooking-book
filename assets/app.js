@@ -541,6 +541,10 @@
     if (restore) window.scrollBy(0, -24);
   }
   function scrollToCurrentStage(restore, recipe) {
+    if (!state.cookingMode) {
+      scrollToCurrentStep(restore);
+      return;
+    }
     const stages = cookingStages(recipe);
     const current = stages[state.cookingStageIndex];
     if (current?.type === "step") {
