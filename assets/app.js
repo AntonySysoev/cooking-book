@@ -283,7 +283,12 @@
       ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(Number(savedProgress.multiplier) * 100) / 100));
     state.checkedIngredients = new Set(Array.isArray(savedProgress.checkedIngredients) ? savedProgress.checkedIngredients : []);
     state.doneSteps = new Set(Array.isArray(savedProgress.doneSteps) ? savedProgress.doneSteps : []);
-    state.currentStepIndex = Math.max(0, Math.min((recipe.steps || []).length - 1, Number.isInteger(savedProgress.currentStepIndex) ? savedProgress.currentStepIndex : 0));
+    state.currentStepIndex = Math.max(0, Math.min(Math.max(0, (recipe.steps || []).length - 1), Number.isInteger(savedProgress.currentStepIndex) ? savedProgress.currentStepIndex : 0));
+    state.cookingStageIndex = Number.isInteger(savedProgress.cookingStageIndex) ? savedProgress.cookingStageIndex : 0;
+    if (!Number.isInteger(savedProgress.cookingStageIndex)) {
+      const savedStepStage = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === state.currentStepIndex);
+      if (savedStepStage >= 0) state.cookingStageIndex = savedStepStage;
+    }
     state.cookingMode = savedProgress.cookingMode === true;
     const subcategory = (state.categories.find(c => c.id === recipe.category)?.subcategories || []).find(s => s.id === recipe.subcategory)?.title;
     app.innerHTML = `
