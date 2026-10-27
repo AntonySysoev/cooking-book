@@ -8,7 +8,7 @@
   const printMenuLink = document.getElementById("print-menu-link");
   const topButton = document.getElementById("top-button");
   const STORAGE_KEY = "cooking-book-user-state-v1";
-  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false };
+  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), doneSteps: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false, currentStepIndex: 0, cookingMode: false };
   function loadUserState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -25,7 +25,7 @@
   }
   function saveCurrentRecipeState() {
     if (!state.currentRecipe) return;
-    state.recipeProgress[state.currentRecipe.id] = { multiplier: state.multiplier, checkedIngredients: [...state.checkedIngredients], doneSteps: [...state.doneSteps] };
+    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, checkedIngredients: [...state.checkedIngredients], doneSteps: [...state.doneSteps], currentStepIndex: state.currentStepIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
     saveUserState();
   }
   loadUserState();
@@ -282,6 +282,8 @@
       ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(Number(savedProgress.multiplier) * 100) / 100));
     state.checkedIngredients = new Set(Array.isArray(savedProgress.checkedIngredients) ? savedProgress.checkedIngredients : []);
     state.doneSteps = new Set(Array.isArray(savedProgress.doneSteps) ? savedProgress.doneSteps : []);
+    state.currentStepIndex = Math.max(0, Math.min((recipe.steps || []).length - 1, Number.isInteger(savedProgress.currentStepIndex) ? savedProgress.currentStepIndex : 0));
+    state.cookingMode = savedProgress.cookingMode === true;
     const subcategory = (state.categories.find(c => c.id === recipe.category)?.subcategories || []).find(s => s.id === recipe.subcategory)?.title;
     app.innerHTML = `
       <a class="back-link" href="./">← Все рецепты</a>
@@ -304,7 +306,8 @@
           ${recipe.storage?.length ? `<section class="panel"><h2 class="panel-title">Хранение</h2><ul class="storage-list">${recipe.storage.map(item => `<li>${escapeHtml(contentText(item))}</li>`).join("")}</ul></section>` : ""}
         </div>
         <section class="panel">
-          <div class="panel-head-row"><h2 class="panel-title" style="margin:0">Приготовление</h2><button id="reset-steps" class="reset-button" type="button">Сбросить шаги</button></div>
+          <div class="panel-head-row cooking-panel-heading"><h2 class="panel-title" style="margin:0">Приготовление</h2><div class="cooking-panel-actions"><button id="cooking-mode-toggle" class="secondary-button cooking-mode-toggle" type="button" aria-pressed="${state.cookingMode}">${state.cookingMode ? "Обычный вид" : "Режим готовки"}</button><button id="reset-steps" class="reset-button" type="button">Сбросить шаги</button></div></div>
+          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button">← Назад</button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button">Далее →</button></div>
           <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
         </section>
       </div>
@@ -321,6 +324,8 @@
       wakeToggle.setAttribute("aria-label", wakeToggle.title);
     };
     updateWakeButton();
+    applyCookingMode();
+    updateCookingNavigation(recipe);
     wakeToggle.addEventListener("click", async () => {
       if (state.wakeEnabled) {
         state.wakeEnabled = false;
@@ -395,6 +400,15 @@
       saveCurrentRecipeState();
       updateMultiplier();
     };
+    $("#cooking-mode-toggle").addEventListener("click", () => {
+      state.cookingMode = !state.cookingMode;
+      saveCurrentRecipeState();
+      applyCookingMode();
+      updateCookingNavigation(recipe);
+      if (state.cookingMode) scrollToCurrentStep(false);
+    });
+    $("#cooking-prev").addEventListener("click", () => moveCookingStep(-1, recipe));
+    $("#cooking-next").addEventListener("click", () => moveCookingStep(1, recipe));
     $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
     $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
     $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); });
@@ -410,6 +424,73 @@
     });
     bindIngredientRows();
     bindSteps();
+    window.setTimeout(() => {
+      if (state.recipeProgress[recipe.id]?.hasStepPosition) scrollToCurrentStep(true);
+      else if (state.cookingMode) scrollToCurrentStep(false);
+    }, 250);
+    let scrollSavePending = false;
+    window.addEventListener("scroll", () => {
+      if (scrollSavePending || state.currentRecipe?.id !== recipe.id) return;
+      scrollSavePending = true;
+      window.setTimeout(() => {
+        scrollSavePending = false;
+        const steps = [...app.querySelectorAll("[data-step-id]")];
+        if (!steps.length) return;
+        let closestIndex = 0, closestDistance = Infinity;
+        steps.forEach((step, index) => {
+          const distance = Math.abs(step.getBoundingClientRect().top - 90);
+          if (distance < closestDistance) { closestDistance = distance; closestIndex = index; }
+        });
+        if (closestIndex !== state.currentStepIndex) {
+          state.currentStepIndex = closestIndex;
+          const progress = state.recipeProgress[recipe.id] || {};
+          progress.hasStepPosition = true;
+          state.recipeProgress[recipe.id] = progress;
+          saveCurrentRecipeState();
+          updateCookingNavigation(recipe);
+        }
+      }, 180);
+    }, { passive: true });
+  }
+  function applyCookingMode() {
+    document.body.classList.toggle("cooking-mode", state.cookingMode);
+    const toggle = $("#cooking-mode-toggle");
+    const navigation = $("#cooking-navigation");
+    if (toggle) {
+      toggle.textContent = state.cookingMode ? "Обычный вид" : "Режим готовки";
+      toggle.setAttribute("aria-pressed", String(state.cookingMode));
+    }
+    if (navigation) navigation.hidden = !state.cookingMode;
+    const steps = [...app.querySelectorAll("[data-step-id]")];
+    steps.forEach((step, index) => step.classList.toggle("current-cooking-step", index === state.currentStepIndex));
+  }
+  function updateCookingNavigation(recipe) {
+    const total = (recipe.steps || []).length;
+    const counter = $("#cooking-step-counter");
+    const previous = $("#cooking-prev");
+    const next = $("#cooking-next");
+    if (counter) counter.textContent = total ? `Шаг ${state.currentStepIndex + 1} из ${total}` : "Нет шагов";
+    if (previous) previous.disabled = state.currentStepIndex <= 0;
+    if (next) next.disabled = state.currentStepIndex >= total - 1;
+    applyCookingMode();
+  }
+  function scrollToCurrentStep(restore) {
+    const steps = [...app.querySelectorAll("[data-step-id]")];
+    const step = steps[state.currentStepIndex];
+    if (!step) return;
+    try { step.scrollIntoView({ behavior: "auto", block: "start" }); }
+    catch (_) { step.scrollIntoView(true); }
+    if (restore) window.scrollBy(0, -24);
+  }
+  function moveCookingStep(direction, recipe) {
+    const total = (recipe.steps || []).length;
+    state.currentStepIndex = Math.max(0, Math.min(total - 1, state.currentStepIndex + direction));
+    const progress = state.recipeProgress[recipe.id] || {};
+    progress.hasStepPosition = true;
+    state.recipeProgress[recipe.id] = progress;
+    saveCurrentRecipeState();
+    updateCookingNavigation(recipe);
+    scrollToCurrentStep(false);
   }
   function bindIngredientRows() {
     app.querySelectorAll("[data-ingredient-key]").forEach(row => {
@@ -435,6 +516,8 @@
         const factor = state.multiplier;
         $(".step-list").innerHTML = renderSteps(recipe, factor);
         bindSteps();
+        applyCookingMode();
+        updateCookingNavigation(recipe);
       };
       row.addEventListener("click", toggle);
       row.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
