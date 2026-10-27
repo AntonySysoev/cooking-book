@@ -54,7 +54,14 @@
   if (cookingModeHeaderButton) cookingModeHeaderButton.addEventListener("click", () => {
     if (!state.currentRecipe) return;
     state.cookingMode = !state.cookingMode;
-    if (state.cookingMode) state.cookingStageIndex = 0;
+    if (state.cookingMode) {
+      state.cookingStageIndex = 0;
+      const wakeToggle = document.getElementById("wake-toggle");
+      if (wakeToggle && !state.wakeEnabled) wakeToggle.click();
+    } else if (state.wakeEnabled) {
+      const wakeToggle = document.getElementById("wake-toggle");
+      if (wakeToggle) wakeToggle.click();
+    }
     saveCurrentRecipeState();
     applyCookingMode();
     updateCookingNavigation(state.currentRecipe);
@@ -175,6 +182,8 @@
       ...(recipe.ingredients || []).map(i => i.name)].join(" ").toLocaleLowerCase("ru");
   }
   function renderHome() {
+    state.cookingMode = false;
+    document.body.classList.remove("cooking-mode");
     document.title = "Cooking Book — кулинарная книга";
     printMenuWrap.hidden = true;
     closePrintMenu();
@@ -292,6 +301,7 @@
     state.recentlyViewed[recipe.id] = Date.now();
     saveUserState();
     const savedProgress = state.recipeProgress[recipe.id] || {};
+    state.cookingMode = false;
     state.multiplier = savedProgress.multiplier == null || !Number.isFinite(Number(savedProgress.multiplier))
       ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(Number(savedProgress.multiplier) * 100) / 100));
     state.checkedIngredients = new Set(Array.isArray(savedProgress.checkedIngredients) ? savedProgress.checkedIngredients : []);
@@ -325,9 +335,9 @@
         </div>
         <section class="panel">
           <div class="panel-head-row cooking-panel-heading"><h2 class="panel-title" style="margin:0">Приготовление</h2></div>
-          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button">← Назад</button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button">Далее →</button></div>
           <div id="cooking-ingredient-screen" class="cooking-ingredient-screen" hidden></div>
           <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
+          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button">← Назад</button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button">Далее →</button></div>
         </section>
       </div>
       <section class="reset-all-wrap" aria-label="Сброс прогресса рецепта">
