@@ -40,7 +40,7 @@
     rootStyle.setProperty("--font-size-heading", (Math.round(Math.max(34, Math.min(width * 0.05, 52)) * scale * 100) / 100) + "px");
     rootStyle.setProperty("--font-size-recipe-heading", (Math.round(Math.max(34, Math.min(width * 0.05, 48)) * scale * 100) / 100) + "px");
     document.documentElement.classList.toggle("high-contrast", state.readingMode);
-    const fontSizeButton = document.getElementById("font-size-toggle");
+    const cookingModeHeaderButton = document.getElementById("cooking-mode-toggle");\n  if (cookingModeHeaderButton) cookingModeHeaderButton.addEventListener("click", () => {\n    if (!state.currentRecipe) return;\n    state.cookingMode = !state.cookingMode;\n    saveCurrentRecipeState();\n    applyCookingMode();\n    updateCookingNavigation(state.currentRecipe);\n    if (state.cookingMode) scrollToCurrentStage(false, state.currentRecipe);\n  });\n  const fontSizeButton = document.getElementById("font-size-toggle");
     if (fontSizeButton) {
       fontSizeButton.setAttribute("aria-pressed", String(state.readingMode));
       fontSizeButton.setAttribute("aria-label", state.readingMode ? "Вернуть обычное оформление и размер текста 100%" : "Включить чёрно-белый режим чтения с размером текста 150%");
