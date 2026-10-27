@@ -54,6 +54,7 @@
   if (cookingModeHeaderButton) cookingModeHeaderButton.addEventListener("click", () => {
     if (!state.currentRecipe) return;
     state.cookingMode = !state.cookingMode;
+    if (state.cookingMode) state.cookingStageIndex = 0;
     saveCurrentRecipeState();
     applyCookingMode();
     updateCookingNavigation(state.currentRecipe);
@@ -530,7 +531,7 @@
     const previous = $("#cooking-prev");
     const next = $("#cooking-next");
     const current = stages[state.cookingStageIndex];
-    if (counter) counter.textContent = total ? `${current?.type === "ingredients" ? "Ингредиенты · " + current.title : "Шаг " + ((current?.stepIndex ?? 0) + 1)} · ${state.cookingStageIndex + 1} из ${total}` : "Нет этапов";
+    if (counter) counter.textContent = !total ? "Нет этапов" : current?.type === "ingredients" ? "Ингредиенты" : `Шаг ${(current?.stepIndex ?? 0) + 1} из ${(recipe.steps || []).length}`;
     if (previous) previous.disabled = state.cookingStageIndex <= 0;
     if (next) next.disabled = state.cookingStageIndex >= total - 1;
     applyCookingMode();
