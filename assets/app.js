@@ -677,6 +677,7 @@
     }
   });
   document.querySelector(".brand")?.addEventListener("click", () => { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} });
+  window.addEventListener("pageshow", () => { if (!new URLSearchParams(location.search).has("recipe")) { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} } });
   document.addEventListener("click", event => {
     const backLink = event.target.closest(".back-link");
     if (backLink) { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} }
