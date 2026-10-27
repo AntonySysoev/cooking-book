@@ -127,9 +127,6 @@ ingredients:
     unit: г
     group: filling
     note: Густое, без избытка жидкого сиропа.
-  - id: blueberry-mixture
-    name: Подготовленная черничная смесь
-    group: filling
   - id: cinnamon
     name: Молотая корица
     quantity: 1
