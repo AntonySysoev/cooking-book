@@ -387,3 +387,23 @@ body.cooking-mode .cooking-navigation { display:grid; grid-template-columns:52px
 body.cooking-mode .cooking-nav-button { width:100%; min-width:52px; }
 
 body.cooking-mode .cooking-panel-heading { display:none !important; }
+
+
+/* Compact recipe title in the header while cooking */
+body.cooking-mode .back-link { display:none !important; }
+body.cooking-mode .site-header { gap:8px; padding-top:12px; padding-bottom:8px; }
+body.cooking-mode .brand { flex:1 1 auto; min-width:0; gap:0; }
+body.cooking-mode .brand-mark,
+body.cooking-mode .brand small { display:none !important; }
+body.cooking-mode .brand > span:last-child { min-width:0; width:100%; }
+body.cooking-mode .brand strong {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-family:Georgia,serif;
+  font-size:clamp(14px, 3.8vw, 22px);
+  line-height:1.2;
+  letter-spacing:-.3px;
+}
+body.cooking-mode .header-actions { flex:0 0 auto; gap:6px; }
+body.cooking-mode .cooking-mode-header-button { flex:0 0 40px; }
