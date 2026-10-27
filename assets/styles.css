@@ -284,6 +284,7 @@ html.high-contrast button { color: #000; }
 .print-menu-wrap[hidden] { display:none !important; }
 .print-menu { position:absolute; top:calc(100% + 8px); right:0; z-index:50; min-width:230px; padding:5px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:0 8px 24px rgba(65,43,24,.16); }
 .print-menu[hidden] { display:none !important; }
+.print-menu button[hidden], .menu-separator[hidden] { display:none !important; }
 .print-menu button { display:block; width:100%; padding:10px 12px; border:0; border-radius:8px; background:transparent; color:var(--ink); text-align:left; white-space:nowrap; font:inherit; font-size:var(--font-size-13, 13px); cursor:pointer; }
 .print-menu button:hover,.print-menu button:focus-visible { background:var(--accent-soft); outline:none; }
 .print-menu .menu-setting-button { display:flex; align-items:center; gap:10px; }
