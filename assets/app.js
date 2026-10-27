@@ -324,7 +324,7 @@
         </div>
         <section class="panel">
           <div class="panel-head-row cooking-panel-heading"><h2 class="panel-title" style="margin:0">Приготовление</h2></div>
-          <div id="cooking-navigation class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button">← Назад</button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button">Далее →</button></div>
+          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button">← Назад</button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button">Далее →</button></div>
           <div id="cooking-ingredient-screen" class="cooking-ingredient-screen" hidden></div>
           <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
         </section>
