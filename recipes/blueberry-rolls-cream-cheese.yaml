@@ -1,9 +1,9 @@
 id: blueberry-rolls-cream-cheese
-title: Черничные роллы с густым сливочным кремом
+title: Черничные роллы с белой сливочной прослойкой
 description: >-
   Мягкие сдобные роллы с сушёной черникой, ягодным вареньем и лимонной
-  цедрой под густым кремом из сливочного сыра и маскарпоне.
-  Тесто замешивается в Ankarsrum.
+  цедрой, с белыми полосами сливочной начинки из маскарпоне и сливочного сыра
+  внутри и густым сливочным кремом сверху. Тесто замешивается в Ankarsrum.
 category: baking-and-dough
 also_in: [desserts]
 subcategory: buns-and-pastries
@@ -32,6 +32,8 @@ ingredient_groups:
     title: Сдобное тесто
   - id: filling
     title: Черничная начинка
+  - id: cream-layer
+    title: Белая сливочная прослойка
   - id: frosting
     title: Густой сливочный крем
 ingredients:
@@ -58,7 +60,7 @@ ingredients:
     group: dough
   - id: butter
     name: Сливочное масло 82%
-    quantity: 145
+    quantity: 160
     unit: г
     note: Размягчённое для теста и начинки.
     parts:
@@ -68,7 +70,7 @@ ingredients:
         group: dough
       - id: filling
         name: В начинку
-        quantity: 55
+        quantity: 70
         group: filling
   - id: yeast
     name: Сухие быстродействующие дрожжи
@@ -101,7 +103,7 @@ ingredients:
     note: После замачивания слить; в начинку воду не добавлять.
   - id: brown-sugar
     name: Коричневый сахар
-    quantity: 35
+    quantity: 25
     unit: г
     group: filling
   - id: cornstarch
@@ -121,11 +123,43 @@ ingredients:
     group: filling
   - id: berry-jam
     name: Ягодное варенье
-    quantity_min: 120
-    quantity_max: 150
+    quantity: 200
     unit: г
     group: filling
     note: Густое, без избытка жидкого сиропа.
+  - id: blueberry-mixture
+    name: Подготовленная черничная смесь
+    group: filling
+  - id: filling-cream-cheese
+    name: Сливочный сыр для белой прослойки
+    quantity: 100
+    unit: г
+    group: cream-layer
+    note: Без добавок; не обезжиренный.
+  - id: filling-mascarpone
+    name: Маскарпоне для белой прослойки
+    quantity: 100
+    unit: г
+    group: cream-layer
+    note: Холодный.
+  - id: filling-icing-sugar
+    name: Сахарная пудра для белой прослойки
+    quantity: 35
+    unit: г
+    group: cream-layer
+  - id: filling-cornstarch
+    name: Кукурузный крахмал для белой прослойки
+    quantity: 5
+    unit: г
+    group: cream-layer
+  - id: filling-vanilla
+    name: Ванильный экстракт для белой прослойки
+    quantity: 2
+    unit: г
+    group: cream-layer
+  - id: white-cream-layer
+    name: Подготовленная белая сливочная прослойка
+    group: cream-layer
   - id: cinnamon
     name: Молотая корица
     quantity: 1
@@ -224,6 +258,20 @@ steps:
       если используешь, затем вмешай варенье до однородности. Если в варенье
       много жидкого сиропа, лучше предварительно уварить его и полностью остудить.
       Смесь должна распределяться тонким слоем, не растекаясь по тесту.
+  - id: prepare-white-layer
+    title: Подготовить белую сливочную прослойку
+    ingredients:
+      - ingredient: filling-cream-cheese
+      - ingredient: filling-mascarpone
+      - ingredient: filling-icing-sugar
+      - ingredient: filling-cornstarch
+      - ingredient: filling-vanilla
+    instructions: >-
+      Перемешай сливочный сыр с сахарной пудрой и ванилью до гладкости.
+      Добавь холодный маскарпоне и перемешай на низкой скорости или лопаткой
+      только до объединения. Вмешай крахмал, не взбивая массу. Переложи её
+      в кондитерский мешок и охлади 20–30 минут, чтобы она стала плотнее
+      и её было удобно отсаживать полосами.
   - id: roll-dough
     title: Раскатать тесто
     instructions: >-
@@ -235,12 +283,16 @@ steps:
     ingredients:
       - ingredient: butter
         part: filling
+      - ingredient: blueberry-mixture
+      - ingredient: white-cream-layer
       - ingredient: dried-blueberries
     instructions: >-
-      Равномерно распредели по тесту 55 г мягкого масла, оставив свободными
-      около 2–3 см вдоль одного длинного края. Распредели подготовленную ягодную
-      смесь тонким равномерным слоем, затем разложи обсушенную чернику.
-      Не заполняй смесью свободный край, чтобы рулет хорошо склеился.
+      Равномерно распредели по тесту 70 г мягкого масла, оставив свободными
+      около 2–3 см вдоль одного длинного края. Нанеси подготовленную черничную
+      смесь тонким равномерным слоем. Кондитерским мешком отсади поверх неё
+      сливочную прослойку полосами толщиной около 5–7 мм, не размазывая их
+      по ягодной смеси. Разложи обсушенную чернику. Не заполняй свободный край,
+      чтобы рулет хорошо склеился.
   - id: shape
     title: Сформовать роллы
     instructions: >-
@@ -294,6 +346,10 @@ tips:
   - >-
     Используй густое варенье без избытка сиропа. Слишком жидкая начинка может
     вытекать при сворачивании и выпечке.
+  - >-
+    Для заметных белых полос отсаживай сливочную прослойку из кондитерского
+    мешка поверх черничной смеси и не смешивай слои. При выпечке полосы могут
+    немного размягчиться, но сохранят сливочный контраст.
   - >-
     Не добавляй лишнюю муку при раскатке: мягкое эластичное тесто даёт более
     нежный мякиш.
