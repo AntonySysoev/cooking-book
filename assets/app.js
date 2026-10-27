@@ -378,6 +378,7 @@
       bindIngredientRows();
       $(".step-list").innerHTML = renderSteps(recipe, factor);
       bindSteps();
+      updateCookingNavigation(recipe);
     };
     multiplierInput.addEventListener("input", e => {
       const amount = parseMultiplier(e.target.value);
@@ -417,7 +418,7 @@
     $("#cooking-next").addEventListener("click", () => moveCookingStep(1, recipe));
     $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
     $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
-    $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); });
+    $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); updateCookingNavigation(recipe); });
     $("#reset-steps").addEventListener("click", () => { state.doneSteps.clear(); saveCurrentRecipeState(); $(".step-list").innerHTML = renderSteps(recipe, state.multiplier); bindSteps(); });
     $("#reset-recipe-progress").addEventListener("click", () => {
       if (!window.confirm("Сбросить все отметки ингредиентов, выполненные шаги и множитель только для этого рецепта?")) return;
@@ -431,8 +432,8 @@
     bindIngredientRows();
     bindSteps();
     window.setTimeout(() => {
-      if (state.recipeProgress[recipe.id]?.hasStepPosition) scrollToCurrentStep(true);
-      else if (state.cookingMode) scrollToCurrentStep(false);
+      if (state.recipeProgress[recipe.id]?.hasStepPosition) scrollToCurrentStage(true, recipe);
+      else if (state.cookingMode) scrollToCurrentStage(false, recipe);
     }, 250);
     let scrollSavePending = false;
     window.addEventListener("scroll", () => {
@@ -526,7 +527,7 @@
     const previous = $("#cooking-prev");
     const next = $("#cooking-next");
     const current = stages[state.cookingStageIndex];
-    if (counter) counter.textContent = total ? `${current?.type === "ingredients" ? current.title : "Шаг " + ((current?.stepIndex ?? 0) + 1)} · ${state.cookingStageIndex + 1} из ${total}` : "Нет этапов";
+    if (counter) counter.textContent = total ? `${current?.type === "ingredients" ? "Ингредиенты · " + current.title : "Шаг " + ((current?.stepIndex ?? 0) + 1)} · ${state.cookingStageIndex + 1} из ${total}` : "Нет этапов";
     if (previous) previous.disabled = state.cookingStageIndex <= 0;
     if (next) next.disabled = state.cookingStageIndex >= total - 1;
     applyCookingMode();
@@ -564,6 +565,8 @@
   }
   function bindIngredientRows(root = app) {
     root.querySelectorAll("[data-ingredient-key]").forEach(row => {
+      if (row.dataset.ingredientBound === "true") return;
+      row.dataset.ingredientBound = "true";
       const toggle = () => {
         const key = row.dataset.ingredientKey;
         state.checkedIngredients.has(key) ? state.checkedIngredients.delete(key) : state.checkedIngredients.add(key);
