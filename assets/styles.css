@@ -282,12 +282,20 @@ html.high-contrast button { color: #000; }
 /* Компактное меню действий с рецептом: сама кнопка сохраняет размер 40×40 px. */
 .print-menu-wrap { position:relative; width:40px; height:40px; flex:0 0 40px; }
 .print-menu-wrap[hidden] { display:none !important; }
-.print-menu { position:absolute; top:calc(100% + 8px); right:0; z-index:50; min-width:184px; padding:5px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:0 8px 24px rgba(65,43,24,.16); }
+.print-menu { position:absolute; top:calc(100% + 8px); right:0; z-index:50; min-width:230px; padding:5px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:0 8px 24px rgba(65,43,24,.16); }
 .print-menu[hidden] { display:none !important; }
 .print-menu button { display:block; width:100%; padding:10px 12px; border:0; border-radius:8px; background:transparent; color:var(--ink); text-align:left; white-space:nowrap; font:inherit; font-size:var(--font-size-13, 13px); cursor:pointer; }
 .print-menu button:hover,.print-menu button:focus-visible { background:var(--accent-soft); outline:none; }
+.print-menu .menu-setting-button { display:flex; align-items:center; gap:10px; }
+.menu-setting-button svg { width:19px; height:19px; flex:0 0 19px; }
+.menu-setting-status { margin-left:auto; color:var(--muted); font-size:var(--font-size-12, 12px); font-weight:700; }
+.menu-setting-button[aria-pressed="true"], .menu-setting-button.is-active { background:var(--accent-soft); box-shadow:inset 0 0 0 1px var(--category-line, var(--line)); }
+.menu-separator { height:1px; margin:5px 8px; background:var(--line); }
 html.high-contrast .print-menu { color:#000; background:#fff; border-color:#000; box-shadow:none; }
 html.high-contrast .print-menu button { color:#000; }
+html.high-contrast .menu-setting-status { color:#000; }
+html.high-contrast .menu-setting-button[aria-pressed="true"], html.high-contrast .menu-setting-button.is-active { color:#fff; background:#000; box-shadow:inset 0 0 0 1px #000; }
+html.high-contrast .menu-setting-button[aria-pressed="true"] .menu-setting-status, html.high-contrast .menu-setting-button.is-active .menu-setting-status { color:#fff; }
 @media print { .print-menu-wrap { display:none !important; } }
 
 
@@ -301,9 +309,10 @@ html.high-contrast .print-menu button { color:#000; }
 .cooking-nav-button svg { display:block; width:24px; height:24px; }
 .cooking-nav-button:disabled { opacity:.35; }
 .cooking-step-counter { color:var(--muted); font-size:var(--font-size-12, 12px); text-align:center; white-space:nowrap; font-variant-numeric:tabular-nums; }
-body.cooking-mode .cooking-navigation { position:fixed; left:50%; bottom:0; transform:translateX(-50%); z-index:30; width:min(100%, 1040px); padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); box-shadow:0 -4px 18px rgba(0,0,0,.09); }
-body.cooking-mode .page-shell { padding-bottom:calc(96px + env(safe-area-inset-bottom, 0px)); }
+body.cooking-mode .cooking-navigation { position:fixed; left:0; right:0; bottom:0; transform:none; z-index:30; width:auto; max-width:none; margin:0; padding:10px 12px; padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px)); box-shadow:0 -4px 18px rgba(0,0,0,.09); }
+body.cooking-mode .page-shell { padding-bottom:100px; padding-bottom:calc(100px + env(safe-area-inset-bottom, 0px)); }
 body.cooking-mode .top-button { display:none !important; }
+body.cooking-mode .site-footer { display:none !important; }
 html.high-contrast body.cooking-mode .cooking-navigation { color:#000; background:#fff; border-color:#000; box-shadow:0 -2px 0 #000; }
 html.high-contrast body.cooking-mode .cooking-nav-button { color:#000; background:#fff; border:2px solid #000; }
 .step { scroll-margin-top:18px; }
@@ -371,3 +380,7 @@ html.high-contrast .cooking-ingredient-list .ingredient-row { background:#fff; b
 .wake-toggle-button[aria-pressed="true"] { background:var(--accent-soft); border-color:var(--category-ink, var(--accent)); box-shadow:inset 0 0 0 1px var(--category-ink, var(--accent)); }
 html.high-contrast .wake-toggle-button[aria-pressed="true"] { color:#fff; background:#000; border-color:#000; box-shadow:inset 0 0 0 1px #000; }
 html.high-contrast .wake-toggle-button[aria-pressed="true"] svg { color:#fff; }
+
+/* Полноширинная навигация в старых браузерах, включая Kindle. */
+body.cooking-mode .cooking-navigation { display:grid; grid-template-columns:52px minmax(0,1fr) 52px; }
+body.cooking-mode .cooking-nav-button { width:100%; min-width:52px; }
