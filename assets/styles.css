@@ -411,3 +411,10 @@ body.cooking-mode .cooking-mode-header-button { flex:0 0 40px; }
 
 /* В режиме готовки название уже есть в шапке — не дублируем крупный заголовок рецепта. */
 body.cooking-mode .recipe-head { display:none !important; }
+
+
+/* Ссылки категорий в хлебных крошках рецепта ведут на главную с активным фильтром. */
+.category-breadcrumb-link { color:var(--category-ink, var(--accent)); text-decoration:none; border-bottom:1px dotted currentColor; }
+.category-breadcrumb-link:hover,.category-breadcrumb-link:focus-visible { border-bottom-style:solid; }
+.breadcrumb-separator { color:var(--muted); padding:0 2px; }
+.breadcrumb-subcategory { color:var(--muted); }
