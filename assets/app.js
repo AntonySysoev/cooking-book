@@ -434,10 +434,12 @@
       scrollSavePending = true;
       window.setTimeout(() => {
         scrollSavePending = false;
-        const steps = [...app.querySelectorAll("[data-step-id]")];
+        const allSteps = [...app.querySelectorAll("[data-step-id]")];
+        const steps = allSteps.filter(step => step.getClientRects().length > 0);
         if (!steps.length) return;
         let closestIndex = 0, closestDistance = Infinity;
-        steps.forEach((step, index) => {
+        steps.forEach(step => {
+          const index = allSteps.indexOf(step);
           const distance = Math.abs(step.getBoundingClientRect().top - 90);
           if (distance < closestDistance) { closestDistance = distance; closestIndex = index; }
         });
@@ -510,6 +512,11 @@
     app.querySelectorAll("[data-step-id]").forEach(row => {
       const toggle = () => {
         const id = row.dataset.stepId;
+        const allSteps = [...app.querySelectorAll("[data-step-id]")];
+        state.currentStepIndex = Math.max(0, allSteps.findIndex(step => step.dataset.stepId === id));
+        const progress = state.recipeProgress[state.currentRecipe.id] || {};
+        progress.hasStepPosition = true;
+        state.recipeProgress[state.currentRecipe.id] = progress;
         state.doneSteps.has(id) ? state.doneSteps.delete(id) : state.doneSteps.add(id);
         saveCurrentRecipeState();
         const recipe = state.currentRecipe;
