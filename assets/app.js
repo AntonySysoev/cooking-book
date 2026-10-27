@@ -8,6 +8,7 @@
   const printMenuLink = document.getElementById("print-menu-link");
   const topButton = document.getElementById("top-button");
   const STORAGE_KEY = "cooking-book-user-state-v1";
+  const COOKING_SESSION_KEY = "cooking-book-active-cooking-recipe";
   const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false, currentStepIndex: 0, cookingStageIndex: 0, cookingMode: false };
   function loadUserState() {
     try {
@@ -45,7 +46,7 @@
       fontSizeButton.setAttribute("aria-pressed", String(state.readingMode));
       fontSizeButton.setAttribute("aria-label", state.readingMode ? "Вернуть обычное оформление и размер текста 100%" : "Включить чёрно-белый режим чтения с размером текста 150%");
       fontSizeButton.title = state.readingMode ? "Обычный режим · 100%" : "Крупный текст и чёрно-белое оформление · 150%";
-      const value = fontSizeButton.querySelector(".font-size-value");
+      const value = document.getElementById("font-size-value");
       if (value) value.textContent = state.readingMode ? "150%" : "100%";
     }
   }
@@ -54,6 +55,7 @@
   if (cookingModeHeaderButton) cookingModeHeaderButton.addEventListener("click", () => {
     if (!state.currentRecipe) return;
     state.cookingMode = !state.cookingMode;
+    try { if (state.cookingMode) sessionStorage.setItem(COOKING_SESSION_KEY, state.currentRecipe.id); else sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
     if (state.cookingMode) {
       state.cookingStageIndex = 0;
       const wakeToggle = document.getElementById("wake-toggle");
@@ -183,11 +185,15 @@
   }
   function renderHome() {
     state.cookingMode = false;
+    try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
     document.body.classList.remove("cooking-mode");
     document.title = "Cooking Book — кулинарная книга";
-    printMenuWrap.hidden = true;
+    printMenuWrap.hidden = false;
     closePrintMenu();
     $("#wake-toggle").hidden = true;
+    $("#print-menu-print").hidden = true;
+    $("#print-menu-link").hidden = true;
+    $("#recipe-menu-separator").hidden = true;
     const cookingToggle = document.getElementById("cooking-mode-toggle");
     if (cookingToggle) cookingToggle.hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
@@ -294,6 +300,9 @@
     document.body.classList.add(categoryClass(recipe.category));
     printMenuWrap.hidden = false;
     $("#wake-toggle").hidden = false;
+    $("#print-menu-print").hidden = false;
+    $("#print-menu-link").hidden = false;
+    $("#recipe-menu-separator").hidden = false;
     const cookingToggle = document.getElementById("cooking-mode-toggle");
     if (cookingToggle) cookingToggle.hidden = false;
     document.title = `${recipe.title} — Cooking Book`;
@@ -301,7 +310,9 @@
     state.recentlyViewed[recipe.id] = Date.now();
     saveUserState();
     const savedProgress = state.recipeProgress[recipe.id] || {};
-    state.cookingMode = false;
+    let resumeCookingMode = false;
+    try { resumeCookingMode = sessionStorage.getItem(COOKING_SESSION_KEY) === recipe.id; } catch (_) {}
+    state.cookingMode = resumeCookingMode;
     state.multiplier = savedProgress.multiplier == null || !Number.isFinite(Number(savedProgress.multiplier))
       ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(Number(savedProgress.multiplier) * 100) / 100));
     state.checkedIngredients = new Set(Array.isArray(savedProgress.checkedIngredients) ? savedProgress.checkedIngredients : []);
@@ -351,6 +362,8 @@
       wakeToggle.classList.toggle("is-active", state.wakeEnabled);
       wakeToggle.title = state.wakeEnabled ? "Экран удерживается включённым — нажми, чтобы выключить" : "Не выключать экран во время готовки";
       wakeToggle.setAttribute("aria-label", wakeToggle.title);
+      const status = document.getElementById("wake-status");
+      if (status) status.textContent = state.wakeEnabled ? "Вкл." : "Выкл.";
     };
     updateWakeButton();
     applyCookingMode();
@@ -663,7 +676,10 @@
       window.prompt("Скопируй ссылку на рецепт:", url);
     }
   });
+  document.querySelector(".brand")?.addEventListener("click", () => { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} });
   document.addEventListener("click", event => {
+    const backLink = event.target.closest(".back-link");
+    if (backLink) { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} }
     if (!printMenuWrap.contains(event.target)) closePrintMenu();
   });
   document.addEventListener("keydown", event => {
