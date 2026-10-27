@@ -179,6 +179,13 @@
   function categoryLabels(recipe) {
     return recipeCategories(recipe).map(id => `${categoryIcon(id)} ${categoryName(id)}`);
   }
+  function categoryBreadcrumb(recipe, subcategory) {
+    const links = recipeCategories(recipe).map(id =>
+      `<a class="category-breadcrumb-link ${categoryClass(id)}" href="?category=${encodeURIComponent(id)}">${escapeHtml(categoryIcon(id) + " " + categoryName(id))}</a>`
+    );
+    return links.join(' <span class="breadcrumb-separator">·</span> ') +
+      (subcategory ? ` <span class="breadcrumb-separator">/</span> <span class="breadcrumb-subcategory">${escapeHtml(subcategory)}</span>` : "");
+  }
   function allSearchText(recipe) {
     return [recipe.title, recipe.description, ...(recipe.tags || []), ...recipeCategories(recipe).map(categoryName), recipe.subcategory,
       ...(recipe.ingredients || []).map(i => i.name)].join(" ").toLocaleLowerCase("ru");
@@ -196,6 +203,8 @@
     $("#recipe-menu-separator").hidden = true;
     const cookingToggle = document.getElementById("cooking-mode-toggle");
     if (cookingToggle) cookingToggle.hidden = true;
+    const requestedCategory = new URLSearchParams(location.search).get("category");
+    if (requestedCategory && (requestedCategory === "all" || state.categories.some(c => c.id === requestedCategory))) state.activeCategory = requestedCategory;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || recipeCategories(r).includes(state.activeCategory)) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")))
@@ -327,7 +336,7 @@
     app.innerHTML = `
       <a class="back-link" href="./">← Все рецепты</a>
       <section class="recipe-head">
-        <div class="eyebrow">${categoryLabels(recipe).map(label => escapeHtml(label)).join(" · ")}${subcategory ? " / " + escapeHtml(subcategory) : ""}</div>
+        <div class="eyebrow">${categoryBreadcrumb(recipe, subcategory)}</div>
         <h1>${escapeHtml(recipe.title)}</h1>
         ${recipe.description ? `<p class="recipe-description">${escapeHtml(recipe.description)}</p>` : ""}
         <div class="recipe-meta">${timeLabel(recipe) ? `<span class="meta-chip">◷ ${escapeHtml(timeLabel(recipe))}</span>` : ""}${yieldHint(recipe) ? `<span class="meta-chip">♧ ${escapeHtml(yieldHint(recipe))}</span>` : ""}${(recipe.tags || []).slice(0,4).map(t => `<span class="meta-chip">${escapeHtml(t)}</span>`).join("")}</div>
