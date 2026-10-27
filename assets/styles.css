@@ -335,3 +335,34 @@ html.high-contrast .cooking-nav-button { color:#000; background:#fff; border-col
   .cooking-navigation,.cooking-mode-toggle { display:none !important; }
   .cooking-mode .step { display:grid !important; }
 }
+
+
+/* Иконка режима готовки в верхней панели */
+.cooking-mode-header-button { color:var(--accent-dark); }
+.cooking-mode-header-button.is-active { background:var(--accent-soft); border-color:var(--category-line, var(--line)); }
+.cooking-mode-header-button svg { width:21px; height:21px; display:block; }
+.cooking-mode-header-button[hidden] { display:none !important; }
+
+/* Экран ингредиентов — тот же ритм и карточки, что и в полном рецепте */
+.cooking-ingredient-screen { padding:8px 0 14px; }
+.cooking-ingredient-screen[hidden] { display:none !important; }
+.cooking-ingredient-title { margin:4px 0 18px; font-size:var(--font-size-26, 26px); line-height:1.25; letter-spacing:-.02em; }
+.cooking-ingredient-list .ingredient-group { margin:0; }
+.cooking-ingredient-list .ingredient-group h3 { display:none; }
+.cooking-ingredient-list .ingredient-list { gap:8px; }
+.cooking-ingredient-list .ingredient-row { min-height:54px; padding:11px 10px; grid-template-columns:24px minmax(0,1fr) auto; gap:10px; border-radius:10px; }
+.cooking-ingredient-list .ingredient-name { font-size:var(--font-size-16, 16px); line-height:1.4; }
+.cooking-ingredient-list .ingredient-amount { font-size:var(--font-size-16, 16px); white-space:nowrap; }
+.cooking-mode .step-list[hidden] { display:none !important; }
+.cooking-mode .cooking-ingredient-screen .ingredient-group + .ingredient-group { margin-top:16px; }
+html.high-contrast .cooking-mode-header-button { color:#000; }
+html.high-contrast .cooking-mode-header-button.is-active { background:#fff; border-color:#000; }
+html.high-contrast .cooking-ingredient-list .ingredient-row { background:#fff; border-color:#000; }
+@media (max-width:700px) {
+  .cooking-ingredient-title { font-size:var(--font-size-23, 23px); margin-bottom:12px; }
+  .cooking-ingredient-list .ingredient-row { grid-template-columns:22px minmax(0,1fr) auto; gap:8px; padding:10px 8px; }
+}
+@media print {
+  .cooking-mode-header-button { display:none !important; }
+  .cooking-ingredient-screen { display:none !important; }
+}
