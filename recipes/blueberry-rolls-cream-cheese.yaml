@@ -128,29 +128,29 @@ ingredients:
     group: filling
     note: Густое, без избытка жидкого сиропа.
   - id: filling-cream-cheese
-    name: Сливочный сыр для белой прослойки
+    name: Сливочный сыр
     quantity: 100
     unit: г
     group: cream-layer
     note: Без добавок; не обезжиренный.
   - id: filling-mascarpone
-    name: Маскарпоне для белой прослойки
+    name: Маскарпоне
     quantity: 100
     unit: г
     group: cream-layer
     note: Холодный.
   - id: filling-icing-sugar
-    name: Сахарная пудра для белой прослойки
+    name: Сахарная пудра
     quantity: 35
     unit: г
     group: cream-layer
   - id: filling-cornstarch
-    name: Кукурузный крахмал для белой прослойки
+    name: Кукурузный крахмал
     quantity: 5
     unit: г
     group: cream-layer
   - id: filling-vanilla
-    name: Ванильный экстракт для белой прослойки
+    name: Ванильный экстракт
     quantity: 2
     unit: г
     group: cream-layer
