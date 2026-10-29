@@ -188,7 +188,7 @@
       `<a class="category-breadcrumb-link ${categoryClass(id)}" href="?category=${encodeURIComponent(id)}">${escapeHtml(categoryIcon(id) + " " + categoryName(id))}</a>`
     );
     return links.join(' <span class="breadcrumb-separator">·</span> ') +
-      (subcategory ? ` <span class="breadcrumb-separator">/</span> <span class="breadcrumb-subcategory">${escapeHtml(subcategory)}</span>` : "");
+      (subcategory && !state.categories.some(item => item.id === subcategory) ? ` <span class="breadcrumb-separator">/</span> <span class="breadcrumb-subcategory">${escapeHtml(subcategory)}</span>` : "");
   }
   function allSearchText(recipe) {
     return [recipe.title, recipe.description, ...(recipe.tags || []), ...recipeCategories(recipe).map(categoryName), recipe.subcategory,
@@ -221,7 +221,7 @@
       <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${pluralRu(filtered.length, "рецепт", "рецепта", "рецептов")}</span></div>
       ${filtered.length ? `<div class="recipe-grid">${filtered.map(r => `
         <a class="recipe-card ${categoryClass(r.category)}" href="?recipe=${encodeURIComponent(r.id)}">
-          <span class="card-category">${categoryLabels(r).map(label => escapeHtml(label)).join(" · ")}${r.subcategory ? " · " + escapeHtml((state.categories.find(c => c.id === r.category)?.subcategories || []).find(s => s.id === r.subcategory)?.title || "") : ""}</span>
+          <span class="card-category">${categoryLabels(r).map(label => escapeHtml(label)).join(" · ")}</span>
           <h3>${escapeHtml(r.title)}</h3>
           <p class="card-description">${escapeHtml(r.description || "")}</p>
           <div class="card-meta"><span>◷ ${escapeHtml(timeLabel(r) || "Время не указано")}</span><span>♧ ${escapeHtml(yieldLabel(r) || "Выход не указан")}</span></div>
