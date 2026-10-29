@@ -195,7 +195,7 @@
     try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
     document.body.classList.remove("cooking-mode");
     document.title = "Cooking Book — кулинарная книга";
-    printMenuWrap.hidden = true;
+    printMenuWrap.hidden = false;
     closePrintMenu();
     $("#wake-toggle").hidden = true;
     $("#print-menu-print").hidden = true;
