@@ -195,7 +195,7 @@
     try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
     document.body.classList.remove("cooking-mode");
     document.title = "Cooking Book — кулинарная книга";
-    printMenuWrap.hidden = false;
+    printMenuWrap.hidden = true;
     closePrintMenu();
     $("#wake-toggle").hidden = true;
     $("#print-menu-print").hidden = true;
@@ -331,7 +331,6 @@
     }
     const subcategory = (state.categories.find(c => c.id === recipe.category)?.subcategories || []).find(s => s.id === recipe.subcategory)?.title;
     app.innerHTML = `
-      <a class="back-link" href="./">← Все рецепты</a>
       <section class="recipe-head">
         <div class="eyebrow">${categoryBreadcrumb(recipe, subcategory)}</div>
         <h1>${escapeHtml(recipe.title)}</h1>
