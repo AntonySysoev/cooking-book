@@ -212,10 +212,6 @@
     app.innerHTML = `
       <div class="toolbar">
         <label class="search-wrap"><span aria-hidden="true">⌕</span><input id="search" class="search-input" type="search" placeholder="Найти рецепт или ингредиент…" value="${escapeHtml(state.query)}" autocomplete="off" aria-label="Поиск рецептов"></label>
-        <select id="category-select" class="category-select" aria-label="Фильтр по категории">
-          <option value="all">Все категории</option>
-          ${state.categories.map(c => `<option value="${escapeHtml(c.id)}" ${state.activeCategory === c.id ? "selected" : ""}>${categoryIcon(c.id)} ${escapeHtml(c.title)}</option>`).join("")}
-        </select>
       </div>
       <div class="category-pills"><button class="pill ${state.activeCategory === "all" ? "active" : ""}" data-category="all" type="button">Все</button>${categories}</div>
       <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${pluralRu(filtered.length, "рецепт", "рецепта", "рецептов")}</span></div>
@@ -228,7 +224,6 @@
         </a>`).join("")}</div>` : `<div class="empty-state"><h3>Ничего не найдено</h3><p>Попробуй изменить запрос или выбрать другую категорию.</p></div>`}
     `;
     $("#search").addEventListener("input", e => { state.query = e.target.value; const pos = e.target.selectionStart; renderHome(); const input = $("#search"); input.focus(); input.setSelectionRange(pos, pos); });
-    $("#category-select").addEventListener("change", e => { state.activeCategory = e.target.value; renderHome(); });
     app.querySelectorAll("[data-category]").forEach(button => button.addEventListener("click", () => { state.activeCategory = button.dataset.category; renderHome(); }));
   }
   function ingredientById(recipe, id) { return (recipe.ingredients || []).find(item => item.id === id); }
