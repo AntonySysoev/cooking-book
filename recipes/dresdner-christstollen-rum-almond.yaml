@@ -1,0 +1,267 @@
+id: dresdner-christstollen-rum-almond
+title: Дрезденский штоллен с ромовым изюмом и миндалём
+description: >-
+  Масляный рождественский штоллен с ромовым изюмом, цитрусовыми цукатами,
+  миндалём, лимонной цедрой и специями. После выпечки покрывается маслом
+  и сахарной пудрой и выдерживается для объединения ароматов.
+category: baking-and-dough
+also_in: [desserts]
+subcategory: buns-and-pastries
+tags: [штоллен, Dresdner Christstollen, немецкая выпечка, рождественская выпечка, ром, изюм, миндаль]
+yield:
+  quantity: 2
+  unit: штоллена (примерно по 750–800 г до выпечки)
+time:
+  active_minutes: 90
+  total_minutes_min: 780
+  total_minutes_max: 900
+equipment:
+  - Тестомес Ankarsrum с роликом и скребком
+  - Весы с точностью до 0,1 г
+  - Ёмкость для опары и брожения
+  - Противень и пергамент
+  - Термометр-щуп
+ingredient_groups:
+  - id: fruit
+    title: Фрукты и орехи
+  - id: dough
+    title: Тесто
+  - id: finish
+    title: Покрытие
+ingredients:
+  - id: raisins
+    name: Изюм
+    quantity: 325
+    unit: г
+    group: fruit
+  - id: rum
+    name: Тёмный ром
+    quantity: 45
+    unit: г
+    group: fruit
+  - id: orangeat
+    name: Апельсиновые цукаты
+    quantity: 60
+    unit: г
+    group: fruit
+  - id: citronat
+    name: Лимонные цукаты
+    quantity: 40
+    unit: г
+    group: fruit
+  - id: almonds
+    name: Миндаль
+    quantity: 75
+    unit: г
+    group: fruit
+  - id: flour
+    name: Пшеничная мука
+    quantity: 500
+    unit: г
+    parts:
+      - id: preferment
+        name: В опару
+        quantity: 100
+        group: dough
+      - id: main
+        name: В основное тесто
+        quantity: 400
+        group: dough
+  - id: milk
+    name: Молоко 3–3,5%
+    quantity: 170
+    unit: г
+    parts:
+      - id: preferment
+        name: В опару
+        quantity: 100
+        group: dough
+      - id: main
+        name: В основное тесто
+        quantity: 70
+        group: dough
+  - id: yeast
+    name: Свежие прессованные дрожжи
+    quantity: 18
+    unit: г
+    group: dough
+    note: Альтернатива — 6 г инстантных сухих дрожжей.
+  - id: sugar
+    name: Сахар
+    quantity: 80
+    unit: г
+    group: dough
+  - id: butter
+    name: Сливочное масло 82%
+    quantity: 330
+    unit: г
+    parts:
+      - id: dough
+        name: В тесто
+        quantity: 250
+        group: dough
+      - id: coating
+        name: Для покрытия
+        quantity: 80
+        group: finish
+  - id: salt
+    name: Соль
+    quantity: 7
+    unit: г
+    group: dough
+  - id: lemon-zest
+    name: Лимонная цедра
+    quantity: 5
+    unit: г
+    group: dough
+  - id: vanilla
+    name: Ванильный экстракт
+    quantity: 3
+    unit: г
+    group: dough
+  - id: cardamom
+    name: Молотый кардамон
+    quantity: 1
+    unit: г
+    group: dough
+  - id: nutmeg
+    name: Молотый мускатный орех
+    quantity: 0.3
+    unit: г
+    group: dough
+  - id: cinnamon
+    name: Молотая корица
+    quantity: 0.5
+    unit: г
+    group: dough
+  - id: powdered-sugar
+    name: Сахарная пудра
+    quantity_min: 100
+    quantity_max: 140
+    unit: г
+    group: finish
+steps:
+  - id: soak-raisins
+    title: Замочить изюм
+    ingredients:
+      - ingredient: raisins
+      - ingredient: rum
+    instructions: >-
+      Чистый изюм не промывай. Если промыл, тщательно обсуши. Смешай изюм с ромом,
+      накрой и оставь на 8–12 часов, перемешав один-два раза. Перед замесом слей
+      свободную жидкость, если она осталась; не добавляй её в тесто.
+  - id: prepare-fruit
+    title: Подготовить цукаты и миндаль
+    ingredients:
+      - ingredient: orangeat
+      - ingredient: citronat
+      - ingredient: almonds
+    instructions: >-
+      Нарежь цукаты кубиками 4–6 мм. Миндаль крупно поруби; при желании подсуши
+      при фактических 150 °C 8–10 минут и полностью остуди.
+  - id: preferment
+    title: Приготовить опару
+    ingredients:
+      - ingredient: flour
+        part: preferment
+      - ingredient: milk
+        part: preferment
+      - ingredient: yeast
+      - ingredient: sugar
+    instructions: >-
+      Используй 100 г молока, 100 г муки, все дрожжи и 10 г сахара из общего
+      количества. Молоко должно быть 25–28 °C. Перемешай до однородности,
+      накрой и оставь при фактических 24–26 °C на 25–40 минут, до пористой
+      поверхности и заметного подъёма.
+  - id: mix-dough
+    title: Замесить тесто
+    ingredients:
+      - ingredient: flour
+        part: main
+      - ingredient: milk
+        part: main
+      - ingredient: sugar
+      - ingredient: butter
+      - ingredient: salt
+      - ingredient: lemon-zest
+      - ingredient: vanilla
+      - ingredient: cardamom
+      - ingredient: nutmeg
+      - ingredient: cinnamon
+    instructions: >-
+      Установи в Ankarsrum ролик и скребок. Добавь 400 г муки, 70 г молока и опару.
+      Меси на низкой скорости до связного теста, затем дай ему отдохнуть 10 минут.
+      Масло должно быть пластичным, около 18–20 °C. Растри цедру с оставшимися
+      70 г сахара. Введи масло порциями по 25–40 г, каждый раз дожидаясь, пока
+      оно в основном соединится с тестом. Добавь сахар с цедрой, соль, ваниль
+      и специи; меси ещё 5–8 минут до однородного пластичного теста. Не стремись
+      к тонкой плёнке, как для панеттоне.
+  - id: add-fruit
+    title: Вмешать фрукты и миндаль
+    ingredients:
+      - ingredient: raisins
+      - ingredient: orangeat
+      - ingredient: citronat
+      - ingredient: almonds
+    instructions: >-
+      Добавь изюм, цукаты и миндаль. Перемешивай на минимальной скорости только
+      до равномерного распределения. Если Ankarsrum начинает раздавливать изюм,
+      закончи вмешивание руками.
+  - id: bulk
+    title: Первое брожение
+    instructions: >-
+      Накрой тесто и оставь при фактических 24–26 °C на 45–75 минут. Оно должно
+      увеличиться примерно на 30–50%, стать пышнее и расслабиться; удвоения ждать
+      не нужно.
+  - id: shape
+    title: Сформовать два штоллена
+    instructions: >-
+      Раздели тесто пополам. Каждую часть расплющи в овал толщиной 2–3 см.
+      Сделай продольное углубление немного в стороне от центра и загни одну
+      сторону поверх другой, формируя характерный асимметричный валик.
+      Переложи на противень с пергаментом.
+  - id: proof
+    title: Окончательная расстойка
+    instructions: >-
+      Накрой заготовки и оставь при фактических 24–26 °C на 35–55 минут.
+      Они должны немного увеличиться и стать пухлее, но не обязаны удваиваться.
+  - id: bake
+    title: Выпечь
+    instructions: >-
+      Разогрей духовку до фактических 190 °C в режиме верхнего и нижнего нагрева,
+      без конвекции. Выпекай на уровне чуть ниже среднего 10 минут, затем снизь
+      температуру до 170 °C и выпекай ещё примерно 35–50 минут. Если верх быстро
+      темнеет, свободно прикрой фольгой. Готовность проверяй термометром:
+      температура в центре мякиша должна достигнуть 94–96 °C.
+  - id: coat
+    title: Покрыть маслом и пудрой
+    ingredients:
+      - ingredient: butter
+        part: coating
+      - ingredient: powdered-sugar
+    instructions: >-
+      Пока штоллены горячие, смажь их со всех сторон растопленным маслом.
+      Через 2–3 минуты повтори смазывание и щедро посыпь сахарной пудрой.
+      После частичного охлаждения добавь тонкий слой пудры, а после полного
+      остывания — последний толстый слой.
+  - id: cool-store
+    title: Остудить и выдержать
+    instructions: >-
+      Полностью остуди на решётке и только затем заверни в пергамент и фольгу
+      или положи в закрытую упаковку. Выдерживай в прохладном сухом месте.
+      Первую пробу можно сделать через 2–3 дня; вкус обычно объединяется за 7–14 дней.
+tips:
+  - >-
+    При замене свежих дрожжей сухими используй 6 г на весь рецепт; добавь около
+    2 г в опару, остальные — к муке основного теста.
+  - >-
+    Не добавляй свободный ром от замачивания: избыток жидкости и спирта меняет
+    консистенцию теста и может замедлить брожение.
+  - >-
+    Не подсыпай много муки при формовании. Штоллен должен быть плотным и маслянистым,
+    но не сырым; ориентируйся на 94–96 °C в центре.
+storage:
+  - >-
+    После полного остывания храни герметично упакованным в прохладном сухом месте.
+    Для первой партии ориентируйся на 1–2 недели выдержки. Для более долгого
+    хранения заморозь порциями; лучше использовать в течение 1–2 месяцев.
