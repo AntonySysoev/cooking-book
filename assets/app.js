@@ -157,13 +157,17 @@
     return c ? c.title : id || "Без категории";
   }
   function categoryClass(id) {
-    const allowed = ["desserts", "ice-cream", "baking-and-dough", "main-dishes", "snacks-and-light-meals", "drinks", "soups", "salads-and-sides", "sauces-and-preserves"];
+    const allowed = ["desserts", "cakes-and-pastries", "ice-cream", "baking-and-dough", "main-dishes", "fish-and-seafood", "meat", "poultry", "snacks-and-light-meals", "drinks", "soups", "salads-and-sides", "sauces-and-preserves"];
     return allowed.includes(id) ? `category-${id}` : "category-neutral";
   }
   function categoryIcon(id) {
     return ({
       desserts: "🍰",
       "ice-cream": "🍨",
+      "cakes-and-pastries": "🎂",
+      "fish-and-seafood": "🐟",
+      meat: "🥩",
+      poultry: "🍗",
       "baking-and-dough": "🥐",
       "main-dishes": "🍽️",
       "snacks-and-light-meals": "🥑",
@@ -174,7 +178,7 @@
     })[id] || "🍴";
   }
   function recipeCategories(recipe) {
-    return [...new Set([recipe.category, ...(Array.isArray(recipe.also_in) ? recipe.also_in : [])].filter(Boolean))];
+    return [...new Set([recipe.category, recipe.subcategory, ...(Array.isArray(recipe.also_in) ? recipe.also_in : [])].filter(Boolean))];
   }
   function categoryLabels(recipe) {
     return recipeCategories(recipe).map(id => `${categoryIcon(id)} ${categoryName(id)}`);
