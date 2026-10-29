@@ -1,8 +1,7 @@
 id: basque-cheesecake
 title: Баскский чизкейк
 description: "Баскский чизкейк на смеси крем-чиза и маскарпоне: тёмная карамелизированная корочка и плотная, очень кремовая середина."
-category: desserts
-subcategory: cakes-and-pastries
+category: cakes-and-pastries
 tags: [чизкейк, крем-чиз, маскарпоне, баскский, десерт]
 yield:
   quantity: 8
