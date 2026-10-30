@@ -167,32 +167,53 @@
     const found = findCategory(id);
     return found ? `category-${found.parent.id}` : "category-neutral";
   }
+  const categoryIconShapes = {
+    "cake-slice": '<path d="M4 14h16l-2 7H6l-2-7Z"/><path d="M4 14 12 4l8 10M12 4v4M9 10h.01M15 10h.01"/>',
+    "ice-cream-cone": '<path d="m7 12 5 10 5-10"/><path d="M17 12a5 5 0 1 0-10 0Z"/><path d="M9 5a3 3 0 0 1 6 0"/>',
+    cookie: '<circle cx="12" cy="12" r="9"/><path d="M15 3.5a3 3 0 0 0 5 3.5 9 9 0 0 1-11 14"/><path d="M8 10h.01M13 15h.01M9 16h.01"/>',
+    candy: '<path d="m7 9-4-3v12l4-3M17 9l4-3v12l-4-3"/><rect x="7" y="7" width="10" height="10" rx="3"/><path d="m10 10 4 4"/>',
+    bread: '<path d="M4 11a8 8 0 0 1 16 0v8H4v-8Z"/><path d="M8 10v2M12 8v3M16 10v2"/>',
+    croissant: '<path d="M4 15c2-7 14-10 16-3-2 6-11 9-16 3Z"/><path d="M4 15c4-1 5-5 5-7M20 12c-4-1-6 2-7 7"/>',
+    layers: '<path d="m3 8 9-5 9 5-9 5-9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/>',
+    pie: '<path d="M4 20a9 9 0 1 1 16-6H4Z"/><path d="m12 3 2 11 6 0M4 14l8 0"/>',
+    pizza: '<path d="m3 5 18-2-8 18L3 5Z"/><path d="m3 5 10 16M9 8h.01M14 7h.01M12 13h.01"/>',
+    beef: '<path d="M5 8c-2-2-1-5 2-5 2 0 3 2 5 2s3-2 5-2c3 0 4 3 2 5 3 2 3 7 0 10-4 4-12 3-15-1-2-3-1-7 1-9Z"/><path d="M9 12c1-2 5-2 6 0 1 2-1 4-3 4s-4-2-3-4Z"/>',
+    drumstick: '<path d="M15 5a5 5 0 0 0-7 7l-4 4a2 2 0 0 0 3 3l4-4a5 5 0 0 0 7-7Z"/><path d="m5 16-2-2M8 19l-2 2"/>',
+    fish: '<path d="M3 12s4-7 11-7c3 0 5 2 7 7-2 5-4 7-7 7-7 0-11-7-11-7Z"/><path d="m3 12-2-4v8l2-4ZM14 9h.01"/>',
+    utensils: '<path d="M7 3v7M4 3v4a3 3 0 0 0 6 0V3M7 10v11M17 3v18M17 3c-3 3-3 7 0 9"/>',
+    sandwich: '<path d="m3 10 9-6 9 6v2H3v-2ZM4 15h16l-2 5H6l-2-5Z"/><path d="M4 12v3M20 12v3"/>',
+    bowl: '<path d="M3 12h18a9 9 0 0 1-18 0Z"/><path d="M6 7c1-2 2-2 3 0M11 7c1-2 2-2 3 0M16 7c1-2 2-2 3 0"/>',
+    salad: '<path d="M3 12a9 9 0 0 0 18 0H3Z"/><path d="M7 10c0-3 3-5 5-5M12 10c1-4 4-5 6-4M10 12l2-4"/>',
+    soup: '<path d="M3 12h18a9 9 0 0 1-18 0Z"/><path d="M5 20h14M8 7c-1-1 1-2 0-3M13 7c-1-1 1-2 0-3M18 7c-1-1 1-2 0-3"/>',
+    coffee: '<path d="M4 8h13v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8Z"/><path d="M17 10h2a2 2 0 1 1 0 4h-2M8 3v2M12 3v2"/>',
+    "cup-soda": '<path d="M5 4h14l-1 17H6L5 4Z"/><path d="M8 4 7 2M12 4l1-2M16 4l2-2M8 10h8"/>',
+    "glass-water": '<path d="M5 3h14l-2 18H7L5 3Z"/><path d="M7 13c3-2 7 2 10 0"/>',
+    martini: '<path d="M3 4h18l-9 9-9-9ZM12 13v8M8 21h8"/>',
+    "cooking-pot": '<path d="M4 10h16v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-8ZM2 10h20M9 6h6M12 6V3"/>',
+    carrot: '<path d="m5 7 12 12-5 2L3 12l2-5Z"/><path d="M5 7 3 3M7 6l1-4M9 8l4-3"/>',
+    wheat: '<path d="M12 22V3M12 8c-4 0-6-2-6-5 4 0 6 2 6 5ZM12 13c4 0 6-2 6-5-4 0-6 2-6 5ZM12 18c-4 0-6-2-6-5 4 0 6 2 6 5Z"/>',
+    bottle: '<path d="M9 3h6v4l2 2v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2V3Z"/><path d="M9 7h6M7 13h10"/>',
+    droplet: '<path d="M12 2s7 8 7 13a7 7 0 0 1-14 0c0-5 7-13 7-13Z"/>',
+    jar: '<path d="M6 7h12l1 14H5L6 7ZM8 4h8v3H8z"/><path d="M8 12h8"/>',
+    nut: '<path d="M12 3c5 0 8 5 8 10s-3 8-8 8-8-3-8-8 3-10 8-10Z"/><path d="M12 3c-2 4-2 12 0 18M8 8c2 1 6 1 8 0"/>',
+    pasta: '<path d="M4 5c4-3 5 5 9 2s5-2 7 0M4 11c4-3 5 5 9 2s5-2 7 0M4 17c4-3 5 5 9 2s5-2 7 0"/>',
+    dumpling: '<path d="M4 13a8 8 0 0 1 16 0c0 4-4 7-8 7s-8-3-8-7Z"/><path d="M4 13c3 2 5 2 8 0s5-2 8 0M8 8l1 2M12 7v2M16 8l-1 2"/>'
+  };
   function categoryIcon(id) {
-    return ({
-      desserts: "🍰",
-      "ice-cream": "🍨",
-      "cakes-and-pastries": "🎂",
-      "fish-and-seafood": "🐟",
-      meat: "🥩",
-      poultry: "🍗",
-      "baking-and-dough": "🥐",
-      "main-dishes": "🍽️",
-      "snacks-and-light-meals": "🥑",
-      drinks: "🥤",
-      soups: "🍲",
-      "salads-and-sides": "🥗",
-      "sauces-and-preserves": "🫙"
-    })[id] || "🍴";
+    const found = findCategory(id);
+    const icon = found?.item.icon || found?.parent.icon || "utensils";
+    const shape = categoryIconShapes[icon] || categoryIconShapes.utensils;
+    return `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${shape}</svg>`;
   }
   function recipeCategories(recipe) {
     return [...new Set([recipe.category, recipe.subcategory, ...(Array.isArray(recipe.also_in) ? recipe.also_in : [])].filter(Boolean))];
   }
   function categoryLabels(recipe) {
-    return recipeCategories(recipe).map(id => `${categoryIcon(id)} ${categoryName(id)}`);
+    return recipeCategories(recipe).map(id => `${categoryIcon(id)} <span>${escapeHtml(categoryName(id))}</span>`);
   }
   function categoryBreadcrumb(recipe, subcategory) {
     const links = recipeCategories(recipe).map(id =>
-      `<a class="category-breadcrumb-link ${categoryClass(id)}" href="?category=${encodeURIComponent(id)}">${escapeHtml(categoryIcon(id) + " " + categoryName(id))}</a>`
+      `<a class="category-breadcrumb-link ${categoryClass(id)}" href="?category=${encodeURIComponent(id)}">${categoryIcon(id)} ${escapeHtml(categoryName(id))}</a>`
     );
     return links.join(' <span class="breadcrumb-separator">·</span> ');
   }
@@ -233,7 +254,7 @@
       <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${pluralRu(filtered.length, "рецепт", "рецепта", "рецептов")}</span></div>
       ${filtered.length ? `<div class="recipe-grid">${filtered.map(r => `
         <a class="recipe-card ${categoryClass(r.category)}" href="?recipe=${encodeURIComponent(r.id)}">
-          <span class="card-category">${categoryLabels(r).map(label => escapeHtml(label)).join(" · ")}</span>
+          <span class="card-category">${categoryLabels(r).join(" · ")}</span>
           <h3>${escapeHtml(r.title)}</h3>
           <p class="card-description">${escapeHtml(r.description || "")}</p>
           <div class="card-meta"><span>◷ ${escapeHtml(timeLabel(r) || "Время не указано")}</span><span>♧ ${escapeHtml(yieldLabel(r) || "Выход не указан")}</span></div>
