@@ -61,7 +61,10 @@ h3 { font-size:var(--font-size-16, 16px); margin:0 0 8px; }
 .category-salads-and-sides { --category-ink:#6e7c48; --category-soft:#edf0e2; --category-line:#d8dfbf; }
 .category-sauces-and-preserves { --category-ink:#79638c; --category-soft:#eee8f3; --category-line:#d9cce5; }
 body[class*="category-"] { --accent:var(--category-ink); --accent-dark:var(--category-ink); --accent-soft:var(--category-soft); }
-.category-icon { display:inline-block; margin-right:3px; font-size:var(--font-size-14, 14px); line-height:1; vertical-align:-1px; }
+.category-icon { display:inline-flex; align-items:center; justify-content:center; margin-right:5px; line-height:1; vertical-align:-3px; }
+.category-icon svg,.card-category svg,.category-breadcrumb-link svg { width:16px; height:16px; display:inline-block; flex:none; vertical-align:-3px; }
+.card-category svg { width:13px; height:13px; margin-right:4px; }
+.category-breadcrumb-link svg { width:14px; height:14px; margin-right:3px; }
 .pill[class*="category-"] { color:var(--category-ink); background:var(--category-soft); border-color:var(--category-line); }
 .pill[class*="category-"].active { color:var(--category-ink); background:var(--category-soft); border-color:var(--category-ink); box-shadow:inset 0 0 0 1px var(--category-ink); }
 .recipe-card[class*="category-"] { border-top:3px solid var(--category-line); }
