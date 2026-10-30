@@ -17,7 +17,6 @@ categories:
         icon: cookie
         title: Печенье и конфеты
       - id: puddings
-        icon: undefined
         title: Пудинги
   - id: baking-and-dough
     icon: croissant
