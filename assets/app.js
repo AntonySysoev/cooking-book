@@ -152,13 +152,20 @@
   const multiplierText = value => Number(value).toFixed(2);
   const MIN_MULTIPLIER = 0.1;
   const MAX_MULTIPLIER = 5;
+  function findCategory(id) {
+    for (const category of state.categories) {
+      if (category.id === id) return { item: category, parent: category };
+      const child = (category.subcategories || []).find(item => item.id === id);
+      if (child) return { item: child, parent: category };
+    }
+    return null;
+  }
   function categoryName(id) {
-    const c = state.categories.find(item => item.id === id);
-    return c ? c.title : id || "Без категории";
+    return findCategory(id)?.item.title || id || "Без категории";
   }
   function categoryClass(id) {
-    const allowed = ["desserts", "cakes-and-pastries", "ice-cream", "baking-and-dough", "main-dishes", "fish-and-seafood", "meat", "poultry", "snacks-and-light-meals", "drinks", "soups", "salads-and-sides", "sauces-and-preserves"];
-    return allowed.includes(id) ? `category-${id}` : "category-neutral";
+    const found = findCategory(id);
+    return found ? `category-${found.parent.id}` : "category-neutral";
   }
   function categoryIcon(id) {
     return ({
@@ -187,8 +194,7 @@
     const links = recipeCategories(recipe).map(id =>
       `<a class="category-breadcrumb-link ${categoryClass(id)}" href="?category=${encodeURIComponent(id)}">${escapeHtml(categoryIcon(id) + " " + categoryName(id))}</a>`
     );
-    return links.join(' <span class="breadcrumb-separator">·</span> ') +
-      (subcategory && !state.categories.some(item => item.id === subcategory) ? ` <span class="breadcrumb-separator">/</span> <span class="breadcrumb-subcategory">${escapeHtml(subcategory)}</span>` : "");
+    return links.join(' <span class="breadcrumb-separator">·</span> ');
   }
   function allSearchText(recipe) {
     return [recipe.title, recipe.description, ...(recipe.tags || []), ...recipeCategories(recipe).map(categoryName), recipe.subcategory,
@@ -208,6 +214,10 @@
     const cookingToggle = document.getElementById("cooking-mode-toggle");
     if (cookingToggle) cookingToggle.hidden = true;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
+    const activeParent = state.categories.find(c => c.id === state.activeCategory);
+    const subcategories = activeParent?.subcategories?.length
+      ? `<div class="category-pills subcategory-pills" aria-label="Подкатегории ${escapeHtml(activeParent.title)}">${activeParent.subcategories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("")}</div>`
+      : "";
     const filtered = state.recipes.filter(r => (state.activeCategory === "all" || recipeCategories(r).includes(state.activeCategory)) &&
       allSearchText(r).includes(state.query.toLocaleLowerCase("ru")))
       .map((recipe, index) => ({ recipe, index, viewedAt: Number(state.recentlyViewed[recipe.id]) || 0 }))
@@ -217,7 +227,7 @@
       <div class="toolbar">
         <label class="search-wrap"><span aria-hidden="true">⌕</span><input id="search" class="search-input" type="search" placeholder="Найти рецепт или ингредиент…" value="${escapeHtml(state.query)}" autocomplete="off" aria-label="Поиск рецептов"></label>
       </div>
-      <div class="category-pills"><button class="pill ${state.activeCategory === "all" ? "active" : ""}" data-category="all" type="button">Все</button>${categories}</div>
+      <div class="category-pills"><button class="pill ${state.activeCategory === "all" ? "active" : ""}" data-category="all" type="button">Все</button>${categories}</div>${subcategories}
       <div class="section-heading"><h2>Рецепты</h2><span class="result-count">${filtered.length} ${pluralRu(filtered.length, "рецепт", "рецепта", "рецептов")}</span></div>
       ${filtered.length ? `<div class="recipe-grid">${filtered.map(r => `
         <a class="recipe-card ${categoryClass(r.category)}" href="?recipe=${encodeURIComponent(r.id)}">
@@ -328,7 +338,7 @@
       const savedStepStage = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === state.currentStepIndex);
       if (savedStepStage >= 0) state.cookingStageIndex = savedStepStage;
     }
-    const subcategory = (state.categories.find(c => c.id === recipe.category)?.subcategories || []).find(s => s.id === recipe.subcategory)?.title;
+    const subcategory = findCategory(recipe.subcategory)?.item.title;
     app.innerHTML = `
       <section class="recipe-head">
         <div class="eyebrow">${categoryBreadcrumb(recipe, subcategory)}</div>
@@ -631,7 +641,7 @@
       const params = new URLSearchParams(location.search);
       const id = params.get("recipe");
       const requestedCategory = params.get("category");
-      if (requestedCategory && (requestedCategory === "all" || state.categories.some(c => c.id === requestedCategory))) state.activeCategory = requestedCategory;
+      if (requestedCategory && (requestedCategory === "all" || findCategory(requestedCategory))) state.activeCategory = requestedCategory;
       const recipe = id ? state.recipes.find(r => r.id === id) : null;
       if (id && !recipe) {
         app.innerHTML = `<div class="error-state"><h2>Рецепт не найден</h2><p>Возможно, ссылка устарела или рецепт ещё не опубликован.</p><a class="back-link" href="./">← Вернуться к рецептам</a></div>`;
