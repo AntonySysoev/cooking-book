@@ -1,94 +1,136 @@
 # Stable category IDs used by recipe files.
 categories:
   - id: desserts
+    icon: cake-slice
     title: Десерты
     subcategories:
       - id: cakes-and-pastries
+        icon: cake-slice
         title: Торты и пирожные
       - id: ice-cream
+        icon: ice-cream-cone
         title: Мороженое
       - id: creams-and-fillings
+        icon: candy
         title: Кремы и начинки
       - id: cookies-and-candies
+        icon: cookie
         title: Печенье и конфеты
       - id: puddings
+        icon: undefined
         title: Пудинги
   - id: baking-and-dough
+    icon: croissant
     title: Выпечка и тесто
     subcategories:
       - id: bread
+        icon: bread
         title: Хлеб
       - id: buns-and-pastries
+        icon: croissant
         title: Булочки и сдоба
       - id: laminated-dough
+        icon: layers
         title: Слоёное тесто
       - id: pies-and-tarts
+        icon: pie
         title: Пироги и тарты
       - id: pizza-and-flatbreads
+        icon: pizza
         title: Пицца и лепёшки
       - id: cookies
+        icon: cookie
         title: Печенье
   - id: main-dishes
+    icon: utensils
     title: Основные блюда
     subcategories:
       - id: meat
+        icon: beef
         title: Мясо
       - id: poultry
+        icon: drumstick
         title: Птица
       - id: fish-and-seafood
+        icon: fish
         title: Рыба и морепродукты
       - id: pasta-and-noodles
+        icon: pasta
         title: Паста и лапша
       - id: dumplings
+        icon: dumpling
         title: Пельмени и манты
       - id: casseroles
+        icon: cooking-pot
         title: Запеканки
   - id: snacks-and-light-meals
+    icon: sandwich
     title: Закуски и лёгкие блюда
     subcategories:
       - id: dips-and-spreads
+        icon: bowl
         title: Дипы и намазки
       - id: finger-food
+        icon: cookie
         title: Закуски на один укус
       - id: sandwiches
+        icon: sandwich
         title: Бутерброды
   - id: drinks
+    icon: cup-soda
     title: Напитки
     subcategories:
       - id: coffee-and-tea
+        icon: coffee
         title: Кофе и чай
       - id: cold-drinks
+        icon: glass-water
         title: Холодные напитки
       - id: cocktails
+        icon: martini
         title: Коктейли
       - id: hot-drinks
+        icon: coffee
         title: Горячие напитки
   - id: soups
+    icon: soup
     title: Супы
     subcategories:
       - id: clear-soups
+        icon: soup
         title: Прозрачные супы
       - id: creamy-soups
+        icon: bowl
         title: Крем-супы
       - id: hearty-soups
+        icon: cooking-pot
         title: Сытные супы
   - id: salads-and-sides
+    icon: salad
     title: Салаты и гарниры
     subcategories:
       - id: salads
+        icon: salad
         title: Салаты
       - id: vegetable-sides
+        icon: carrot
         title: Овощные гарниры
       - id: grains-and-potatoes
+        icon: wheat
         title: Крупы и картофель
   - id: sauces-and-preserves
+    icon: cooking-pot
     title: Соусы и заготовки
     subcategories:
       - id: sauces
+        icon: bottle
         title: Соусы
       - id: caramel-and-syrups
+        icon: droplet
         title: Карамель и сиропы
       - id: jams-and-preserves
+        icon: jar
         title: Варенье и заготовки
       - id: spice-and-nut-pastes
+        icon: nut
         title: Пряные и ореховые пасты
