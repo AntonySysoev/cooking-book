@@ -1,8 +1,8 @@
 id: pistachio-gelato
 title: Фисташковое джелато
 description: Итальянское ореховое мороженое с насыщенным натуральным вкусом фисташек, заварной молочной основой и мягкой кремовой текстурой.
-category: ice-cream
-also_in: [desserts]
+category: desserts
+subcategory: ice-cream
 
 tags:
   - джелато
