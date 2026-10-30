@@ -1,8 +1,8 @@
 id: mint-gelato
 title: Мятное мороженое
 description: Молочное мятное джелато с настоем свежей мяты, умеренной сладостью и мягкой текстурой.
-category: ice-cream
-also_in: [desserts]
+category: desserts
+subcategory: ice-cream
 
 tags: [мороженое, мята, джелато, Ankarsrum]
 yield:
