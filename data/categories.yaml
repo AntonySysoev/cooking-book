@@ -3,16 +3,16 @@ categories:
   - id: desserts
     title: Десерты
     subcategories:
+      - id: cakes-and-pastries
+        title: Торты и пирожные
+      - id: ice-cream
+        title: Мороженое
       - id: creams-and-fillings
         title: Кремы и начинки
       - id: cookies-and-candies
         title: Печенье и конфеты
       - id: puddings
         title: Пудинги
-  - id: cakes-and-pastries
-    title: Торты и пирожные
-  - id: ice-cream
-    title: Мороженое
   - id: baking-and-dough
     title: Выпечка и тесто
     subcategories:
@@ -31,18 +31,18 @@ categories:
   - id: main-dishes
     title: Основные блюда
     subcategories:
+      - id: meat
+        title: Мясо
+      - id: poultry
+        title: Птица
+      - id: fish-and-seafood
+        title: Рыба и морепродукты
       - id: pasta-and-noodles
         title: Паста и лапша
       - id: dumplings
         title: Пельмени и манты
       - id: casseroles
         title: Запеканки
-  - id: fish-and-seafood
-    title: Рыба и морепродукты
-  - id: meat
-    title: Мясо
-  - id: poultry
-    title: Птица
   - id: snacks-and-light-meals
     title: Закуски и лёгкие блюда
     subcategories:
