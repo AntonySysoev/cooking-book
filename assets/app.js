@@ -213,8 +213,10 @@
     $("#recipe-menu-separator").hidden = true;
     const cookingToggle = document.getElementById("cooking-mode-toggle");
     if (cookingToggle) cookingToggle.hidden = true;
-    const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
-    const activeParent = state.categories.find(c => c.id === state.activeCategory);
+    const selectedCategory = findCategory(state.activeCategory);
+    const selectedParentId = selectedCategory?.parent.id;
+    const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id || selectedParentId === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
+    const activeParent = selectedCategory?.parent;
     const subcategories = activeParent?.subcategories?.length
       ? `<div class="category-pills subcategory-pills" aria-label="Подкатегории ${escapeHtml(activeParent.title)}">${activeParent.subcategories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("")}</div>`
       : "";
