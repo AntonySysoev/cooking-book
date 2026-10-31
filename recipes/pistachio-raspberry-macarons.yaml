@@ -14,7 +14,7 @@ tags:
   - итальянская меренга
   - ганаш
 yield:
-  quantity: 43
+  quantity: 42
   unit: макарона
 time:
   active_minutes: 100
@@ -75,7 +75,7 @@ ingredients:
     group: shells
   - id: pistachios
     name: Фисташки очищенные, сырые
-    quantity: 133
+    quantity: 135
     unit: г
     group: pistachio-ganache
     note: Без соли; слегка прогреть для раскрытия аромата и полностью остудить.
@@ -103,7 +103,7 @@ ingredients:
     group: raspberry-insert
   - id: raspberry-sugar
     name: Сахар
-    quantity: 13.3
+    quantity: 14
     unit: г
     group: raspberry-insert
   - id: pectin
@@ -114,7 +114,7 @@ ingredients:
     note: Формула рассчитана именно на NH; обычный яблочный пектин не заменять в той же дозировке.
   - id: lemon-juice
     name: Лимонный сок
-    quantity: 5.3
+    quantity: 5.5
     unit: г
     group: raspberry-insert
 steps:
