@@ -24,9 +24,21 @@
   function saveUserState() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ recentlyViewed: state.recentlyViewed, recipeProgress: state.recipeProgress, fontScale: state.fontScale, readingMode: state.readingMode })); } catch (_) {}
   }
+  function recipeScaleSignature(recipe) {
+    const ingredients = (recipe.ingredients || []).map(item => ({
+      id: item.id,
+      quantity: item.quantity,
+      quantity_min: item.quantity_min,
+      quantity_max: item.quantity_max,
+      unit: item.unit,
+      parts: (item.parts || []).map(part => ({ id: part.id, quantity: part.quantity, group: part.group }))
+    }));
+    const y = recipe.yield || {};
+    return JSON.stringify({ ingredients, yield: { quantity: y.quantity, quantity_min: y.quantity_min, quantity_max: y.quantity_max, unit: y.unit } });
+  }
   function saveCurrentRecipeState() {
     if (!state.currentRecipe) return;
-    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, checkedIngredients: [...state.checkedIngredients], currentStepIndex: state.currentStepIndex, cookingStageIndex: state.cookingStageIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
+    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, scaleSignature: recipeScaleSignature(state.currentRecipe), checkedIngredients: [...state.checkedIngredients], currentStepIndex: state.currentStepIndex, cookingStageIndex: state.cookingStageIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
     saveUserState();
   }
   loadUserState();
@@ -352,7 +364,9 @@
     let resumeCookingMode = false;
     try { resumeCookingMode = sessionStorage.getItem(COOKING_SESSION_KEY) === recipe.id; } catch (_) {}
     state.cookingMode = resumeCookingMode;
-    state.multiplier = savedProgress.multiplier == null || !Number.isFinite(Number(savedProgress.multiplier))
+    const currentScaleSignature = recipeScaleSignature(recipe);
+    const scaleFormulaChanged = savedProgress.scaleSignature !== currentScaleSignature;
+    state.multiplier = scaleFormulaChanged || savedProgress.multiplier == null || !Number.isFinite(Number(savedProgress.multiplier))
       ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(Number(savedProgress.multiplier) * 100) / 100));
     state.checkedIngredients = new Set(Array.isArray(savedProgress.checkedIngredients) ? savedProgress.checkedIngredients : []);
     state.currentStepIndex = Math.max(0, Math.min(Math.max(0, (recipe.steps || []).length - 1), Number.isInteger(savedProgress.currentStepIndex) ? savedProgress.currentStepIndex : 0));
@@ -361,6 +375,7 @@
       const savedStepStage = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === state.currentStepIndex);
       if (savedStepStage >= 0) state.cookingStageIndex = savedStepStage;
     }
+    if (scaleFormulaChanged) saveCurrentRecipeState();
     const subcategory = findCategory(recipe.subcategory)?.item.title;
     app.innerHTML = `
       <section class="recipe-head">
