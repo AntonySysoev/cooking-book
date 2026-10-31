@@ -48,7 +48,7 @@ ingredients:
     group: shells
   - id: egg-whites
     name: Яичные белки
-    quantity: 200
+    quantity: 150
     unit: г
     group: shells
     note: Без следов желтка; разделить на две порции по 75 г.
@@ -63,7 +63,7 @@ ingredients:
         group: shells
   - id: caster-sugar
     name: Сахар
-    quantity: 150
+    quantity: 200
     unit: г
     group: shells
   - id: syrup-water
@@ -195,7 +195,6 @@ steps:
       импульсами, не вводя воздух. Накрой плёнкой в контакт и охлади 6–12 часов.
   - id: fill
     title: Наполнить макароны
-    ingredients:
     instructions: >-
       Размешай охлаждённый ганаш лопаткой до пластичности. Отсади примерно по
       6 г на половину оболочек и накрой оставшимися. Оставь в закрытом контейнере
