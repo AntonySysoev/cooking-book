@@ -50,18 +50,18 @@ ingredients:
     group: shells
   - id: egg-whites
     name: Яичные белки
-    quantity: 200
+    quantity: 150
     unit: г
     group: shells
-    note: Без следов желтка; разделить на две порции по 100 г.
+    note: Без следов желтка; разделить на две порции по 75 г.
     parts:
       - id: almond-mixture
         name: Для миндальной пасты
-        quantity: 100
+        quantity: 75
         group: shells
       - id: meringue
         name: Для меренги
-        quantity: 100
+        quantity: 75
         group: shells
   - id: caster-sugar
     name: Сахар
@@ -70,7 +70,7 @@ ingredients:
     group: shells
   - id: syrup-water
     name: Вода для сиропа
-    quantity: 66.7
+    quantity: 50
     unit: г
     group: shells
   - id: pistachios
@@ -87,7 +87,7 @@ ingredients:
     note: Обычный магазинный шоколад, мелко нарубленный.
   - id: cream
     name: Сливки 30%
-    quantity: 120
+    quantity: 90
     unit: г
     group: pistachio-ganache
     note: 33–40 г использовать при измельчении фисташек, остальное — для эмульсии.
@@ -179,7 +179,7 @@ steps:
       - ingredient: egg-whites
         part: almond-mixture
     instructions: >-
-      Добавь 100 г белков к сухой смеси и тщательно перемешай лопаткой до густой
+      Добавь 75 г белков к сухой смеси и тщательно перемешай лопаткой до густой
       однородной миндальной пасты. Накрой, чтобы поверхность не подсыхала,
       пока готовится сироп и меренга.
   - id: make-italian-meringue
@@ -192,7 +192,7 @@ steps:
     instructions: >-
       В небольшом сотейнике смешай сахар и воду. Нагревай без перемешивания
       после растворения сахара до 118 °C по термометру. Когда сироп достигнет
-      примерно 108–110 °C, начни взбивать оставшиеся 100 г белков в Ankarsrum
+      примерно 108–110 °C, начни взбивать оставшиеся 75 г белков в Ankarsrum
       с Balloon Whisks до мягких пиков. Не останавливая взбивание, влей сироп
       тонкой струёй между венчиком и стенкой чаши. Взбивай до плотной блестящей
       меренги, пока чаша не станет лишь слегка тёплой, а температура меренги
