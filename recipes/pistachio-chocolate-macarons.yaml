@@ -65,7 +65,7 @@ ingredients:
     group: chocolate-ganache
   - id: cream-chocolate
     name: Сливки 30–35%
-    quantity: 80
+    quantity: 104
     unit: г
     group: chocolate-ganache
   - id: butter-chocolate
@@ -95,7 +95,7 @@ ingredients:
     group: pistachio-ganache
   - id: cream-pistachio
     name: Сливки 30–35%
-    quantity: 40
+    quantity: 52
     unit: г
     group: pistachio-ganache
   - id: pistachio-paste
@@ -119,15 +119,6 @@ ingredients:
     unit: мл
     group: pistachio-ganache
 steps:
-  - id: prepare-almond
-    title: Подготовить миндальную смесь
-    ingredients:
-      - ingredient: almond-flour
-      - ingredient: icing-sugar
-    instructions: >-
-      Смешай миндальную муку с сахарной пудрой и тщательно просей через мелкое
-      сито. Если смесь остаётся крупной, не проталкивай через сито влажные
-      комки: лучше отдельно измельчить и просеять сухую смесь.
   - id: meringue
     title: Взбить меренгу в Ankarsrum
     ingredients:
