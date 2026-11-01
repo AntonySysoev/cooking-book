@@ -75,7 +75,7 @@ ingredients:
     group: shells
   - id: pistachios
     name: Фисташки очищенные, сырые
-    quantity: 175.5
+    quantity: 175
     unit: г
     group: pistachio-ganache
     note: Без соли; слегка прогреть для раскрытия аромата и полностью остудить.
@@ -87,13 +87,13 @@ ingredients:
     note: Обычный магазинный шоколад, мелко нарубленный.
   - id: cream
     name: Сливки 30%
-    quantity: 182
+    quantity: 180
     unit: г
     group: pistachio-ganache
     note: Включает дополнительные сливки, которые потребовались в пробной партии для менее плотной консистенции.
   - id: ganache-salt
     name: Мелкая соль
-    quantity: 0.65
+    quantity: 0.7
     unit: г
     group: pistachio-ganache
   - id: raspberries
