@@ -78,7 +78,7 @@ ingredients:
     group: coffee-ganache
   - id: cream
     name: Сливки 30%
-    quantity: 95
+    quantity: 123.5
     unit: г
     group: coffee-ganache
   - id: espresso
@@ -98,20 +98,6 @@ ingredients:
     unit: г
     group: coffee-ganache
 steps:
-  - id: prepare
-    title: Подготовить ингредиенты и противни
-    ingredients:
-      - ingredient: almond-flour
-      - ingredient: icing-sugar
-      - ingredient: egg-whites
-        part: almond-mixture
-      - ingredient: egg-whites
-        part: meringue
-      - ingredient: caster-sugar
-      - ingredient: syrup-water
-    instructions: >-
-      Точно отвесь ингредиенты. Обезжирь чашу и Balloon Whisks. Подготовь
-      противень с пергаментом и шаблон кругов диаметром 3,5–4 см.
   - id: sift
     title: Подготовить сухую смесь
     ingredients:
