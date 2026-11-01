@@ -87,10 +87,10 @@ ingredients:
     note: Обычный магазинный шоколад, мелко нарубленный.
   - id: cream
     name: Сливки 30%
-    quantity: 90
+    quantity: 117
     unit: г
     group: pistachio-ganache
-    note: 33–40 г использовать при измельчении фисташек, остальное — для эмульсии.
+    note: Ориентировочно 40 г использовать при измельчении фисташек, остальное — для эмульсии.
   - id: ganache-salt
     name: Мелкая соль
     quantity: 0.5
@@ -118,22 +118,6 @@ ingredients:
     unit: г
     group: raspberry-insert
 steps:
-  - id: prepare
-    title: Подготовить ингредиенты и противни
-    ingredients:
-      - ingredient: almond-flour
-      - ingredient: icing-sugar
-      - ingredient: egg-whites
-        part: almond-mixture
-      - ingredient: egg-whites
-        part: meringue
-      - ingredient: caster-sugar
-      - ingredient: syrup-water
-    instructions: >-
-      Заранее точно отвесь все ингредиенты. Протри чашу и венчики для белков
-      обезжиренной салфеткой. Подготовь шаблон кругов диаметром 3,5–4 см под
-      пергаментом. Для равномерной выпечки лучше отсаживать оболочки на холодный
-      противень; перед следующей партией полностью остуди его.
   - id: roast-pistachios
     title: Раскрыть аромат фисташек
     ingredients:
@@ -257,15 +241,6 @@ steps:
       лучше 10–12 часов.
   - id: fill-macarons
     title: Собрать макароны
-    ingredients:
-      - ingredient: pistachios
-      - ingredient: white-chocolate
-      - ingredient: cream
-      - ingredient: ganache-salt
-      - ingredient: raspberries
-      - ingredient: raspberry-sugar
-      - ingredient: pectin
-      - ingredient: lemon-juice
     instructions: >-
       Подбери оболочки попарно по размеру. Переложи стабилизированный ганаш в
       кондитерский мешок и отсади кольцо или невысокий валик по краю одной
