@@ -72,7 +72,7 @@ ingredients:
     group: shells
   - id: cream
     name: Сливки 30%
-    quantity: 100
+    quantity: 130
     unit: г
     group: caramel-ganache
   - id: sugar
@@ -97,20 +97,6 @@ ingredients:
     unit: г
     group: caramel-ganache
 steps:
-  - id: prepare
-    title: Подготовить ингредиенты и противни
-    ingredients:
-      - ingredient: almond-flour
-      - ingredient: icing-sugar
-      - ingredient: egg-whites
-        part: almond-mixture
-      - ingredient: egg-whites
-        part: meringue
-      - ingredient: caster-sugar
-      - ingredient: syrup-water
-    instructions: >-
-      Точно отвесь ингредиенты. Обезжирь чашу и Balloon Whisks. Подготовь
-      противень с пергаментом и шаблон кругов диаметром 3,5–4 см.
   - id: sift
     title: Подготовить сухую смесь
     ingredients:
@@ -188,12 +174,6 @@ steps:
       карамель. Накрой плёнкой в контакт и охлади 6–12 часов.
   - id: fill
     title: Наполнить макароны
-    ingredients:
-      - ingredient: cream
-      - ingredient: sugar
-      - ingredient: butter
-      - ingredient: white-chocolate
-      - ingredient: salt
     instructions: >-
       Перемешай охлаждённый ганаш лопаткой до пластичности. Если он слишком плотный,
       дай ему постоять 10–15 минут при комнатной температуре; не разогревай сильно.
