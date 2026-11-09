@@ -12,7 +12,7 @@ yield:
   unit: порция (около 340 г)
 time:
   active_minutes: 25
-  total_minutes_min: 745
+  total_minutes_min: 145
   total_minutes_max: 1485
 equipment:
   - Блендер Ninja с чашей PowerBowl или основной чашей с ножом
