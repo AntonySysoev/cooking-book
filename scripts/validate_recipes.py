@@ -250,7 +250,7 @@ def validate_recipe(path: Path) -> list[str]:
                 error(f"step '{sid or index}' quantity '{qid}' must specify a unit")
             check_unit_forms(f"step '{sid or index}' quantity '{qid}'", quantity.get("unit_forms"))
         instructions = step.get("instructions", "") or ""
-        for token_id in re.findall(r"\\{\\{(?:amount|count):([a-zA-Z0-9_-]+)\\}\\}", instructions):
+        for token_id in re.findall(r"\{\{(?:amount|count):([a-zA-Z0-9_-]+)\}\}", instructions):
             if token_id not in local_quantity_ids and token_id not in ingredient_by_id:
                 error(f"step '{sid or index}' instruction references unknown quantity '{token_id}'")
 
