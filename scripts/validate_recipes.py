@@ -7,6 +7,7 @@ Usage:
 """
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -33,6 +34,15 @@ def validate_recipe(path: Path) -> list[str]:
 
     def error(message: str) -> None:
         errors.append(f"{path}: {message}")
+
+    def check_unit_forms(label: str, forms: Any) -> None:
+        if forms is None:
+            return
+        if not isinstance(forms, dict) or any(
+            not isinstance(forms.get(key), str) or not forms.get(key, "").strip()
+            for key in ("one", "few", "many")
+        ):
+            error(f"{label} unit_forms must define non-empty one, few, and many strings")
 
     for field in ("id", "title", "category", "yield", "ingredients", "steps"):
         if field not in data:
@@ -126,6 +136,7 @@ def validate_recipe(path: Path) -> list[str]:
         if has_exact or has_min or has_max:
             if not isinstance(ingredient.get("unit"), str) or not ingredient.get("unit", "").strip():
                 error(f"ingredient '{iid}' has a quantity but no unit")
+        check_unit_forms(f"ingredient '{iid}'", ingredient.get("unit_forms"))
 
         group = ingredient.get("group")
         if group is not None and group_ids and group not in group_ids:
@@ -208,6 +219,41 @@ def validate_recipe(path: Path) -> list[str]:
                 if ref["part"] not in part_ids:
                     error(f"step '{sid or index}' references unknown part '{ref['part']}' of ingredient '{iid}'")
 
+        quantities = step.get("quantities", [])
+        local_quantity_ids: set[str] = set()
+        if quantities is not None and not isinstance(quantities, list):
+            error(f"step '{sid or index}' quantities must be a list")
+            quantities = []
+        for qindex, quantity in enumerate(quantities or []):
+            if not isinstance(quantity, dict) or not isinstance(quantity.get("id"), str) or not quantity.get("id", "").strip():
+                error(f"step '{sid or index}' quantity {qindex} must have a non-empty ID")
+                continue
+            qid = quantity["id"]
+            if qid in local_quantity_ids:
+                error(f"step '{sid or index}' has duplicate quantity ID '{qid}'")
+            local_quantity_ids.add(qid)
+            exact = "quantity" in quantity
+            has_min = "quantity_min" in quantity
+            has_max = "quantity_max" in quantity
+            if exact and (has_min or has_max):
+                error(f"step '{sid or index}' quantity '{qid}' cannot combine quantity with a range")
+            if has_min != has_max:
+                error(f"step '{sid or index}' quantity '{qid}' must provide both range endpoints")
+            for key in ("quantity", "quantity_min", "quantity_max"):
+                if key in quantity and (not is_number(quantity[key]) or quantity[key] < 0):
+                    error(f"step '{sid or index}' quantity '{qid}' field '{key}' must be non-negative")
+            if has_min and has_max and is_number(quantity["quantity_min"]) and is_number(quantity["quantity_max"]) and quantity["quantity_min"] > quantity["quantity_max"]:
+                error(f"step '{sid or index}' quantity '{qid}' has quantity_min greater than quantity_max")
+            if not (exact or (has_min and has_max)):
+                error(f"step '{sid or index}' quantity '{qid}' must specify quantity or a complete range")
+            if not isinstance(quantity.get("unit"), str) or not quantity.get("unit", "").strip():
+                error(f"step '{sid or index}' quantity '{qid}' must specify a unit")
+            check_unit_forms(f"step '{sid or index}' quantity '{qid}'", quantity.get("unit_forms"))
+        instructions = step.get("instructions", "") or ""
+        for token_id in re.findall(r"\\{\\{(?:amount|count):([a-zA-Z0-9_-]+)\\}\\}", instructions):
+            if token_id not in local_quantity_ids and token_id not in ingredient_by_id:
+                error(f"step '{sid or index}' instruction references unknown quantity '{token_id}'")
+
     yield_data = data.get("yield")
     if not isinstance(yield_data, dict):
         error("'yield' must be a mapping")
@@ -226,6 +272,7 @@ def validate_recipe(path: Path) -> list[str]:
                 error("'yield.quantity_min' cannot exceed 'yield.quantity_max'")
         if not isinstance(yield_data.get("unit"), str) or not yield_data.get("unit", "").strip():
             error("'yield' must specify a unit")
+        check_unit_forms("'yield'", yield_data.get("unit_forms"))
 
     time_data = data.get("time", {})
     if time_data is not None:
