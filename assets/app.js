@@ -88,27 +88,17 @@
     return String(Math.round(Number(value) * 10) / 10);
   };
   const unitText = unit => unit || "";
-  function formatAmount(value, unit) {
-    if (value === undefined || value === null) return "";
-    if (typeof value === "object" && "min" in value && "max" in value) {
-      return `${numberText(value.min)}–${numberText(value.max)} ${unitText(unit)}`.trim();
-    }
-    return `${numberText(value)} ${unitText(unit)}`.trim();
-  }
-  function scaleQuantity(item, factor) {
-    if ("quantity" in item) return Math.round(item.quantity * factor * 10) / 10;
-    if ("quantity_min" in item && "quantity_max" in item) {
-      return { min: Math.round(item.quantity_min * factor * 10) / 10, max: Math.round(item.quantity_max * factor * 10) / 10 };
-    }
-    return null;
-  }
-  function pluralRu(n, one, few, many) {
-    const lastTwo = n % 100;
-    if (lastTwo >= 11 && lastTwo <= 14) return many;
-    const last = n % 10;
-    if (last === 1) return one;
-    if (last >= 2 && last <= 4) return few;
-    return many;
+  function pluralIndex(n) {
+    const value = Number(n);
+    if (!Number.isFinite(value)) return 2;
+    if (!Number.isInteger(value)) return 1;
+    const absolute = Math.abs(value);
+    const lastTwo = absolute % 100;
+    if (lastTwo >= 11 && lastTwo <= 14) return 2;
+    const last = absolute % 10;
+    if (last === 1) return 0;
+    if (last >= 2 && last <= 4) return 1;
+    return 2;
   }
   function formatMinutes(minutes) {
     if (!Number.isFinite(minutes)) return "";
@@ -131,10 +121,10 @@
   }
   function yieldLabel(recipe) {
     const y = recipe.yield || {};
-    const amount = y.quantity != null ? numberText(y.quantity)
-      : y.quantity_min != null && y.quantity_max != null ? `${numberText(y.quantity_min)}–${numberText(y.quantity_max)}`
-      : "";
-    return [amount, y.unit].filter(Boolean).join(" ");
+    const amount = y.quantity != null ? y.quantity
+      : y.quantity_min != null && y.quantity_max != null ? { min: y.quantity_min, max: y.quantity_max }
+      : null;
+    return formatAmount(amount, y.unit, y.unit_forms);
   }
   function contentText(item) {
     if (typeof item === "string" || typeof item === "number") return String(item);
@@ -144,21 +134,39 @@
     }
     return Object.values(item).filter(value => typeof value === "string" || typeof value === "number").join(" — ");
   }
-  function interpolateRecipeText(text, recipe, factor = 1) {
+  function interpolateRecipeText(text, recipe, step, factor = 1) {
     if (typeof text !== "string") return "";
-    const quantity = recipe.yield?.quantity;
-    return text.replace(/\{\{yield\.quantity\}\}/g, () => {
-      if (!Number.isFinite(Number(quantity))) return "";
-      return numberText(Number(quantity) * factor);
-    });
+    const findQuantity = id => {
+      const local = (step.quantities || []).find(item => item.id === id);
+      if (local) return { amount: scaleQuantity(local, factor), unit: local.unit, unitForms: local.unit_forms };
+      const ingredient = ingredientById(recipe, id);
+      return ingredient ? { amount: scaleQuantity(ingredient, factor), unit: ingredient.unit, unitForms: ingredient.unit_forms } : null;
+    };
+    return text
+      .replace(/\\{\\{amount:([a-zA-Z0-9_-]+)\\}\\}/g, (match, id) => {
+        const item = findQuantity(id);
+        return item ? formatAmount(item.amount, item.unit, item.unitForms) : match;
+      })
+      .replace(/\\{\\{count:([a-zA-Z0-9_-]+)\\}\\}/g, (match, id) => {
+        const item = findQuantity(id);
+        return item ? formatAmount(item.amount, item.unit, item.unitForms) : match;
+      })
+      .replace(/\\{\\{yield\\}\\}/g, () => {
+        const y = recipe.yield || {};
+        const amount = y.quantity != null ? Math.round(y.quantity * factor * 10) / 10
+          : y.quantity_min != null && y.quantity_max != null
+            ? { min: Math.round(y.quantity_min * factor * 10) / 10, max: Math.round(y.quantity_max * factor * 10) / 10 }
+            : null;
+        return formatAmount(amount, y.unit, y.unit_forms);
+      });
   }
   function yieldHint(recipe, factor = 1) {
     const y = recipe.yield || {};
-    const amount = y.quantity != null ? numberText(y.quantity * factor)
+    const amount = y.quantity != null ? Math.round(y.quantity * factor * 10) / 10
       : y.quantity_min != null && y.quantity_max != null
-        ? `${numberText(y.quantity_min * factor)}–${numberText(y.quantity_max * factor)}`
-        : "";
-    const label = [amount, y.unit].filter(Boolean).join(" ");
+        ? { min: Math.round(y.quantity_min * factor * 10) / 10, max: Math.round(y.quantity_max * factor * 10) / 10 }
+        : null;
+    const label = formatAmount(amount, y.unit, y.unit_forms);
     return label ? `Примерно ${label}` : "";
   }
   const multiplierText = value => Number(value).toFixed(2);
@@ -282,7 +290,7 @@
     const part = ref.part && (ingredient.parts || []).find(p => p.id === ref.part);
     const amount = part ? (part.quantity == null ? null : Math.round(part.quantity * factor * 10) / 10) : scaleQuantity(ingredient, factor);
     const name = part?.name ? `${ingredient.name} — ${part.name.toLocaleLowerCase("ru")}` : ingredient.name;
-    return `${name}${amount == null ? "" : " " + formatAmount(amount, ingredient.unit)}`;
+    return `${name}${amount == null ? "" : " " + formatAmount(amount, ingredient.unit, ingredient.unit_forms)}`;
   }
   function ingredientRows(recipe, factor, targetGroupId = null, onlyTarget = false) {
     const groups = (recipe.ingredient_groups || []).filter(group => !targetGroupId || group.id === targetGroupId);
@@ -333,7 +341,7 @@
     const checked = state.checkedIngredients.has(key);
     return `<li class="ingredient-row ${checked ? "checked" : ""}" role="checkbox" aria-checked="${checked}" tabindex="0" data-ingredient-key="${escapeHtml(key)}">
       <span class="check-dot" aria-hidden="true">${checked ? "✓" : ""}</span><span class="ingredient-copy"><span class="ingredient-name">${escapeHtml(label)}${item.optional ? " (по желанию)" : ""}</span>${note ? `<span class="ingredient-note">${escapeHtml(note)}</span>` : ""}</span>
-      <span class="ingredient-amount">${amount == null ? "" : escapeHtml(formatAmount(amount, item.unit))}</span>
+      <span class="ingredient-amount">${amount == null ? "" : escapeHtml(formatAmount(amount, item.unit, item.unit_forms))}</span>
     </li>`;
   }
   function renderSteps(recipe, factor) {
@@ -342,7 +350,7 @@
       return `<li class="step" data-step-id="${escapeHtml(step.id)}">
         <span class="step-number">${index + 1}</span><div><div class="step-title">${escapeHtml(step.title || `Шаг ${index + 1}`)}</div>
         ${chips.length ? `<div class="step-ingredients">${chips.map(chip => `<span class="step-ingredient-chip">${escapeHtml(chip)}</span>`).join("")}</div>` : ""}
-        <p class="step-instructions">${escapeHtml(interpolateRecipeText(step.instructions || "", recipe, factor))}</p></div>
+        <p class="step-instructions">${escapeHtml(interpolateRecipeText(step.instructions || "", recipe, step, factor))}</p></div>
       </li>`;
     }).join("");
   }
