@@ -100,6 +100,9 @@
     if (last >= 2 && last <= 4) return 1;
     return 2;
   }
+  function pluralRu(n, one, few, many) {
+    return [one, few, many][pluralIndex(n)];
+  }
   function formatMinutes(minutes) {
     if (!Number.isFinite(minutes)) return "";
     const n = Math.round(minutes);
