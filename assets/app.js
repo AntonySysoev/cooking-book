@@ -88,6 +88,13 @@
     return String(Math.round(Number(value) * 10) / 10);
   };
   const unitText = unit => unit || "";
+  function scaleQuantity(item, factor) {
+    if ("quantity" in item) return Math.round(item.quantity * factor * 10) / 10;
+    if ("quantity_min" in item && "quantity_max" in item) {
+      return { min: Math.round(item.quantity_min * factor * 10) / 10, max: Math.round(item.quantity_max * factor * 10) / 10 };
+    }
+    return null;
+  }
   function pluralIndex(n) {
     const value = Number(n);
     if (!Number.isFinite(value)) return 2;
@@ -102,6 +109,16 @@
   }
   function pluralRu(n, one, few, many) {
     return [one, few, many][pluralIndex(n)];
+  }
+  function formatAmount(value, unit, unitForms) {
+    if (value === undefined || value === null) return "";
+    const isRange = typeof value === "object" && "min" in value && "max" in value;
+    const amount = isRange ? `${numberText(value.min)}–${numberText(value.max)}` : numberText(value);
+    const formValue = isRange ? value.max : value;
+    const label = unitForms
+      ? pluralRu(formValue, unitForms.one, unitForms.few, unitForms.many)
+      : unitText(unit);
+    return [amount, label].filter(Boolean).join(" ");
   }
   function formatMinutes(minutes) {
     if (!Number.isFinite(minutes)) return "";
