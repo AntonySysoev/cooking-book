@@ -143,15 +143,15 @@
       return ingredient ? { amount: scaleQuantity(ingredient, factor), unit: ingredient.unit, unitForms: ingredient.unit_forms } : null;
     };
     return text
-      .replace(/\\{\\{amount:([a-zA-Z0-9_-]+)\\}\\}/g, (match, id) => {
+      .replace(/\{\{amount:([a-zA-Z0-9_-]+)\}\}/g, (match, id) => {
         const item = findQuantity(id);
         return item ? formatAmount(item.amount, item.unit, item.unitForms) : match;
       })
-      .replace(/\\{\\{count:([a-zA-Z0-9_-]+)\\}\\}/g, (match, id) => {
+      .replace(/\{\{count:([a-zA-Z0-9_-]+)\}\}/g, (match, id) => {
         const item = findQuantity(id);
         return item ? formatAmount(item.amount, item.unit, item.unitForms) : match;
       })
-      .replace(/\\{\\{yield\\}\\}/g, () => {
+      .replace(/\\{\\{yield\}\}/g, () => {
         const y = recipe.yield || {};
         const amount = y.quantity != null ? Math.round(y.quantity * factor * 10) / 10
           : y.quantity_min != null && y.quantity_max != null
