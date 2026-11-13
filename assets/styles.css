@@ -421,3 +421,31 @@ body.cooking-mode .recipe-head { display:none !important; }
 .category-breadcrumb-link:hover,.category-breadcrumb-link:focus-visible { border-bottom-style:solid; }
 .breadcrumb-separator { color:var(--muted); padding:0 2px; }
 .breadcrumb-subcategory { color:var(--muted); }
+
+
+/* Закреплённая верхняя панель на странице открытого рецепта. */
+body.recipe-open .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--paper);
+}
+
+/* Поле перехода к произвольному шагу в нижней навигации. */
+.cooking-step-counter { display:flex; align-items:center; justify-content:center; gap:5px; }
+.cooking-step-input {
+  width:3.2em;
+  min-width:3.2em;
+  padding:5px 3px;
+  border:1px solid var(--category-line, var(--line));
+  border-radius:8px;
+  color:var(--ink);
+  background:var(--card);
+  text-align:center;
+  font:inherit;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.cooking-step-input:focus { outline:2px solid var(--accent); outline-offset:2px; }
+.cooking-step-label { white-space:nowrap; }
+html.high-contrast .cooking-step-input { color:#000; background:#fff; border-color:#000; }
