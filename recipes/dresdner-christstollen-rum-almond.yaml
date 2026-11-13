@@ -78,7 +78,7 @@ ingredients:
         group: dough
   - id: milk
     name: Молоко 3–3,5%
-    quantity: 170
+    quantity: 200
     unit: г
     parts:
       - id: preferment
@@ -87,7 +87,7 @@ ingredients:
         group: dough
       - id: main
         name: В основное тесто
-        quantity: 70
+        quantity: 100
         group: dough
   - id: yeast
     name: Свежие прессованные дрожжи
@@ -104,8 +104,9 @@ ingredients:
     note: Все 6 г добавляются в опару вместо свежих прессованных дрожжей; не используй оба вида одновременно.
   - id: sugar
     name: Сахар
-    quantity: 80
+    quantity: 100
     unit: г
+    note: Можно использовать смесь примерно поровну из тёмного мусковадо, коричневого тростникового и белого сахара.
     parts:
       - id: preferment
         name: В опару
@@ -113,7 +114,7 @@ ingredients:
         group: dough
       - id: main
         name: В основное тесто
-        quantity: 70
+        quantity: 90
         group: dough
   - id: butter
     name: Сливочное масло 82%
@@ -234,10 +235,10 @@ steps:
         quantity: 400
         unit: г
       - id: main-milk
-        quantity: 70
+        quantity: 100
         unit: г
       - id: main-sugar
-        quantity: 70
+        quantity: 90
         unit: г
       - id: main-butter
         quantity: 250
