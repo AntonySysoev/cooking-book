@@ -557,44 +557,6 @@
         event.target.value = String((current?.stepIndex ?? state.currentStepIndex) + 1);
       }
     });
-    const bindStepNumberInput = () => {
-      const input = $("#cooking-step-input");
-      if (!input || input.dataset.bound === "true") return;
-      input.dataset.bound = "true";
-      const goToEnteredStep = () => {
-        const value = Number(input.value);
-        const stepCount = (recipe.steps || []).length;
-        if (!Number.isInteger(value) || value < 1 || value > stepCount) {
-          input.value = String((cookingStages(recipe)[state.cookingStageIndex]?.stepIndex ?? state.currentStepIndex) + 1);
-          return;
-        }
-        const targetIndex = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === value - 1);
-        if (targetIndex < 0) {
-          input.value = String(state.currentStepIndex + 1);
-          return;
-        }
-        state.cookingStageIndex = targetIndex;
-        state.currentStepIndex = value - 1;
-        const progress = state.recipeProgress[recipe.id] || {};
-        progress.hasStepPosition = true;
-        state.recipeProgress[recipe.id] = progress;
-        saveCurrentRecipeState();
-        updateCookingNavigation(recipe);
-        scrollToCurrentStage(false, recipe);
-      };
-      input.addEventListener("change", goToEnteredStep);
-      input.addEventListener("keydown", event => {
-        if (event.key === "Enter") { event.preventDefault(); input.blur(); }
-      });
-      input.addEventListener("blur", () => {
-        const value = Number(input.value);
-        if (!Number.isInteger(value) || value < 1 || value > (recipe.steps || []).length) {
-          const current = cookingStages(recipe)[state.cookingStageIndex];
-          input.value = String((current?.stepIndex ?? state.currentStepIndex) + 1);
-        }
-      });
-    };
-    bindStepNumberInput();
     $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
     $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
     $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); updateCookingNavigation(recipe); });
