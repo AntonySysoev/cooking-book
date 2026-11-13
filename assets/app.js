@@ -525,6 +525,76 @@
     };
     $("#cooking-prev").addEventListener("click", () => moveCookingStage(-1, recipe));
     $("#cooking-next").addEventListener("click", () => moveCookingStage(1, recipe));
+    $("#cooking-navigation").addEventListener("change", event => {
+      if (event.target.id !== "cooking-step-input") return;
+      const input = event.target;
+      const value = Number(input.value);
+      const stepCount = (recipe.steps || []).length;
+      if (!Number.isInteger(value) || value < 1 || value > stepCount) {
+        const current = cookingStages(recipe)[state.cookingStageIndex];
+        input.value = String((current?.stepIndex ?? state.currentStepIndex) + 1);
+        return;
+      }
+      const targetIndex = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === value - 1);
+      if (targetIndex < 0) { input.value = String(state.currentStepIndex + 1); return; }
+      state.cookingStageIndex = targetIndex;
+      state.currentStepIndex = value - 1;
+      const progress = state.recipeProgress[recipe.id] || {};
+      progress.hasStepPosition = true;
+      state.recipeProgress[recipe.id] = progress;
+      saveCurrentRecipeState();
+      updateCookingNavigation(recipe);
+      scrollToCurrentStage(false, recipe);
+    });
+    $("#cooking-navigation").addEventListener("keydown", event => {
+      if (event.target.id === "cooking-step-input" && event.key === "Enter") { event.preventDefault(); event.target.blur(); }
+    });
+    $("#cooking-navigation").addEventListener("focusout", event => {
+      if (event.target.id !== "cooking-step-input") return;
+      const value = Number(event.target.value);
+      if (!Number.isInteger(value) || value < 1 || value > (recipe.steps || []).length) {
+        const current = cookingStages(recipe)[state.cookingStageIndex];
+        event.target.value = String((current?.stepIndex ?? state.currentStepIndex) + 1);
+      }
+    });
+    const bindStepNumberInput = () => {
+      const input = $("#cooking-step-input");
+      if (!input || input.dataset.bound === "true") return;
+      input.dataset.bound = "true";
+      const goToEnteredStep = () => {
+        const value = Number(input.value);
+        const stepCount = (recipe.steps || []).length;
+        if (!Number.isInteger(value) || value < 1 || value > stepCount) {
+          input.value = String((cookingStages(recipe)[state.cookingStageIndex]?.stepIndex ?? state.currentStepIndex) + 1);
+          return;
+        }
+        const targetIndex = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === value - 1);
+        if (targetIndex < 0) {
+          input.value = String(state.currentStepIndex + 1);
+          return;
+        }
+        state.cookingStageIndex = targetIndex;
+        state.currentStepIndex = value - 1;
+        const progress = state.recipeProgress[recipe.id] || {};
+        progress.hasStepPosition = true;
+        state.recipeProgress[recipe.id] = progress;
+        saveCurrentRecipeState();
+        updateCookingNavigation(recipe);
+        scrollToCurrentStage(false, recipe);
+      };
+      input.addEventListener("change", goToEnteredStep);
+      input.addEventListener("keydown", event => {
+        if (event.key === "Enter") { event.preventDefault(); input.blur(); }
+      });
+      input.addEventListener("blur", () => {
+        const value = Number(input.value);
+        if (!Number.isInteger(value) || value < 1 || value > (recipe.steps || []).length) {
+          const current = cookingStages(recipe)[state.cookingStageIndex];
+          input.value = String((current?.stepIndex ?? state.currentStepIndex) + 1);
+        }
+      });
+    };
+    bindStepNumberInput();
     $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
     $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
     $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); updateCookingNavigation(recipe); });
@@ -595,6 +665,7 @@
     return `<h2 class="cooking-ingredient-title">${escapeHtml(group.title)}</h2><div class="cooking-ingredient-list">${html || "<p>Нет отдельных ингредиентов для этого этапа.</p>"}</div>`;
   }
   function applyCookingMode() {
+    document.body.classList.toggle("recipe-open", Boolean(state.currentRecipe));
     document.body.classList.toggle("cooking-mode", state.cookingMode);
     const brand = document.querySelector(".brand");
     const brandTitle = brand?.querySelector("strong");
@@ -640,7 +711,7 @@
     const previous = $("#cooking-prev");
     const next = $("#cooking-next");
     const current = stages[state.cookingStageIndex];
-    if (counter) { const ingredientStages = stages.filter(stage => stage.type === "ingredients"); const ingredientIndex = current?.type === "ingredients" ? ingredientStages.findIndex(stage => stage.id === current.id) : -1; counter.textContent = !total ? "Нет этапов" : current?.type === "ingredients" ? (ingredientStages.length > 1 ? `Ингредиенты ${ingredientIndex + 1} из ${ingredientStages.length}` : "Ингредиенты") : `Шаг ${(current?.stepIndex ?? 0) + 1} из ${(recipe.steps || []).length}`; }
+    if (counter) { const ingredientStages = stages.filter(stage => stage.type === "ingredients"); const ingredientIndex = current?.type === "ingredients" ? ingredientStages.findIndex(stage => stage.id === current.id) : -1; counter.innerHTML = !total ? "Нет этапов" : current?.type === "ingredients" ? (ingredientStages.length > 1 ? `Ингредиенты ${ingredientIndex + 1} из ${ingredientStages.length}` : "Ингредиенты") : `<span class="cooking-step-label">Шаг</span> <input id="cooking-step-input" class="cooking-step-input" type="number" inputmode="numeric" min="1" max="${(recipe.steps || []).length}" step="1" value="${(current?.stepIndex ?? 0) + 1}" aria-label="Перейти к шагу" title="Введи номер шага"> <span>из ${(recipe.steps || []).length}</span>`; }
     if (previous) previous.disabled = state.cookingStageIndex <= 0;
     if (next) next.disabled = state.cookingStageIndex >= total - 1;
     applyCookingMode();
