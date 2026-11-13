@@ -58,11 +58,11 @@ ingredients:
     group: fruit
   - id: marzipan
     name: Марципан
-    quantity: 150
+    quantity: 250
     unit: г
     group: filling
     optional: true
-    note: По 75 г на каждый штоллен; можно использовать домашний марципан.
+    note: По 125 г на каждый штоллен; можно использовать домашний марципан.
   - id: flour
     name: Пшеничная мука
     quantity: 500
@@ -115,7 +115,15 @@ ingredients:
     name: Сахар
     quantity: 80
     unit: г
-    group: dough
+    parts:
+      - id: preferment
+        name: В опару
+        quantity: 10
+        group: dough
+      - id: main
+        name: В основное тесто
+        quantity: 70
+        group: dough
   - id: butter
     name: Сливочное масло 82%
     quantity: 330
@@ -195,8 +203,20 @@ steps:
       - ingredient: dry-yeast
         part: preferment
       - ingredient: sugar
+        part: preferment
+    quantities:
+      - id: preferment-milk
+        quantity: 100
+        unit: г
+      - id: preferment-flour
+        quantity: 100
+        unit: г
+      - id: preferment-sugar
+        quantity: 10
+        unit: г
     instructions: >-
-      Используй 100 г молока, 100 г муки и 10 г сахара из общего количества.
+      Используй {{amount:preferment-milk}} молока, {{amount:preferment-flour}} муки
+      и {{amount:preferment-sugar}} сахара из общего количества.
       Если выбрал свежие дрожжи, добавь их все; если сухие — добавь только часть,
       предназначенную для опары. Молоко должно быть 25–28 °C. Перемешай до однородности,
       накрой и оставь при 24–26 °C на 25–40 минут, до пористой
@@ -211,6 +231,7 @@ steps:
       - ingredient: dry-yeast
         part: main
       - ingredient: sugar
+        part: main
       - ingredient: butter
       - ingredient: salt
       - ingredient: lemon-zest
@@ -218,11 +239,22 @@ steps:
       - ingredient: cardamom
       - ingredient: nutmeg
       - ingredient: cinnamon
+    quantities:
+      - id: main-flour
+        quantity: 400
+        unit: г
+      - id: main-milk
+        quantity: 70
+        unit: г
+      - id: main-sugar
+        quantity: 70
+        unit: г
     instructions: >-
-      Установи в Ankarsrum ролик и скребок. Добавь 400 г муки, 70 г молока и опару.
+      Установи в Ankarsrum ролик и скребок. Добавь {{amount:main-flour}} муки,
+      {{amount:main-milk}} молока и опару.
       Меси на низкой скорости до связного теста, затем дай ему отдохнуть 10 минут.
-      Масло должно быть пластичным, около 18–20 °C. Растри цедру с оставшимися
-      70 г сахара. Введи масло порциями по 25–40 г, каждый раз дожидаясь, пока
+      Масло должно быть пластичным, около 18–20 °C. Растри цедру с
+      {{amount:main-sugar}} сахара. Введи масло порциями по 25–40 г, каждый раз дожидаясь, пока
       оно в основном соединится с тестом. Добавь сахар с цедрой, соль, ваниль
       и специи; меси ещё 5–8 минут до однородного пластичного теста. Не стремись
       к тонкой плёнке, как для панеттоне.
@@ -247,9 +279,13 @@ steps:
     title: Сформовать два штоллена
     ingredients:
       - ingredient: marzipan
+    quantities:
+      - id: marzipan-half
+        quantity: 125
+        unit: г
     instructions: >-
-      Раздели тесто пополам. Если используешь марципан, раздели его на две части
-      примерно по 75 г и сформируй из каждой цилиндр длиной 20–25 см. Каждую
+      Раздели тесто на две равные части. Если используешь марципан, раздели его
+      на порции по {{amount:marzipan-half}} и сформируй из каждой цилиндр длиной 20–25 см. Каждую
       порцию теста расплющи в овал толщиной 2–3 см, положи цилиндр марципана
       немного в стороне от центра и заверни тесто вокруг него, полностью закрыв
       начинку; слегка защипни шов. Затем у обеих заготовок сделай продольное
