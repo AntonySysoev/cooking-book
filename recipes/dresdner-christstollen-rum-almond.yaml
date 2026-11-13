@@ -43,7 +43,7 @@ ingredients:
     group: fruit
   - id: orangeat
     name: Апельсиновые цукаты
-    quantity: 100
+    quantity: 75
     unit: г
     group: fruit
   - id: citronat
@@ -53,7 +53,7 @@ ingredients:
     group: fruit
   - id: almonds
     name: Миндаль
-    quantity: 75
+    quantity: 100
     unit: г
     group: fruit
   - id: marzipan
