@@ -145,6 +145,10 @@ steps:
       - id: dough-balls
         quantity: 6
         unit: частей
+        unit_forms:
+          one: часть
+          few: части
+          many: частей
     instructions: >-
       Слегка смажь хлебную форму. Раздели холодное тесто на {{count:dough-balls}}
       равных частей. Подкатай каждую часть в гладкий шар и уложи в форму
