@@ -78,7 +78,7 @@ ingredients:
         group: dough
   - id: milk
     name: Молоко 3–3,5%
-    quantity: 170
+    quantity: 200
     unit: г
     parts:
       - id: preferment
@@ -87,7 +87,7 @@ ingredients:
         group: dough
       - id: main
         name: В основное тесто
-        quantity: 10
+        quantity: 40
         group: dough
   - id: egg
     name: Яйцо без скорлупы
@@ -240,7 +240,7 @@ steps:
         quantity: 300
         unit: г
       - id: main-milk
-        quantity: 10
+        quantity: 40
         unit: г
       - id: main-egg
         quantity: 50
