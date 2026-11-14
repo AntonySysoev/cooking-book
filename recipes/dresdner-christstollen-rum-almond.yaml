@@ -85,7 +85,7 @@ ingredients:
         group: dough
   - id: milk
     name: Молоко 3–3,5%
-    quantity: 260
+    quantity: 300
     unit: г
     parts:
       - id: preferment
@@ -94,9 +94,9 @@ ingredients:
         group: dough
       - id: main
         name: В основное тесто
-        quantity: 100
+        quantity: 140
         group: dough
-    note: Часть молока идёт в опару, остальное — в основное тесто. Увеличенное количество компенсирует испарение воды при подрумянивании масла и немного повышает гидратацию.
+    note: 40 г молока в основном замесе компенсируют примерно 40 г воды, испаряющейся при подрумянивании 250 г сливочного масла; так сохраняется исходный баланс влаги.
   - id: egg
     name: Яйцо без скорлупы
     quantity: 50
@@ -270,7 +270,7 @@ steps:
         quantity: 300
         unit: г
       - id: main-milk
-        quantity: 100
+        quantity: 140
         unit: г
       - id: main-egg
         quantity: 50
