@@ -275,7 +275,7 @@ steps:
         quantity: 300
         unit: г
       - id: main-milk
-        quantity: 110
+        quantity: 140
         unit: г
       - id: main-egg
         quantity: 50
