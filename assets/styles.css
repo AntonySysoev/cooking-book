@@ -470,6 +470,8 @@ body.shopping-list-mode .mode-scale-box {
   border:1px solid var(--line); border-radius:14px; background:var(--card);
 }
 body.cooking-mode .mode-scale-box { margin-bottom:8px; }
+/* В списке продуктов блок множителя совпадает по ширине с карточкой списка. */
+body.shopping-list-mode .mode-scale-box { max-width:none; width:100%; }
 body.shopping-list-mode .recipe-layout { display:none !important; }
 body.shopping-list-mode .shopping-list-screen { display:block; }
 body.shopping-list-mode .shopping-list-screen[hidden] { display:none !important; }
