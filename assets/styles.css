@@ -518,3 +518,40 @@ body.shopping-list-mode .site-footer { display:none !important; }
 .cooking-mode-menu button[aria-checked="true"] small { color:var(--accent-dark); }
 html.high-contrast .cooking-mode-menu button[aria-checked="true"] { color:#fff; background:#000; }
 html.high-contrast .cooking-mode-menu button[aria-checked="true"] small { color:#fff; }
+
+/* Компактный переключатель этапов: ширина по содержимому, с ограничением для длинных названий. */
+body.cooking-mode .cooking-stage-picker {
+  width:auto;
+  max-width:min(360px, 100%);
+  justify-self:center;
+}
+body.cooking-mode .cooking-stage-picker-button {
+  width:100%;
+  max-width:100%;
+  min-height:56px;
+}
+body.cooking-mode .cooking-stage-picker-label {
+  flex:0 0 auto;
+}
+body.cooking-mode .cooking-stage-picker-meta {
+  flex:0 1 auto;
+  min-width:0;
+  max-width:220px;
+  white-space:normal;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  line-height:1.35;
+}
+body.cooking-mode .cooking-stage-picker-caret {
+  margin-left:2px;
+}
+@media (max-width:700px) {
+  body.cooking-mode .cooking-stage-picker {
+    max-width:100%;
+  }
+  body.cooking-mode .cooking-stage-picker-meta {
+    max-width:calc(100vw - 190px);
+  }
+}
