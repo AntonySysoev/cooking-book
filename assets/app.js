@@ -799,12 +799,12 @@
     const recipe = state.currentRecipe;
     if (!recipe) return;
     closeCookingModeMenu();
-    if (view === "cooking") {
+    if (view === "cooking" && !state.cookingMode) {
       state.shoppingListMode = false;
       state.cookingMode = true;
       try { sessionStorage.setItem(COOKING_SESSION_KEY, recipe.id); } catch (_) {}
       if (!state.wakeEnabled) $("#wake-toggle")?.click();
-    } else if (view === "shopping") {
+    } else if (view === "shopping" && !state.shoppingListMode) {
       state.cookingMode = false;
       state.shoppingListMode = true;
       try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
@@ -929,8 +929,6 @@
     scrollToCurrentStage(false, recipe);
   }
   function moveCookingStage(direction, recipe) {
-    const stages = cookingStages(recipe);
-    state.cookingStageIndex = Math.max(0, Math.min(stages.length - 1, state.cookingStageIndex + direction));
     jumpToCookingStage(state.cookingStageIndex + direction, recipe);
   }
   function bindIngredientRows(root = app) {
