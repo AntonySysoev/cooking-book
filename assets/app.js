@@ -9,7 +9,7 @@
   const topButton = document.getElementById("top-button");
   const STORAGE_KEY = "cooking-book-user-state-v1";
   const COOKING_SESSION_KEY = "cooking-book-active-cooking-recipe";
-  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false, currentStepIndex: 0, cookingStageIndex: 0, cookingMode: false };
+  const state = { recipes: [], categories: [], activeCategory: "all", query: "", checkedIngredients: new Set(), checkedShoppingItems: new Set(), wakeLock: null, wakeEnabled: false, currentRecipe: null, multiplier: 1, recentlyViewed: {}, recipeProgress: {}, fontScale: 100, readingMode: false, currentStepIndex: 0, cookingStageIndex: 0, cookingMode: false, shoppingListMode: false };
   function loadUserState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -38,7 +38,7 @@
   }
   function saveCurrentRecipeState() {
     if (!state.currentRecipe) return;
-    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, scaleSignature: recipeScaleSignature(state.currentRecipe), checkedIngredients: [...state.checkedIngredients], currentStepIndex: state.currentStepIndex, cookingStageIndex: state.cookingStageIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
+    state.recipeProgress[state.currentRecipe.id] = { ...state.recipeProgress[state.currentRecipe.id], multiplier: state.multiplier, scaleSignature: recipeScaleSignature(state.currentRecipe), checkedIngredients: [...state.checkedIngredients], checkedShoppingItems: [...state.checkedShoppingItems], currentStepIndex: state.currentStepIndex, cookingStageIndex: state.cookingStageIndex, cookingMode: state.cookingMode, hasStepPosition: state.recipeProgress[state.currentRecipe.id]?.hasStepPosition || false };
     saveUserState();
   }
   loadUserState();
@@ -63,25 +63,27 @@
     }
   }
   applyFontScale();
-  const cookingModeHeaderButton = document.getElementById("cooking-mode-toggle");
-  if (cookingModeHeaderButton) cookingModeHeaderButton.addEventListener("click", () => {
-    if (!state.currentRecipe) return;
-    state.cookingMode = !state.cookingMode;
-    try { if (state.cookingMode) sessionStorage.setItem(COOKING_SESSION_KEY, state.currentRecipe.id); else sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
-    if (state.cookingMode) {
-      state.cookingStageIndex = 0;
-      const wakeToggle = document.getElementById("wake-toggle");
-      if (wakeToggle && !state.wakeEnabled) wakeToggle.click();
-    } else if (state.wakeEnabled) {
-      const wakeToggle = document.getElementById("wake-toggle");
-      if (wakeToggle) wakeToggle.click();
-    }
-    saveCurrentRecipeState();
-    applyCookingMode();
-    updateCookingNavigation(state.currentRecipe);
-    if (state.cookingMode) scrollToCurrentStage(false, state.currentRecipe);
-  });
   const $ = (selector, root = document) => root.querySelector(selector);
+  const cookingModeHeaderButton = document.getElementById("cooking-mode-toggle");
+  const cookingModeMenuWrap = document.getElementById("cooking-mode-menu-wrap");
+  const cookingModeMenu = document.getElementById("cooking-mode-menu");
+  function closeCookingModeMenu() {
+    if (!cookingModeMenu || !cookingModeHeaderButton) return;
+    cookingModeMenu.hidden = true;
+    cookingModeHeaderButton.setAttribute("aria-expanded", "false");
+  }
+  if (cookingModeHeaderButton && cookingModeMenu) {
+    cookingModeHeaderButton.addEventListener("click", event => {
+      event.stopPropagation();
+      if (!state.currentRecipe) return;
+      const opening = cookingModeMenu.hidden;
+      cookingModeMenu.hidden = !opening;
+      cookingModeHeaderButton.setAttribute("aria-expanded", String(opening));
+    });
+    cookingModeMenu.querySelectorAll("[data-recipe-view]").forEach(item => {
+      item.addEventListener("click", () => setRecipeView(item.dataset.recipeView));
+    });
+  }
   const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
   const numberText = value => {
     if (!Number.isFinite(Number(value))) return String(value ?? "");
@@ -263,8 +265,11 @@
   }
   function renderHome() {
     state.cookingMode = false;
+    state.shoppingListMode = false;
     try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
-    document.body.classList.remove("cooking-mode");
+    document.body.classList.remove("cooking-mode", "shopping-list-mode");
+    const brand = document.querySelector(".brand");
+    if (brand) { brand.removeAttribute("aria-disabled"); brand.removeAttribute("tabindex"); brand.setAttribute("aria-label", "Cooking Book — главная"); }
     document.title = "Cooking Book — кулинарная книга";
     printMenuWrap.hidden = false;
     closePrintMenu();
@@ -274,6 +279,8 @@
     $("#recipe-menu-separator").hidden = true;
     const cookingToggle = document.getElementById("cooking-mode-toggle");
     if (cookingToggle) cookingToggle.hidden = true;
+    if (cookingModeMenuWrap) cookingModeMenuWrap.hidden = true;
+    closeCookingModeMenu();
     const selectedCategory = findCategory(state.activeCategory);
     const selectedParentId = selectedCategory?.parent.id;
     const categories = state.categories.map(c => `<button class="pill ${categoryClass(c.id)} ${state.activeCategory === c.id || selectedParentId === c.id ? "active" : ""}" data-category="${escapeHtml(c.id)}" type="button"><span class="category-icon" aria-hidden="true">${categoryIcon(c.id)}</span> ${escapeHtml(c.title)}</button>`).join("");
@@ -384,8 +391,10 @@
     $("#recipe-menu-separator").hidden = false;
     const cookingToggle = document.getElementById("cooking-mode-toggle");
     if (cookingToggle) cookingToggle.hidden = false;
+    if (cookingModeMenuWrap) cookingModeMenuWrap.hidden = false;
     document.title = `${recipe.title} — Cooking Book`;
     state.currentRecipe = recipe;
+    state.shoppingListMode = false;
     state.recentlyViewed[recipe.id] = Date.now();
     saveUserState();
     const savedProgress = state.recipeProgress[recipe.id] || {};
@@ -397,6 +406,7 @@
     state.multiplier = scaleFormulaChanged || savedProgress.multiplier == null || !Number.isFinite(Number(savedProgress.multiplier))
       ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(Number(savedProgress.multiplier) * 100) / 100));
     state.checkedIngredients = new Set(Array.isArray(savedProgress.checkedIngredients) ? savedProgress.checkedIngredients : []);
+    state.checkedShoppingItems = new Set(Array.isArray(savedProgress.checkedShoppingItems) ? savedProgress.checkedShoppingItems : []);
     state.currentStepIndex = Math.max(0, Math.min(Math.max(0, (recipe.steps || []).length - 1), Number.isInteger(savedProgress.currentStepIndex) ? savedProgress.currentStepIndex : 0));
     state.cookingStageIndex = Number.isInteger(savedProgress.cookingStageIndex) ? savedProgress.cookingStageIndex : 0;
     if (!Number.isInteger(savedProgress.cookingStageIndex)) {
@@ -412,11 +422,16 @@
         ${recipe.description ? `<p class="recipe-description">${escapeHtml(recipe.description)}</p>` : ""}
         <div class="recipe-meta">${timeLabel(recipe) ? `<span class="meta-chip">◷ ${escapeHtml(timeLabel(recipe))}</span>` : ""}${yieldHint(recipe) ? `<span class="meta-chip">♧ ${escapeHtml(yieldHint(recipe))}</span>` : ""}${(recipe.tags || []).slice(0,4).map(t => `<span class="meta-chip">${escapeHtml(t)}</span>`).join("")}</div>
       </section>
+      <div id="mode-scale-box" class="scale-box mode-scale-box" hidden>
+        <label for="mode-multiplier-input">Множитель</label>
+        <div class="multiplier-control"><input id="mode-multiplier-input" class="scale-input multiplier-input" data-multiplier-input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="${multiplierText(state.multiplier)}" aria-label="Множитель количества ингредиентов от 0.10 до 5.00" title="От 0.10 до 5.00"><div class="multiplier-arrows"><button class="multiplier-arrow" data-multiplier-step="1" type="button" aria-label="Увеличить множитель на четверть">▲</button><button class="multiplier-arrow" data-multiplier-step="-1" type="button" aria-label="Уменьшить множитель на четверть">▼</button></div></div>
+        <small class="scale-hint" id="mode-multiplier-yield-hint">${escapeHtml(yieldHint(recipe, state.multiplier))}</small>
+      </div>
       <div class="recipe-layout">
         <div>
           <section class="panel">
             <h2 class="panel-title">Ингредиенты</h2>
-            <div class="scale-box"><label for="multiplier-input">Множитель</label><div class="multiplier-control"><input id="multiplier-input" class="scale-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="${multiplierText(state.multiplier)}" aria-label="Множитель количества ингредиентов от 0.10 до 5.00" title="От 0.10 до 5.00"><div class="multiplier-arrows"><button class="multiplier-arrow" id="multiplier-up" type="button" aria-label="Увеличить множитель на четверть">▲</button><button class="multiplier-arrow" id="multiplier-down" type="button" aria-label="Уменьшить множитель на четверть">▼</button></div></div><small class="scale-hint" id="multiplier-yield-hint">${escapeHtml(yieldHint(recipe, state.multiplier))}</small></div>
+            <div class="scale-box"><label for="multiplier-input">Множитель</label><div class="multiplier-control"><input id="multiplier-input" class="scale-input multiplier-input" data-multiplier-input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="${multiplierText(state.multiplier)}" aria-label="Множитель количества ингредиентов от 0.10 до 5.00" title="От 0.10 до 5.00"><div class="multiplier-arrows"><button class="multiplier-arrow" id="multiplier-up" data-multiplier-step="1" type="button" aria-label="Увеличить множитель на четверть">▲</button><button class="multiplier-arrow" id="multiplier-down" data-multiplier-step="-1" type="button" aria-label="Уменьшить множитель на четверть">▼</button></div></div><small class="scale-hint" id="multiplier-yield-hint">${escapeHtml(yieldHint(recipe, state.multiplier))}</small></div>
             <div id="ingredient-groups">${ingredientRows(recipe, state.multiplier)}</div>
             <div style="margin-top:14px"><button id="reset-checks" class="reset-button" type="button">Сбросить отметки</button></div>
           </section>
@@ -426,11 +441,18 @@
         </div>
         <section class="panel">
           <div class="panel-head-row cooking-panel-heading"><h2 class="panel-title" style="margin:0">Приготовление</h2></div>
+          <div id="cooking-stage-picker" class="cooking-stage-picker" hidden>
+            <button id="cooking-stage-picker-button" class="cooking-stage-picker-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Выбрать этап приготовления">
+              <span id="cooking-stage-picker-label" class="cooking-stage-picker-label">Ингредиенты</span><span id="cooking-stage-picker-meta" class="cooking-stage-picker-meta"></span><span class="cooking-stage-picker-caret" aria-hidden="true">▾</span>
+            </button>
+            <div id="cooking-stage-picker-menu" class="cooking-stage-picker-menu" role="menu" aria-label="Этапы рецепта" hidden></div>
+          </div>
           <div id="cooking-ingredient-screen" class="cooking-ingredient-screen" hidden></div>
           <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
           <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button" aria-label="Вперёд" title="Вперёд"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
         </section>
       </div>
+      <section id="shopping-list-screen" class="panel shopping-list-screen" hidden aria-label="Список продуктов"></section>
       <section class="reset-all-wrap" aria-label="Сброс прогресса рецепта">
         <button id="reset-recipe-progress" class="reset-button" type="button">Сбросить отметки ингредиентов</button>
         <p>Сбросит отметки ингредиентов и множитель только для этого рецепта.</p>
@@ -480,38 +502,41 @@
       }
     });
     const multiplierInput = $("#multiplier-input");
+    const multiplierInputs = [...app.querySelectorAll(".multiplier-input")];
     const parseMultiplier = value => {
       const normalized = String(value).trim().replace(",", ".");
       if (!normalized || /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(normalized) === false) return null;
       const amount = Number(normalized);
       return Number.isFinite(amount) ? amount : null;
     };
+    const syncMultiplierInputs = activeInput => multiplierInputs.forEach(input => {
+      if (input !== activeInput) input.value = multiplierText(state.multiplier);
+    });
     const updateMultiplier = () => {
-      const factor = state.multiplier;
       saveCurrentRecipeState();
-      $("#multiplier-yield-hint").textContent = yieldHint(recipe, factor);
-      $("#ingredient-groups").innerHTML = ingredientRows(recipe, factor);
+      app.querySelectorAll(".scale-hint").forEach(node => { node.textContent = yieldHint(recipe, state.multiplier); });
+      $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier);
       bindIngredientRows();
-      $(".step-list").innerHTML = renderSteps(recipe, factor);
-      
+      $(".step-list").innerHTML = renderSteps(recipe, state.multiplier);
       updateCookingNavigation(recipe);
     };
-    multiplierInput.addEventListener("input", e => {
-      const amount = parseMultiplier(e.target.value);
-      if (amount == null || amount < MIN_MULTIPLIER || amount > MAX_MULTIPLIER) return;
-      state.multiplier = Math.round(amount * 100) / 100;
-      saveCurrentRecipeState();
-      updateMultiplier();
+    multiplierInputs.forEach(input => {
+      input.addEventListener("input", event => {
+        const amount = parseMultiplier(event.target.value);
+        if (amount == null || amount < MIN_MULTIPLIER || amount > MAX_MULTIPLIER) return;
+        state.multiplier = Math.round(amount * 100) / 100;
+        syncMultiplierInputs(event.target);
+        updateMultiplier();
+      });
+      input.addEventListener("change", event => {
+        const amount = parseMultiplier(event.target.value);
+        state.multiplier = amount == null ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(amount * 100) / 100));
+        syncMultiplierInputs();
+        updateMultiplier();
+      });
     });
-    multiplierInput.addEventListener("change", e => {
-      const amount = parseMultiplier(e.target.value);
-      state.multiplier = amount == null ? 1 : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(amount * 100) / 100));
-      e.target.value = multiplierText(state.multiplier);
-      saveCurrentRecipeState();
-      updateMultiplier();
-    });
-    const stepMultiplier = direction => {
-      const parsed = parseMultiplier(multiplierInput.value);
+    const stepMultiplier = (direction, sourceInput) => {
+      const parsed = parseMultiplier(sourceInput?.value ?? multiplierInput.value);
       const current = parsed == null ? state.multiplier : Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, parsed));
       const quarterPosition = current * 4;
       const onQuarter = Math.abs(quarterPosition - Math.round(quarterPosition)) < 1e-8;
@@ -519,11 +544,16 @@
         ? current + direction * 0.25
         : (direction > 0 ? Math.ceil(quarterPosition - 1e-8) : Math.floor(quarterPosition + 1e-8)) / 4;
       state.multiplier = Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, Math.round(next * 100) / 100));
-      multiplierInput.value = multiplierText(state.multiplier);
-      saveCurrentRecipeState();
+      syncMultiplierInputs();
       updateMultiplier();
     };
-    $("#cooking-prev").addEventListener("click", () => moveCookingStage(-1, recipe));
+    app.querySelectorAll("[data-multiplier-step]").forEach(button => {
+      button.addEventListener("click", () => {
+        const source = button.closest(".scale-box")?.querySelector(".multiplier-input");
+        stepMultiplier(Number(button.dataset.multiplierStep), source);
+      });
+    });
+        $("#cooking-prev").addEventListener("click", () => moveCookingStage(-1, recipe));
     $("#cooking-next").addEventListener("click", () => moveCookingStage(1, recipe));
     $("#cooking-navigation").addEventListener("change", event => {
       if (event.target.id !== "cooking-step-input") return;
@@ -626,26 +656,201 @@
       : ingredientRows(recipe, factor, group.id, true);
     return `<h2 class="cooking-ingredient-title">${escapeHtml(group.title)}</h2><div class="cooking-ingredient-list">${html || "<p>Нет отдельных ингредиентов для этого этапа.</p>"}</div>`;
   }
+  function shoppingDisplayName(name) {
+    let label = String(name || "").trim();
+    label = label.replace(/\s+(?:для|в)\s+(?:теста|опары|начинки|начинку|крема|крем|соуса|глазури|смазки|смазывания|подачи|декора|сборки|пропитки|бисквита|меренги|сиропа|фарша|подпыла)(?=\s|$).*$/i, "").trim();
+    if (/вода/i.test(label)) label = label.replace(/^(?:тёплая|теплая|холодная|горячая|прохладная)\s+/i, "");
+    return label || String(name || "").trim();
+  }
+  function shoppingIngredientKey(name) {
+    return shoppingDisplayName(name).toLocaleLowerCase("ru").replace(/[.,;:]+$/g, "").replace(/\s+/g, " ").trim();
+  }
+  function shoppingListItems(recipe, factor) {
+    const buckets = new Map();
+    for (const item of recipe.ingredients || []) {
+      const amount = scaleQuantity(item, factor);
+      const name = shoppingDisplayName(item.name);
+      const unit = String(item.unit || "").trim();
+      const baseKey = `${shoppingIngredientKey(item.name)}|${unit.toLocaleLowerCase("ru")}`;
+      const key = amount == null ? `${baseKey}|unknown:${item.id}` : baseKey;
+      let bucket = buckets.get(key);
+      if (!bucket) {
+        bucket = { key, name, unit, unitForms: item.unit_forms, total: null, min: 0, max: 0, range: false, optional: Boolean(item.optional), notes: [] };
+        buckets.set(key, bucket);
+      } else {
+        bucket.optional = bucket.optional && Boolean(item.optional);
+      }
+      if (item.note && !bucket.notes.includes(item.note)) bucket.notes.push(item.note);
+      if (amount != null) {
+        if (typeof amount === "number") {
+          if (bucket.range) { bucket.min += amount; bucket.max += amount; }
+          else bucket.total = (bucket.total ?? 0) + amount;
+        } else if (bucket.range) {
+          bucket.min += amount.min; bucket.max += amount.max;
+        } else {
+          bucket.min = (bucket.total ?? 0) + amount.min;
+          bucket.max = (bucket.total ?? 0) + amount.max;
+          bucket.total = null;
+          bucket.range = true;
+        }
+      }
+    }
+    return [...buckets.values()].map(item => ({
+      ...item,
+      amount: item.range ? { min: Math.round(item.min * 10) / 10, max: Math.round(item.max * 10) / 10 }
+        : item.total == null ? null : Math.round(item.total * 10) / 10
+    }));
+  }
+  function renderShoppingListScreen(recipe) {
+    const host = $("#shopping-list-screen");
+    if (!host) return;
+    const items = shoppingListItems(recipe, state.multiplier);
+    const rows = items.map(item => {
+      const key = `shopping:${item.key}`;
+      const checked = state.checkedShoppingItems.has(key);
+      const amount = item.amount == null ? "" : formatAmount(item.amount, item.unit, item.unitForms);
+      const note = item.notes.join(" · ") || (item.optional ? "По желанию" : "");
+      return `<li class="shopping-item-row ${checked ? "checked" : ""}" role="checkbox" aria-checked="${checked}" tabindex="0" data-shopping-key="${escapeHtml(key)}">
+        <span class="check-dot" aria-hidden="true">${checked ? "✓" : ""}</span><span class="shopping-item-copy"><span class="shopping-item-name">${escapeHtml(item.name)}${item.optional ? " (по желанию)" : ""}</span>${note ? `<span class="shopping-item-note">${escapeHtml(note)}</span>` : ""}</span>
+        <span class="shopping-item-amount">${escapeHtml(amount)}</span>
+      </li>`;
+    }).join("");
+    host.innerHTML = `<div class="shopping-list-heading"><div><h2 class="panel-title">Список продуктов</h2><p class="panel-subtitle">Общие количества на весь рецепт с учётом множителя</p></div><button id="reset-shopping-checks" class="reset-button" type="button">Сбросить отметки</button></div><ul class="shopping-list">${rows || "<li class='shopping-list-empty'>В рецепте пока нет ингредиентов.</li>"}</ul>`;
+    $("#reset-shopping-checks", host)?.addEventListener("click", () => {
+      state.checkedShoppingItems.clear();
+      saveCurrentRecipeState();
+      renderShoppingListScreen(recipe);
+    });
+    bindShoppingRows(host);
+  }
+  function bindShoppingRows(root = app) {
+    root.querySelectorAll("[data-shopping-key]").forEach(row => {
+      if (row.dataset.shoppingBound === "true") return;
+      row.dataset.shoppingBound = "true";
+      const toggle = () => {
+        const key = row.dataset.shoppingKey;
+        if (state.checkedShoppingItems.has(key)) state.checkedShoppingItems.delete(key);
+        else state.checkedShoppingItems.add(key);
+        row.classList.toggle("checked", state.checkedShoppingItems.has(key));
+        row.setAttribute("aria-checked", String(state.checkedShoppingItems.has(key)));
+        const dot = row.querySelector(".check-dot");
+        if (dot) dot.textContent = state.checkedShoppingItems.has(key) ? "✓" : "";
+        saveCurrentRecipeState();
+      };
+      row.addEventListener("click", toggle);
+      row.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); toggle(); }
+      });
+    });
+  }
+  function updateCookingStagePicker(recipe) {
+    const picker = $("#cooking-stage-picker");
+    const button = $("#cooking-stage-picker-button");
+    const menu = $("#cooking-stage-picker-menu");
+    const label = $("#cooking-stage-picker-label");
+    const meta = $("#cooking-stage-picker-meta");
+    if (!picker || !button || !menu || !label || !meta) return;
+    picker.hidden = !state.cookingMode;
+    const stages = cookingStages(recipe);
+    const current = stages[state.cookingStageIndex];
+    if (!current) {
+      label.textContent = "Нет этапов";
+      meta.textContent = "";
+      button.disabled = true;
+      menu.innerHTML = "";
+      return;
+    }
+    button.disabled = false;
+    if (current.type === "ingredients") {
+      label.textContent = "Ингредиенты";
+      meta.textContent = stages.filter(stage => stage.type === "ingredients").length > 1 ? current.title : "";
+    } else {
+      label.textContent = `Шаг ${current.stepIndex + 1}`;
+      meta.textContent = current.title;
+    }
+    menu.innerHTML = stages.map((stage, index) => {
+      const selected = index === state.cookingStageIndex;
+      const title = stage.type === "ingredients" ? "Ингредиенты" : `Шаг ${stage.stepIndex + 1}`;
+      return `<button class="cooking-stage-option" type="button" role="menuitem" data-stage-index="${index}" ${selected ? 'aria-current="step"' : ""}><span>${escapeHtml(title)}</span><small>${escapeHtml(stage.title)}</small></button>`;
+    }).join("");
+    menu.querySelectorAll("[data-stage-index]").forEach(option => option.addEventListener("click", () => {
+      jumpToCookingStage(Number(option.dataset.stageIndex), recipe);
+    }));
+  }
+  function closeCookingStageMenu() {
+    const menu = $("#cooking-stage-picker-menu");
+    const button = $("#cooking-stage-picker-button");
+    if (!menu || !button) return;
+    menu.hidden = true;
+    button.setAttribute("aria-expanded", "false");
+  }
+  document.addEventListener("click", event => {
+    const button = event.target.closest("#cooking-stage-picker-button");
+    if (!button) return;
+    event.stopPropagation();
+    const menu = $("#cooking-stage-picker-menu");
+    if (!menu) return;
+    const opening = menu.hidden;
+    closeCookingModeMenu();
+    menu.hidden = !opening;
+    button.setAttribute("aria-expanded", String(opening));
+  });
+  function setRecipeView(view) {
+    const recipe = state.currentRecipe;
+    if (!recipe) return;
+    closeCookingModeMenu();
+    if (view === "cooking") {
+      state.shoppingListMode = false;
+      state.cookingMode = true;
+      try { sessionStorage.setItem(COOKING_SESSION_KEY, recipe.id); } catch (_) {}
+      if (!state.wakeEnabled) $("#wake-toggle")?.click();
+    } else if (view === "shopping") {
+      state.cookingMode = false;
+      state.shoppingListMode = true;
+      try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
+      if (state.wakeEnabled) $("#wake-toggle")?.click();
+    } else {
+      state.cookingMode = false;
+      state.shoppingListMode = false;
+      try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
+      if (state.wakeEnabled) $("#wake-toggle")?.click();
+    }
+    saveCurrentRecipeState();
+    updateCookingNavigation(recipe);
+    if (state.cookingMode) scrollToCurrentStage(false, recipe);
+    else if (state.shoppingListMode) window.scrollTo({ top: 0, behavior: "auto" });
+  }
   function applyCookingMode() {
+    const focusedView = state.cookingMode || state.shoppingListMode;
     document.body.classList.toggle("recipe-open", Boolean(state.currentRecipe));
     document.body.classList.toggle("cooking-mode", state.cookingMode);
+    document.body.classList.toggle("shopping-list-mode", state.shoppingListMode);
     const brand = document.querySelector(".brand");
     const brandTitle = brand?.querySelector("strong");
     const brandSubtitle = brand?.querySelector("small");
-    if (brandTitle) brandTitle.textContent = state.cookingMode && state.currentRecipe ? state.currentRecipe.title : "Cooking Book";
-    if (brandSubtitle) brandSubtitle.hidden = state.cookingMode;
-    if (brand) brand.setAttribute("aria-label", state.cookingMode && state.currentRecipe ? state.currentRecipe.title : "Cooking Book — главная");
-    const toggle = document.getElementById("cooking-mode-toggle");
-    const navigation = $("#cooking-navigation");
-    if (toggle) {
-      toggle.setAttribute("aria-pressed", String(state.cookingMode));
-      toggle.setAttribute("aria-label", state.cookingMode ? "Выйти из режима готовки" : "Включить режим готовки");
-      toggle.title = state.cookingMode ? "Выйти из режима готовки" : "Режим готовки";
-      toggle.classList.toggle("is-active", state.cookingMode);
+    if (brandTitle) brandTitle.textContent = state.cookingMode && state.currentRecipe ? state.currentRecipe.title : state.shoppingListMode ? "Список продуктов" : "Cooking Book";
+    if (brandSubtitle) brandSubtitle.hidden = focusedView;
+    if (brand) {
+      brand.setAttribute("aria-label", state.cookingMode && state.currentRecipe ? state.currentRecipe.title : state.shoppingListMode ? "Список продуктов" : "Cooking Book — главная");
+      brand.setAttribute("aria-disabled", String(focusedView));
+      if (focusedView) brand.setAttribute("tabindex", "-1");
+      else brand.removeAttribute("tabindex");
     }
+    if (cookingModeHeaderButton) {
+      cookingModeHeaderButton.setAttribute("aria-pressed", String(focusedView));
+      cookingModeHeaderButton.setAttribute("aria-label", "Выбрать режим рецепта");
+      cookingModeHeaderButton.title = "Режимы рецепта";
+      cookingModeHeaderButton.classList.toggle("is-active", focusedView);
+    }
+    const navigation = $("#cooking-navigation");
     if (navigation) navigation.hidden = !state.cookingMode;
+    const modeScaleBox = $("#mode-scale-box");
+    if (modeScaleBox) modeScaleBox.hidden = !focusedView;
+    const shoppingScreen = $("#shopping-list-screen");
+    if (shoppingScreen) shoppingScreen.hidden = !state.shoppingListMode;
     const recipe = state.currentRecipe;
     if (!recipe) return;
+    updateCookingStagePicker(recipe);
     const stages = cookingStages(recipe);
     state.cookingStageIndex = Math.max(0, Math.min(Math.max(0, stages.length - 1), state.cookingStageIndex));
     const current = stages[state.cookingStageIndex];
@@ -665,6 +870,7 @@
     if (stepList) stepList.hidden = state.cookingMode && current?.type === "ingredients";
     const steps = [...app.querySelectorAll("[data-step-id]")];
     steps.forEach((step, index) => step.classList.toggle("current-cooking-step", index === state.currentStepIndex));
+    if (state.shoppingListMode) renderShoppingListScreen(recipe);
   }
   function updateCookingNavigation(recipe) {
     const stages = cookingStages(recipe);
@@ -673,7 +879,14 @@
     const previous = $("#cooking-prev");
     const next = $("#cooking-next");
     const current = stages[state.cookingStageIndex];
-    if (counter) { const ingredientStages = stages.filter(stage => stage.type === "ingredients"); const ingredientIndex = current?.type === "ingredients" ? ingredientStages.findIndex(stage => stage.id === current.id) : -1; counter.innerHTML = !total ? "Нет этапов" : current?.type === "ingredients" ? (ingredientStages.length > 1 ? `Ингредиенты ${ingredientIndex + 1} из ${ingredientStages.length}` : "Ингредиенты") : `<span class="cooking-step-label">Шаг</span> <input id="cooking-step-input" class="cooking-step-input" type="number" inputmode="numeric" min="1" max="${(recipe.steps || []).length}" step="1" value="${(current?.stepIndex ?? 0) + 1}" aria-label="Перейти к шагу" title="Введи номер шага"> <span>из ${(recipe.steps || []).length}</span>`; }
+    if (counter) {
+      counter.innerHTML = !total ? "Нет этапов" : current?.type === "ingredients"
+        ? (stages.filter(stage => stage.type === "ingredients").length > 1
+          ? `Ингредиенты ${stages.filter(stage => stage.type === "ingredients").findIndex(stage => stage.id === current.id) + 1} из ${stages.filter(stage => stage.type === "ingredients").length}`
+          : "Ингредиенты")
+        : `<span class="cooking-step-label">Шаг</span> <input id="cooking-step-input" class="cooking-step-input" type="number" inputmode="numeric" min="1" max="${(recipe.steps || []).length}" step="1" value="${(current?.stepIndex ?? 0) + 1}" aria-label="Перейти к шагу" title="Введи номер шага"> <span>из ${(recipe.steps || []).length}</span>`;
+    }
+    updateCookingStagePicker(recipe);
     if (previous) previous.disabled = state.cookingStageIndex <= 0;
     if (next) next.disabled = state.cookingStageIndex >= total - 1;
     applyCookingMode();
@@ -701,17 +914,24 @@
       if (screen) screen.scrollIntoView({ behavior: "auto", block: "start" });
     }
   }
-  function moveCookingStage(direction, recipe) {
+  function jumpToCookingStage(targetIndex, recipe) {
     const stages = cookingStages(recipe);
-    state.cookingStageIndex = Math.max(0, Math.min(stages.length - 1, state.cookingStageIndex + direction));
+    if (!stages.length) return;
+    state.cookingStageIndex = Math.max(0, Math.min(stages.length - 1, targetIndex));
     const current = stages[state.cookingStageIndex];
     if (current?.type === "step") state.currentStepIndex = current.stepIndex;
     const progress = state.recipeProgress[recipe.id] || {};
     progress.hasStepPosition = true;
     state.recipeProgress[recipe.id] = progress;
     saveCurrentRecipeState();
+    closeCookingStageMenu();
     updateCookingNavigation(recipe);
     scrollToCurrentStage(false, recipe);
+  }
+  function moveCookingStage(direction, recipe) {
+    const stages = cookingStages(recipe);
+    state.cookingStageIndex = Math.max(0, Math.min(stages.length - 1, state.cookingStageIndex + direction));
+    jumpToCookingStage(state.cookingStageIndex + direction, recipe);
   }
   function bindIngredientRows(root = app) {
     root.querySelectorAll("[data-ingredient-key]").forEach(row => {
@@ -798,15 +1018,20 @@
       window.prompt("Скопируй ссылку на рецепт:", url);
     }
   });
-  document.querySelector(".brand")?.addEventListener("click", () => { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} });
+  document.querySelector(".brand")?.addEventListener("click", event => {
+    if (state.cookingMode || state.shoppingListMode) { event.preventDefault(); return; }
+    try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
+  });
   window.addEventListener("pageshow", () => { if (!new URLSearchParams(location.search).has("recipe")) { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} } });
   document.addEventListener("click", event => {
     const backLink = event.target.closest(".back-link");
     if (backLink) { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} }
     if (!printMenuWrap.contains(event.target)) closePrintMenu();
+    if (!cookingModeMenuWrap?.contains(event.target)) closeCookingModeMenu();
+    if (!event.target.closest("#cooking-stage-picker")) closeCookingStageMenu();
   });
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closePrintMenu();
+    if (event.key === "Escape") { closePrintMenu(); closeCookingModeMenu(); closeCookingStageMenu(); }
   });
   const updateTopButton = () => {
     const shouldShow = window.scrollY > window.innerHeight && !state.cookingMode;
