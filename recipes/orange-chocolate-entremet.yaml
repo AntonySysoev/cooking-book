@@ -127,7 +127,10 @@ ingredients:
     quantity: 430
     unit: г
     group: orange-confit
-    note: Без цедры. Распределить по частям: 180 г в конфи и 250 г в кремё. Если апельсины дают мало сока, довести массу качественным 100% апельсиновым соком без добавок.
+    note: >-
+      Распределить по частям: 180 г в конфи и 250 г в кремё. Если апельсины
+      дают мало сока, довести массу качественным 100% апельсиновым соком
+      без добавок.
     parts:
       - id: confit
         name: Для конфи
@@ -137,6 +140,24 @@ ingredients:
         name: Для кремё
         quantity: 250
         group: orange-cremeux
+  - id: orange-zest
+    name: Мелко натёртая цедра апельсина
+    quantity: 11
+    unit: г
+    note: Только цветная часть кожуры, без белого альбедо. Сними цедру мелкой тёркой непосредственно перед использованием.
+    parts:
+      - id: confit-zest
+        name: Для конфи
+        quantity: 3
+        group: orange-confit
+      - id: cremeux-zest
+        name: Для кремё
+        quantity: 5
+        group: orange-cremeux
+      - id: mousse-zest
+        name: Для мусса
+        quantity: 3
+        group: mousse
   - id: confit-sugar
     name: Сахар
     quantity: 45
@@ -310,6 +331,8 @@ steps:
       - ingredient: orange-pulp
       - ingredient: orange-juice
         part: confit
+      - ingredient: orange-zest
+        part: confit-zest
       - ingredient: confit-sugar
       - ingredient: nh-pectin
       - ingredient: confit-lemon
@@ -328,6 +351,8 @@ steps:
     ingredients:
       - ingredient: orange-juice
         part: cremeux
+      - ingredient: orange-zest
+        part: cremeux-zest
       - ingredient: cremeux-sugar
       - ingredient: egg-yolks
       - ingredient: whole-egg
@@ -342,10 +367,11 @@ steps:
         unit: г
     instructions: >-
       Отвесь апельсиновый сок и увари в небольшом сотейнике на умеренном огне
-      до {{amount:reduced-orange-juice}}: это концентрирует вкус, поскольку
-      цедра в рецепте не используется. Остуди до тёплого состояния. Замочи
-      желатин в холодной воде. Смешай уваренный сок, сахар, желтки и целое
-      яйцо. Нагревай на слабом или среднем огне, постоянно перемешивая
+      до {{amount:reduced-orange-juice}}. Сними с огня, добавь цедру и оставь
+      под крышкой на 8–10 минут, затем процеди. Остуди сок до тёплого
+      состояния. Замочи желатин в холодной воде. Растри цедру с сахаром
+      пальцами, чтобы высвободить эфирные масла. Смешай ароматный сахар,
+      уваренный сок, желтки и целое яйцо. Нагревай на слабом или среднем огне, постоянно перемешивая
       силиконовой лопаткой, до 82–84 °C; не допускай кипения и сворачивания
       яиц. Сними с огня, добавь набухший желатин и перемешай. Остуди массу
       до 40–45 °C, добавь холодное масло кубиками и эмульгируй погружным
@@ -376,6 +402,8 @@ steps:
       - ingredient: mousse-chocolate
       - ingredient: milk
       - ingredient: mousse-cream
+      - ingredient: orange-zest
+        part: mousse-zest
       - ingredient: mousse-gelatin
       - ingredient: mousse-water
     instructions: >-
