@@ -20,9 +20,8 @@
       <div class="cooking-mode-menu-wrap" id="cooking-mode-menu-wrap" hidden>
         <button class="icon-button cooking-mode-header-button" id="cooking-mode-toggle" type="button" hidden aria-pressed="false" aria-haspopup="menu" aria-expanded="false" aria-label="Выбрать режим рецепта" title="Режимы рецепта"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16l-1 10H5L4 10Z"/><path d="M7 10V7a5 5 0 0 1 10 0v3M2 10h20M8 14h.01M12 14h.01M16 14h.01"/></svg></button>
         <div class="cooking-mode-menu" id="cooking-mode-menu" role="menu" aria-label="Режимы рецепта" hidden>
-          <button type="button" role="menuitem" data-recipe-view="cooking"><span>Пошаговое приготовление</span><small>Один этап на экране</small></button>
-          <button type="button" role="menuitem" data-recipe-view="shopping"><span>Список продуктов</span><small>Суммарно на весь рецепт</small></button>
-          <div class="menu-separator"></div>
+          <button type="button" role="menuitemradio" aria-checked="false" data-recipe-view="cooking"><span>Пошаговое приготовление</span><small>Один этап на экране</small></button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-recipe-view="shopping"><span>Список продуктов</span><small>Суммарно на весь рецепт</small></button>
         </div>
       </div>
       <div class="print-menu-wrap" id="print-menu-wrap">

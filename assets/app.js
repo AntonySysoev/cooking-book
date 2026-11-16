@@ -268,8 +268,6 @@
     state.shoppingListMode = false;
     try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
     document.body.classList.remove("cooking-mode", "shopping-list-mode");
-    const brand = document.querySelector(".brand");
-    if (brand) { brand.removeAttribute("aria-disabled"); brand.removeAttribute("tabindex"); brand.setAttribute("aria-label", "Cooking Book — главная"); }
     document.title = "Cooking Book — кулинарная книга";
     printMenuWrap.hidden = false;
     closePrintMenu();
@@ -441,15 +439,18 @@
         </div>
         <section class="panel">
           <div class="panel-head-row cooking-panel-heading"><h2 class="panel-title" style="margin:0">Приготовление</h2></div>
-          <div id="cooking-stage-picker" class="cooking-stage-picker" hidden>
-            <button id="cooking-stage-picker-button" class="cooking-stage-picker-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Выбрать этап приготовления">
-              <span id="cooking-stage-picker-label" class="cooking-stage-picker-label">Ингредиенты</span><span id="cooking-stage-picker-meta" class="cooking-stage-picker-meta"></span><span class="cooking-stage-picker-caret" aria-hidden="true">▾</span>
-            </button>
-            <div id="cooking-stage-picker-menu" class="cooking-stage-picker-menu" role="menu" aria-label="Этапы рецепта" hidden></div>
-          </div>
           <div id="cooking-ingredient-screen" class="cooking-ingredient-screen" hidden></div>
           <ol class="step-list">${renderSteps(recipe, state.multiplier)}</ol>
-          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по шагам"><button id="cooking-prev" class="cooking-nav-button" type="button" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><span id="cooking-step-counter" class="cooking-step-counter"></span><button id="cooking-next" class="cooking-nav-button" type="button" aria-label="Вперёд" title="Вперёд"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+          <div id="cooking-navigation" class="cooking-navigation" ${state.cookingMode ? "" : "hidden"} aria-label="Навигация по этапам">
+            <button id="cooking-prev" class="cooking-nav-button" type="button" aria-label="Назад" title="Назад"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+            <div id="cooking-stage-picker" class="cooking-stage-picker" hidden>
+              <button id="cooking-stage-picker-button" class="cooking-stage-picker-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Выбрать этап приготовления">
+                <span id="cooking-stage-picker-label" class="cooking-stage-picker-label">Ингредиенты</span><span id="cooking-stage-picker-meta" class="cooking-stage-picker-meta"></span><span class="cooking-stage-picker-caret" aria-hidden="true">▾</span>
+              </button>
+              <div id="cooking-stage-picker-menu" class="cooking-stage-picker-menu" role="menu" aria-label="Этапы рецепта" hidden></div>
+            </div>
+            <button id="cooking-next" class="cooking-nav-button" type="button" aria-label="Вперёд" title="Вперёд"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+          </div>
         </section>
       </div>
       <section id="shopping-list-screen" class="panel shopping-list-screen" hidden aria-label="Список продуктов"></section>
@@ -555,40 +556,6 @@
     });
         $("#cooking-prev").addEventListener("click", () => moveCookingStage(-1, recipe));
     $("#cooking-next").addEventListener("click", () => moveCookingStage(1, recipe));
-    $("#cooking-navigation").addEventListener("change", event => {
-      if (event.target.id !== "cooking-step-input") return;
-      const input = event.target;
-      const value = Number(input.value);
-      const stepCount = (recipe.steps || []).length;
-      if (!Number.isInteger(value) || value < 1 || value > stepCount) {
-        const current = cookingStages(recipe)[state.cookingStageIndex];
-        input.value = String((current?.stepIndex ?? state.currentStepIndex) + 1);
-        return;
-      }
-      const targetIndex = cookingStages(recipe).findIndex(stage => stage.type === "step" && stage.stepIndex === value - 1);
-      if (targetIndex < 0) { input.value = String(state.currentStepIndex + 1); return; }
-      state.cookingStageIndex = targetIndex;
-      state.currentStepIndex = value - 1;
-      const progress = state.recipeProgress[recipe.id] || {};
-      progress.hasStepPosition = true;
-      state.recipeProgress[recipe.id] = progress;
-      saveCurrentRecipeState();
-      updateCookingNavigation(recipe);
-      scrollToCurrentStage(false, recipe);
-    });
-    $("#cooking-navigation").addEventListener("keydown", event => {
-      if (event.target.id === "cooking-step-input" && event.key === "Enter") { event.preventDefault(); event.target.blur(); }
-    });
-    $("#cooking-navigation").addEventListener("focusout", event => {
-      if (event.target.id !== "cooking-step-input") return;
-      const value = Number(event.target.value);
-      if (!Number.isInteger(value) || value < 1 || value > (recipe.steps || []).length) {
-        const current = cookingStages(recipe)[state.cookingStageIndex];
-        event.target.value = String((current?.stepIndex ?? state.currentStepIndex) + 1);
-      }
-    });
-    $("#multiplier-up").addEventListener("click", () => stepMultiplier(1));
-    $("#multiplier-down").addEventListener("click", () => stepMultiplier(-1));
     $("#reset-checks").addEventListener("click", () => { state.checkedIngredients.clear(); saveCurrentRecipeState(); $("#ingredient-groups").innerHTML = ingredientRows(recipe, state.multiplier); bindIngredientRows(); updateCookingNavigation(recipe); });
     $("#reset-recipe-progress").addEventListener("click", () => {
       if (!window.confirm("Сбросить отметки ингредиентов и множитель только для этого рецепта?")) return;
@@ -771,7 +738,7 @@
     menu.innerHTML = stages.map((stage, index) => {
       const selected = index === state.cookingStageIndex;
       const title = stage.type === "ingredients" ? "Ингредиенты" : `Шаг ${stage.stepIndex + 1}`;
-      return `<button class="cooking-stage-option" type="button" role="menuitem" data-stage-index="${index}" ${selected ? 'aria-current="step"' : ""}><span>${escapeHtml(title)}</span><small>${escapeHtml(stage.title)}</small></button>`;
+      return `<button class="cooking-stage-option" type="button" role="menuitemradio" aria-checked="${selected}" data-stage-index="${index}" ${selected ? 'aria-current="step"' : ""}><span>${escapeHtml(title)}</span><small>${escapeHtml(stage.title)}</small></button>`;
     }).join("");
     menu.querySelectorAll("[data-stage-index]").forEach(option => option.addEventListener("click", () => {
       jumpToCookingStage(Number(option.dataset.stageIndex), recipe);
@@ -825,22 +792,18 @@
     document.body.classList.toggle("recipe-open", Boolean(state.currentRecipe));
     document.body.classList.toggle("cooking-mode", state.cookingMode);
     document.body.classList.toggle("shopping-list-mode", state.shoppingListMode);
-    const brand = document.querySelector(".brand");
-    const brandTitle = brand?.querySelector("strong");
-    const brandSubtitle = brand?.querySelector("small");
-    if (brandTitle) brandTitle.textContent = state.cookingMode && state.currentRecipe ? state.currentRecipe.title : state.shoppingListMode ? "Список продуктов" : "Cooking Book";
-    if (brandSubtitle) brandSubtitle.hidden = focusedView;
-    if (brand) {
-      brand.setAttribute("aria-label", state.cookingMode && state.currentRecipe ? state.currentRecipe.title : state.shoppingListMode ? "Список продуктов" : "Cooking Book — главная");
-      brand.setAttribute("aria-disabled", String(focusedView));
-      if (focusedView) brand.setAttribute("tabindex", "-1");
-      else brand.removeAttribute("tabindex");
-    }
     if (cookingModeHeaderButton) {
       cookingModeHeaderButton.setAttribute("aria-pressed", String(focusedView));
       cookingModeHeaderButton.setAttribute("aria-label", "Выбрать режим рецепта");
       cookingModeHeaderButton.title = "Режимы рецепта";
       cookingModeHeaderButton.classList.toggle("is-active", focusedView);
+    }
+    if (cookingModeMenu) {
+      cookingModeMenu.querySelectorAll("[data-recipe-view]").forEach(item => {
+        const selected = item.dataset.recipeView === (state.cookingMode ? "cooking" : state.shoppingListMode ? "shopping" : "");
+        item.setAttribute("aria-checked", String(selected));
+        item.classList.toggle("is-selected", selected);
+      });
     }
     const navigation = $("#cooking-navigation");
     if (navigation) navigation.hidden = !state.cookingMode;
@@ -850,9 +813,9 @@
     if (shoppingScreen) shoppingScreen.hidden = !state.shoppingListMode;
     const recipe = state.currentRecipe;
     if (!recipe) return;
-    updateCookingStagePicker(recipe);
     const stages = cookingStages(recipe);
     state.cookingStageIndex = Math.max(0, Math.min(Math.max(0, stages.length - 1), state.cookingStageIndex));
+    updateCookingStagePicker(recipe);
     const current = stages[state.cookingStageIndex];
     const ingredientScreen = $("#cooking-ingredient-screen");
     const stepList = $(".step-list");
@@ -873,20 +836,9 @@
     if (state.shoppingListMode) renderShoppingListScreen(recipe);
   }
   function updateCookingNavigation(recipe) {
-    const stages = cookingStages(recipe);
-    const total = stages.length;
-    const counter = $("#cooking-step-counter");
+    const total = cookingStages(recipe).length;
     const previous = $("#cooking-prev");
     const next = $("#cooking-next");
-    const current = stages[state.cookingStageIndex];
-    if (counter) {
-      counter.innerHTML = !total ? "Нет этапов" : current?.type === "ingredients"
-        ? (stages.filter(stage => stage.type === "ingredients").length > 1
-          ? `Ингредиенты ${stages.filter(stage => stage.type === "ingredients").findIndex(stage => stage.id === current.id) + 1} из ${stages.filter(stage => stage.type === "ingredients").length}`
-          : "Ингредиенты")
-        : `<span class="cooking-step-label">Шаг</span> <input id="cooking-step-input" class="cooking-step-input" type="number" inputmode="numeric" min="1" max="${(recipe.steps || []).length}" step="1" value="${(current?.stepIndex ?? 0) + 1}" aria-label="Перейти к шагу" title="Введи номер шага"> <span>из ${(recipe.steps || []).length}</span>`;
-    }
-    updateCookingStagePicker(recipe);
     if (previous) previous.disabled = state.cookingStageIndex <= 0;
     if (next) next.disabled = state.cookingStageIndex >= total - 1;
     applyCookingMode();
@@ -1015,10 +967,6 @@
     } catch (_) {
       window.prompt("Скопируй ссылку на рецепт:", url);
     }
-  });
-  document.querySelector(".brand")?.addEventListener("click", event => {
-    if (state.cookingMode || state.shoppingListMode) { event.preventDefault(); return; }
-    try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {}
   });
   window.addEventListener("pageshow", () => { if (!new URLSearchParams(location.search).has("recipe")) { try { sessionStorage.removeItem(COOKING_SESSION_KEY); } catch (_) {} } });
   document.addEventListener("click", event => {

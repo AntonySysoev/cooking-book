@@ -392,28 +392,25 @@ body.cooking-mode .cooking-nav-button { width:100%; min-width:52px; }
 body.cooking-mode .cooking-panel-heading { display:none !important; }
 
 
-/* Compact recipe title in the header while cooking */
-body.cooking-mode .back-link { display:none !important; }
-body.cooking-mode .site-header { gap:8px; padding-top:12px; padding-bottom:8px; }
-body.cooking-mode .brand { flex:1 1 auto; min-width:0; gap:0; }
-body.cooking-mode .brand-mark,
-body.cooking-mode .brand small { display:none !important; }
-body.cooking-mode .brand > span:last-child { min-width:0; width:100%; }
-body.cooking-mode .brand strong {
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  font-family:Georgia,serif;
-  font-size:clamp(14px, 3.8vw, 22px);
-  line-height:1.2;
-  letter-spacing:-.3px;
-}
-body.cooking-mode .header-actions { flex:0 0 auto; gap:6px; }
-body.cooking-mode .cooking-mode-header-button { flex:0 0 40px; }
+/* Одинаковая шапка и логотип-ссылка для обоих рабочих представлений. */
+body.cooking-mode .site-header,
+body.shopping-list-mode .site-header { gap:8px; padding-top:12px; padding-bottom:8px; }
+body.cooking-mode .header-actions,
+body.shopping-list-mode .header-actions { flex:0 0 auto; gap:6px; }
+body.cooking-mode .back-link,
+body.shopping-list-mode .back-link { display:none !important; }
 
-
-/* В режиме готовки название уже есть в шапке — не дублируем крупный заголовок рецепта. */
-body.cooking-mode .recipe-head { display:none !important; }
+/* Название рецепта остаётся под логотипом и над множителем в обоих режимах. */
+body.cooking-mode .recipe-head,
+body.shopping-list-mode .recipe-head { max-width:760px; margin:0 auto; padding:8px 0 14px; }
+body.cooking-mode .recipe-head h1,
+body.shopping-list-mode .recipe-head h1 { font-size:var(--font-size-34, 34px); margin-bottom:8px; }
+body.cooking-mode .recipe-description,
+body.cooking-mode .recipe-meta,
+body.cooking-mode .recipe-head .eyebrow,
+body.shopping-list-mode .recipe-description,
+body.shopping-list-mode .recipe-meta,
+body.shopping-list-mode .recipe-head .eyebrow { display:none; }
 
 
 /* Ссылки категорий в хлебных крошках рецепта ведут на главную с активным фильтром. */
@@ -431,25 +428,6 @@ body.recipe-open .site-header {
   background: var(--paper);
 }
 
-/* Поле перехода к произвольному шагу в нижней навигации. */
-.cooking-step-counter { display:flex; align-items:center; justify-content:center; gap:5px; }
-.cooking-step-input {
-  width:3.2em;
-  min-width:3.2em;
-  padding:5px 3px;
-  border:1px solid var(--category-line, var(--line));
-  border-radius:8px;
-  color:var(--ink);
-  background:var(--card);
-  text-align:center;
-  font:inherit;
-  font-weight:700;
-  font-variant-numeric:tabular-nums;
-}
-.cooking-step-input:focus { outline:2px solid var(--accent); outline-offset:2px; }
-.cooking-step-label { white-space:nowrap; }
-html.high-contrast .cooking-step-input { color:#000; background:#fff; border-color:#000; }
-
 
 /* Переключатель представлений рецепта в шапке. */
 .cooking-mode-menu-wrap { position:relative; width:40px; height:40px; flex:0 0 40px; }
@@ -466,14 +444,14 @@ html.high-contrast .cooking-mode-menu button small { color:#000; }
 .mode-scale-box[hidden] { display:none !important; }
 body.cooking-mode .mode-scale-box,
 body.shopping-list-mode .mode-scale-box {
-  display:grid; max-width:760px; margin:0 auto 14px; padding:12px 14px;
+  display:grid; width:100%; max-width:760px; margin:0 auto 14px; padding:12px 14px;
   border:1px solid var(--line); border-radius:14px; background:var(--card);
 }
 body.cooking-mode .mode-scale-box { margin-bottom:8px; }
-/* В списке продуктов блок множителя совпадает по ширине с карточкой списка. */
-body.shopping-list-mode .mode-scale-box { max-width:none; width:100%; }
 body.shopping-list-mode .recipe-layout { display:none !important; }
 body.shopping-list-mode .shopping-list-screen { display:block; }
+body.cooking-mode .shopping-list-screen,
+body.shopping-list-mode .shopping-list-screen { max-width:760px; width:100%; margin:0 auto; }
 body.shopping-list-mode .shopping-list-screen[hidden] { display:none !important; }
 body.shopping-list-mode .reset-all-wrap { display:none !important; }
 .shopping-list-screen[hidden] { display:none !important; }
@@ -495,28 +473,48 @@ html.high-contrast .shopping-item-row.checked .shopping-item-name { color:#555; 
 @media (max-width:700px) {
   .shopping-list-heading { align-items:flex-start; flex-direction:column; }
   .shopping-item-row { grid-template-columns:20px minmax(0,1fr) auto; gap:8px; }
+  body.cooking-mode .cooking-navigation { grid-template-columns:52px minmax(0,1fr) 52px; gap:6px; }
+  body.cooking-mode .cooking-nav-button { width:52px; min-width:52px; min-height:48px; padding:9px 8px; }
 }
 
-.cooking-stage-picker { position:relative; display:none; margin:0 0 10px; }
+.cooking-stage-picker { position:relative; display:none; width:100%; min-width:0; margin:0; }
 .cooking-mode .cooking-stage-picker { display:block; }
+.cooking-navigation .cooking-stage-picker { display:block; }
 .cooking-stage-picker[hidden] { display:none !important; }
-.cooking-stage-picker-button { display:flex; align-items:center; gap:8px; width:100%; min-height:48px; padding:10px 12px; border:1px solid var(--category-line, var(--line)); border-radius:12px; background:var(--accent-soft); color:var(--accent-dark); text-align:left; font-weight:700; }
+.cooking-stage-picker-button { display:flex; align-items:center; gap:8px; width:100%; min-width:0; min-height:48px; padding:8px 10px; border:1px solid var(--category-line, var(--line)); border-radius:12px; background:var(--accent-soft); color:var(--accent-dark); text-align:left; font-weight:700; }
 .cooking-stage-picker-button:disabled { opacity:.55; cursor:default; }
-.cooking-stage-picker-label { white-space:nowrap; }
-.cooking-stage-picker-meta { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); font-size:var(--font-size-13, 13px); font-weight:500; }
+.cooking-stage-picker-label { flex:0 0 auto; white-space:nowrap; }
+.cooking-stage-picker-meta { flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); font-size:var(--font-size-13, 13px); font-weight:500; }
 .cooking-stage-picker-caret { margin-left:auto; flex:0 0 auto; font-size:var(--font-size-16, 16px); }
-.cooking-stage-picker-menu { position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:35; max-height:min(58vh, 460px); overflow:auto; padding:6px; border:1px solid var(--line); border-radius:12px; background:var(--card); box-shadow:0 8px 24px rgba(65,43,24,.16); }
+.cooking-stage-picker-menu { position:absolute; top:auto; bottom:calc(100% + 6px); left:0; right:0; z-index:55; max-height:min(58vh, 460px); overflow:auto; padding:6px; border:1px solid var(--line); border-radius:12px; background:var(--card); box-shadow:0 8px 24px rgba(65,43,24,.16); }
 .cooking-stage-picker-menu[hidden] { display:none !important; }
 .cooking-stage-option { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:10px 12px; border:0; border-radius:8px; background:transparent; color:var(--ink); text-align:left; font:inherit; font-size:var(--font-size-14, 14px); }
 .cooking-stage-option small { color:var(--muted); font-size:var(--font-size-12, 12px); text-align:right; }
 .cooking-stage-option:hover,.cooking-stage-option:focus-visible { background:var(--accent-soft); outline:none; }
-.cooking-stage-option[aria-current="step"] { background:var(--accent-soft); color:var(--accent-dark); font-weight:750; }
+.cooking-stage-option[aria-current="step"] { background:var(--accent-soft); color:var(--accent-dark); font-weight:750; box-shadow:inset 0 0 0 1px var(--category-line, var(--line)); }
 html.high-contrast .cooking-stage-picker-button,
 html.high-contrast .cooking-stage-picker-menu { color:#000; background:#fff; border-color:#000; box-shadow:none; }
 html.high-contrast .cooking-stage-option { color:#000; }
 html.high-contrast .cooking-stage-option[aria-current="step"] { color:#fff; background:#000; }
-body.cooking-mode .brand[aria-disabled="true"],
-body.shopping-list-mode .brand[aria-disabled="true"] { cursor:default; }
+body.cooking-mode .cooking-navigation { z-index:50; gap:8px; }
+body.cooking-mode .cooking-navigation,
+body.shopping-list-mode .cooking-navigation { display:grid; grid-template-columns:52px minmax(0,1fr) 52px; }
+body.cooking-mode .cooking-nav-button { width:100%; min-width:52px; }
+body.cooking-mode .cooking-stage-picker-button { min-height:48px; }
+body.shopping-list-mode .cooking-navigation { display:none !important; }
+body.cooking-mode .top-button,
+body.shopping-list-mode .top-button,
+body.shopping-list-mode .site-footer { display:none !important; }
 @media print {
   .cooking-mode-menu-wrap,.mode-scale-box,.cooking-stage-picker,.shopping-list-screen { display:none !important; }
 }
+
+.cooking-mode-menu button[aria-checked="true"] {
+  color:var(--accent-dark);
+  background:var(--accent-soft);
+  box-shadow:inset 0 0 0 1px var(--category-line, var(--line));
+  font-weight:750;
+}
+.cooking-mode-menu button[aria-checked="true"] small { color:var(--accent-dark); }
+html.high-contrast .cooking-mode-menu button[aria-checked="true"] { color:#fff; background:#000; }
+html.high-contrast .cooking-mode-menu button[aria-checked="true"] small { color:#fff; }
