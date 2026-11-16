@@ -732,12 +732,12 @@
       label.textContent = "Ингредиенты";
       meta.textContent = stages.filter(stage => stage.type === "ingredients").length > 1 ? current.title : "";
     } else {
-      label.textContent = `Шаг ${current.stepIndex + 1}`;
+      label.textContent = `${current.stepIndex + 1})`;
       meta.textContent = current.title;
     }
     menu.innerHTML = stages.map((stage, index) => {
       const selected = index === state.cookingStageIndex;
-      const title = stage.type === "ingredients" ? "Ингредиенты" : `Шаг ${stage.stepIndex + 1}`;
+      const title = stage.type === "ingredients" ? "Ингредиенты" : `${stage.stepIndex + 1})`;
       return `<button class="cooking-stage-option" type="button" role="menuitemradio" aria-checked="${selected}" data-stage-index="${index}" ${selected ? 'aria-current="step"' : ""}><span>${escapeHtml(title)}</span><small>${escapeHtml(stage.title)}</small></button>`;
     }).join("");
     menu.querySelectorAll("[data-stage-index]").forEach(option => option.addEventListener("click", () => {
