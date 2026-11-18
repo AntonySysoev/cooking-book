@@ -181,9 +181,19 @@ steps:
         part: preferment
       - ingredient: yeast
         part: preferment
+    quantities:
+      - id: preferment-flour
+        quantity: 90
+        unit: г
+      - id: preferment-water
+        quantity: 65
+        unit: г
+      - id: preferment-yeast
+        quantity: 0.1
+        unit: г
     instructions: >-
-      Смешай {{amount:flour}} муки, {{amount:water}} воды и {{amount:yeast}} дрожжей
-      из опары до однородного плотного теста.
+      Смешай {{amount:preferment-flour}} муки, {{amount:preferment-water}} воды и
+      {{amount:preferment-yeast}} дрожжей до однородного плотного теста.
       Накрой и оставь на 10–14 часов при фактической температуре 20–22 °C.
       К утру опара должна заметно увеличиться, стать пористой и иметь чистый,
       слегка сладковатый дрожжевой аромат. Не используй опару, которая полностью
@@ -216,10 +226,20 @@ steps:
         part: dough
       - ingredient: eggs
       - ingredient: yolks
+    quantities:
+      - id: dough-flour
+        quantity: 300
+        unit: г
+      - id: dough-water
+        quantity: 20
+        unit: г
+      - id: dough-yeast
+        quantity: 2
+        unit: г
     instructions: >-
       Установи в Ankarsrum ролик и скребок. Раздели опару на небольшие кусочки.
-      Добавь всю опару, {{amount:flour}} муки, {{amount:water}} воды,
-      {{amount:yeast}} дрожжей, {{amount:eggs}} яиц и {{amount:yolks}} желтков.
+      Добавь всю опару, {{amount:dough-flour}} муки, {{amount:dough-water}} воды,
+      {{amount:dough-yeast}} дрожжей, {{amount:eggs}} яиц и {{amount:yolks}} желтков.
       Начни на низкой скорости до исчезновения сухой муки, затем меси на умеренной
       скорости до гладкого, связного и эластичного теста. В зависимости от муки
       это может занять 10–20 минут. До добавления сахара и масла тесто должно
