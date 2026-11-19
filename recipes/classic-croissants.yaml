@@ -118,9 +118,16 @@ steps:
       - ingredient: yeast
       - ingredient: sugar
       - ingredient: salt
+    quantities:
+      - id: dough-milk
+        quantity: 200
+        unit: г
+      - id: dough-water
+        quantity: 40
+        unit: г
     instructions: >-
-      Охлади муку и жидкость. Раствори дрожжи в {{amount:milk}} молока и
-      {{amount:water}} воды. Установи в Ankarsrum ролик и скребок. Добавь муку,
+      Охлади муку и жидкость. Раствори дрожжи в {{amount:dough-milk}} молока и
+      {{amount:dough-water}} воды. Установи в Ankarsrum ролик и скребок. Добавь муку,
       сахар и соль, влей жидкость и замешивай на умеренно низкой скорости
       до однородного теста, затем ещё несколько минут до умеренного развития
       клейковины. Тесто должно стать гладким и связным, но не обязано проходить
@@ -131,8 +138,12 @@ steps:
     ingredients:
       - ingredient: butter
         part: dough
+    quantities:
+      - id: dough-butter
+        quantity: 40
+        unit: г
     instructions: >-
-      Добавь {{amount:butter}} мягкого, но не растопленного масла в 2–3 приёма.
+      Добавь {{amount:dough-butter}} мягкого, но не растопленного масла в 2–3 приёма.
       Каждый раз дождись, пока предыдущая порция разойдётся в тесте. Замешивай
       только до однородности. Целевая температура теста после замеса —
       22–24 °C; если оно теплее, ненадолго убери чашу в холодильник.
@@ -148,8 +159,12 @@ steps:
     ingredients:
       - ingredient: butter
         part: lamination
+    quantities:
+      - id: lamination-butter
+        quantity: 200
+        unit: г
     instructions: >-
-      Помести {{amount:butter}} масла для ламинирования между двумя листами
+      Помести {{amount:lamination-butter}} масла для ламинирования между двумя листами
       пергамента и раскатай в ровный квадрат примерно 16 × 16 см и толщиной
       8–9 мм. Убери в холодильник. Перед ламинированием доведи масло примерно
       до 14–16 °C: оно должно легко сгибаться и раскатываться, не трескаясь,
@@ -218,8 +233,15 @@ steps:
       - ingredient: egg
       - ingredient: milk
         part: wash
+    quantities:
+      - id: wash-egg
+        quantity: 45
+        unit: г
+      - id: wash-milk
+        quantity: 10
+        unit: г
     instructions: >-
-      Аккуратно смешай {{amount:egg}} яйца и {{amount:milk}} молока, не создавая
+      Аккуратно смешай {{amount:wash-egg}} яйца и {{amount:wash-milk}} молока, не создавая
       пены. Тонко смажь верх круассанов непосредственно перед выпечкой.
       Старайся не заливать срезы и открытые слои по бокам: запёкшееся яйцо
       может склеить их и помешать раскрытию слоёв.
